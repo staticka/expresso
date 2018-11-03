@@ -1,0 +1,52 @@
+{% extends 'e.layout.twig' %}
+
+{% block content %}
+  <h1 style="margin-top: 20px; margin-bottom: 20px;">Page Details</h1>
+  <form action="/new" method="POST">
+    <input type="hidden" name="filename" value="{{ item.filename }}">
+    <div class="form-group">
+      <label for="title" class="col-form-label">Title</label>
+      <input type="text" name="title" class="form-control" id="title" value="{{ item.title }}" required>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="permalink" class="col-form-label">Permalink (Slug)</label>
+          <input type="text" name="permalink" class="form-control" value="{{ item.permalink }}" id="permalink">
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="permalink" class="col-form-label">Layout</label>
+          <select name="layout" class="form-control">
+            {% for index, plate in plates %}
+              <option value="{{ index }}" {{ index is same as(item.layout) ? 'selected' : '' }}>{{ plate }}</option>  
+            {% endfor %}
+          </select>
+          <!-- <input type="text" name="permalink" class="form-control" id="permalink"> -->
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="title" class="col-form-label">Content</label>
+      <textarea name="content" id="content" cols="30" rows="10">{{ item.content }}</textarea>
+    </div>
+    <div class="form-group">
+      <a class="btn btn-secondary" href="/">Cancel</a>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </div>
+  </form>
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/simplemde/1.11.2/simplemde.min.js"></script>
+
+  <script>
+    var options = { element: $("#content")[0] };
+
+    options.indentWithTabs = false;
+
+    var editor = new SimpleMDE(options);
+  </script>
+{% endblock %}
