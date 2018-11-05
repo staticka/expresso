@@ -2,7 +2,7 @@
 
 {% block content %}
   <h1 style="margin-top: 20px; margin-bottom: 20px;">Page Details</h1>
-  <form action="/new" method="POST">
+  <form action="{{ item.filename ? '/pages/' ~ item.id : '/pages' }}" method="POST">
     <input type="hidden" name="filename" value="{{ item.filename }}">
     <div class="form-group">
       <label for="title" class="col-form-label">Title</label>
