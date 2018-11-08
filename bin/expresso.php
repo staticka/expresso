@@ -1,38 +1,37 @@
 <?php
 
+use Staticka\Expresso\ComposerReader;
 use Staticka\Expresso\Filesystem;
 use Staticka\Expresso\TwigRenderer;
 use Staticka\Website;
 use Zapheus\Http\Message\RequestInterface;
 use Zapheus\Http\Message\ResponseInterface;
 
-$autoload = __DIR__ . '/../vendor/autoload.php';
-
 $global = __DIR__ . '/../../../autoload.php';
+
+$autoload = __DIR__ . '/../vendor/autoload.php';
 
 file_exists($global) && $autoload = $global;
 
-$current = str_replace('/autoload.php', '', $autoload);
+require realpath((string) $autoload);
 
-require $autoload;
+$search = 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-$paths = array(__DIR__ . '/../tpl');
+$current = str_replace($search, '', realpath($autoload));
 
-$paths[] = getcwd() . '/plates';
+$paths = array(__DIR__ . '/../tpl', $current . '/plates');
 
-$filesystem = new Filesystem(getcwd());
+$content = file_get_contents($current . '/composer.json');
 
-$loader = new Twig_Loader_Filesystem($paths);
+$json = new ComposerReader($content);
 
-$environment = new Twig_Environment($loader);
+$filesystem = new Filesystem($current, $json);
 
-$renderer = new TwigRenderer($environment);
-
-$website = new Website($renderer);
+$renderer = new TwigRenderer($paths);
 
 $app = new Zapheus\Coordinator;
 
-$app->set('Staticka\Website', $website);
+$app->set('Staticka\Website', new Website($renderer));
 
 $app->set('Zapheus\Renderer\RendererInterface', $renderer);
 
@@ -44,11 +43,11 @@ $app->get('build', $pages . '@build');
 
 $app->get('/', (string) $pages . '@index');
 
-$app->post('pages', $pages . '@store');
+$app->get('pages/:id', $pages . '@show');
 
 $app->get('pages/create', $pages . '@create');
 
-$app->get('pages/:id', $pages . '@show');
+$app->post('pages', $pages . '@store');
 
 $app->post('pages/:id', $pages . '@update');
 

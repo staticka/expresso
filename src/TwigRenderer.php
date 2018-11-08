@@ -20,11 +20,13 @@ class TwigRenderer implements RendererInterface
     /**
      * Initializes the renderer instance.
      *
-     * @param \Twig_Environment $twig
+     * @param array $paths
      */
-    public function __construct(\Twig_Environment $twig)
+    public function __construct($paths = array())
     {
-        $this->twig = $twig;
+        $loader = new \Twig_Loader_Filesystem($paths);
+
+        $this->twig = new \Twig_Environment($loader);
     }
 
     /**
