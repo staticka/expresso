@@ -1,0 +1,109 @@
+/*https://coolors.co/0A090C-1C2541-3A506B-E8D7FF-FFFFFF*/
+/*https://coolors.co/F5F6F3-E3DABE-C5AF94-172800-000000*/
+
+.dark body
+{
+  color: #F5F6F3;
+  background: #000000;
+}
+
+.dark a,
+.dark a:visited
+{
+  color: #C5AF94;
+}
+
+.dark a:hover,
+.dark a:focus
+{
+  color: #E3DABE;
+}
+
+.dark code
+{
+  background-color: rgba(27,31,35,0.15);
+}
+
+.dark .form-input
+{
+  color: #F5F6F3;
+  background-color: #000000;
+}
+
+.dark .CodeMirror
+{
+  background-color: #000000;
+  color: #F5F6F3;
+  border: .05rem solid #bcc3ce;
+}
+
+.dark .cm-s-default .cm-header,
+.dark .cm-s-default .cm-link
+{
+  color: #F5F6F3;
+}
+
+.dark .cm-s-default .cm-string
+{
+  color: #C5AF94;
+}
+
+.dark .cm-s-default .cm-comment
+{
+  background-color: rgba(27, 31, 35, 0.15);
+  color: #0A090C;
+}
+
+.dark .navbar .navbar-brand,
+.dark .navbar .btn.btn-link
+{
+  color: #000000;
+}
+
+.dark .navbar .navbar-brand:hover,
+.dark .navbar .btn.btn-link:hover
+{
+  color: #172800;
+}
+
+.dark .breadcrumb .breadcrumb-item:not(:last-child) a,
+.dark .breadcrumb .breadcrumb-item:not(:first-child)::before
+{
+  color: #F5F6F3;
+}
+
+.dark .e-navbar
+{
+  background-color: #F5F6F3;
+}
+
+.dark .btn
+{
+  border: .05rem solid #C5AF94;
+}
+
+.dark .btn:focus,
+.dark .btn:hover
+{
+  border-color: #E3DABE;
+}
+
+.dark .btn:active
+{
+  background: #C5AF94;
+}
+
+.dark .btn.btn-primary
+{
+  background: #C5AF94;
+  border-color: #C5AF94;
+}
+
+.dark .btn.btn-primary:hover,
+.dark .btn.btn-primary:focus,
+.dark .btn.btn-primary.active,
+.dark .btn.btn-primary:active
+{
+  background: #E3DABE;
+  border-color: #E3DABE;
+}

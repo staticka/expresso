@@ -1,0 +1,37 @@
+{% extends 'e.layout.twig' %}
+
+{% block title %} Pages {% endblock %}
+
+{% block content %}
+  <div style="margin-top: 1rem; margin-bottom: 1rem">
+    <ul class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="#">{{ e.get('website.name', 'Expresso') }}</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="#">Pages</a>
+      </li>
+    </ul>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Updated</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in pages %}
+        <tr>
+          <td><a href="/pages/{{ item.id }}">{{ item.name }}</a></td>
+          {% if item.updated_at %}
+            <td>{{ item.updated_at | date('F d, Y h:iA') }}</td>
+          {% else %}
+            <td>{{ item.created_at | date('F d, Y h:iA') }}</td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

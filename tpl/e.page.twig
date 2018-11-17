@@ -1,0 +1,155 @@
+{% extends 'e.layout.twig' %}
+
+{% block title %}
+  {{ item.filename ? 'Pages Details' : 'New Page' }}
+{% endblock %}
+
+{% block content %}
+  <div id="app">
+    <div style="margin-top: 1rem; margin-bottom: 1rem">
+      <ul class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">{{ e.get('website.name', 'Expresso') }}</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="/">Pages</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#">{{ item.filename ? 'Pages Details' : 'New Page' }}</a>
+        </li>
+      </ul>
+    </div>
+    <!-- <h1 style="margin-top: 20px; margin-bottom: 20px;">Page Details</h1> -->
+    <form id="form" action="{{ item.filename ? '/pages/' ~ item.id : '/pages' }}" method="POST">
+      <div class="form-group">
+        <a class="btn btn-secondary" href="/">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+      <input type="hidden" name="filename" value="{{ item.filename }}">
+      <div class="columns">
+        <div class="column col-sm-6">
+          <div class="form-group">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" name="name" class="form-input" id="name" value="{{ item.name }}" v-model="name" required>
+          </div>
+        </div>
+        <div class="column col-sm-6">
+          <div class="form-group">
+            <label for="permalink" class="form-label">Permalink (Slug)</label>
+            <input type="text" name="permalink" class="form-input" value="{{ item.permalink }}" id="permalink" v-model="slug">
+          </div>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column col-sm-6">
+          <div class="form-group">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="title" class="form-input" id="title" value="{{ item.title }}" v-model="title" required>
+          </div>
+        </div>
+        <div class="column col-sm-6">
+          <div class="form-group">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" name="description" class="form-input" id="description" value="{{ item.description }}">
+          </div>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column col-sm-6">
+          <div class="form-group">
+            <label for="permalink" class="form-label">Layout</label>
+            <select name="layout" class="form-input">
+              {% for index, plate in plates %}
+                <option value="{{ index }}" {{ index is same as(item.layout) ? 'selected' : '' }}>{{ plate }}</option>  
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="column col-sm-6">
+          <div class="form-group">
+            <label for="tags" class="form-label">Tags</label>
+            <input type="text" name="tags" class="form-input" id="tags" value="{{ item.tags }}">
+          </div>
+        </div>
+      </div>
+      {% for row in e.get('fields', []) %}
+        <div class="columns">
+          {% for field in row %}
+            <div class="column col-sm-6">
+              <div class="form-group">
+                <label for="{{ field.name }}" class="form-label">{{ field.label }}</label>
+                <input type="text" name="{{ field.name }}" class="form-input" id="{{ field.name }}" value="{{ attribute(item, field.name) }}" v-model="{{ field.name }}">
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <div class="columns">
+        <div class="column col-sm-12">
+          <div class="form-group">
+            <label for="title" class="form-label">Content</label>
+            <textarea name="content" class="form-input" id="content" cols="30" rows="30">{{ item.content }}</textarea>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <a class="btn btn-secondary" href="/">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="/js/codemirror/5.41.0.min.js"></script>
+  <script src="/js/codemirror/markdown-5.41.0.min.js"></script>
+  <script src="/js/jquery/3.3.1.min.js"></script>
+  <script src="/js/jquery/areyousure-1.9.0.min.js"></script>
+  <script src="/js/vue/2.5.17.min.js"></script>
+
+  <script>
+    var permalink = '{{ item.permalink }}';
+
+    var title = '{{ item.title }}';
+
+    var app = { el: '#app', data: { name: null } };
+
+    app.data.name = '{{ item.name }}';
+
+    {% for row in e.get('fields', []) %}
+      {% for field in row %}
+        app.data.{{ field.name }} = '{{ attribute(item, field.name) }}';
+      {% endfor %}
+    {% endfor %}
+
+    app.computed =
+    {
+      slug: function ()
+      {
+        var name = this.name ? this.name : '';
+
+        var lowered = name.toLowerCase();
+
+        var replaced = lowered.replace(/ /g,'-');
+
+        replaced = replaced.replace(/[^\w-]+/g,'');
+
+        return '/' + replaced.toLowerCase();
+      },
+      title: function ()
+      {
+        return this.name;
+      }
+    };
+
+    {{ item.filename ? '' : 'new Vue(app)' }}
+
+    var options = { tabSize: 2, lineWrapping: true };
+
+    var content = document.getElementById('content');
+
+    CodeMirror.fromTextArea(content, options);
+
+    $('#form').areYouSure();
+  </script>
+{% endblock %}

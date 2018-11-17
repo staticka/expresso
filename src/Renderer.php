@@ -2,15 +2,18 @@
 
 namespace Staticka\Expresso;
 
+use Staticka\Filter\HtmlMinifier;
+use Staticka\Filter\ScriptMinifier;
+use Staticka\Filter\StyleMinifier;
 use Zapheus\Renderer\RendererInterface;
 
 /**
- * Twig Renderer
+ * Renderer
  *
- * @package Slytherin
+ * @package Expresso
  * @author  Rougin Gutib <rougingutib@gmail.com>
  */
-class TwigRenderer implements RendererInterface
+class Renderer implements RendererInterface
 {
     /**
      * @var \Twig_Environment

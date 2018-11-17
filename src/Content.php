@@ -4,29 +4,57 @@ namespace Staticka\Expresso;
 
 use Staticka\Matter;
 
-class Filesystem
+/**
+ * Content
+ *
+ * @package Expresso
+ * @author  Rougin Gutib <rougingutib@gmail.com>
+ */
+class Content
 {
-    protected $json;
-
+    /**
+     * @var string
+     */
     protected $path = '';
 
-    public function __construct($path, ComposerReader $json)
+    /**
+     * @var \Staticka\Expresso\Composer
+     */
+    protected $composer;
+
+    /**
+     * Initializes the content instance.
+     *
+     * @param string                      $path
+     * @param \Staticka\Expresso\Composer $composer
+     */
+    public function __construct($path, Composer $composer)
     {
-        $this->path = $path;
+        $this->path = (string) $path;
 
         if (! file_exists($path . '/pages'))
         {
             mkdir((string) $path . '/pages');
         }
 
-        $this->json = $json;
+        $this->composer = $composer;
     }
 
-    public function data()
+    /**
+     * Returns the composer instance.
+     *
+     * @return \Staticka\Expresso\Composer
+     */
+    public function composer()
     {
-        return $this->json->data();
+        return $this->composer;
     }
 
+    /**
+     * Returns an array of pages.
+     *
+     * @return array
+     */
     public function pages()
     {
         $files = glob($this->path . '/pages/*');
@@ -53,6 +81,8 @@ class Filesystem
 
             $item['created_at'] = strtotime($item['id']);
 
+            $item['tag_items'] = array();
+
             if (isset($item['tags']) && is_string($item['tags']))
             {
                 $item['tag_items'] = explode(',', $item['tags']);
@@ -69,11 +99,21 @@ class Filesystem
         return array_reverse($pages);
     }
 
+    /**
+     * Returns the defined root path.
+     *
+     * @return string
+     */
     public function path()
     {
         return $this->path;
     }
 
+    /**
+     * Returns the defined templates.
+     *
+     * @return array
+     */
     public function plates()
     {
         $items = glob($this->path . '/plates/*');
