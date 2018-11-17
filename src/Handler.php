@@ -200,9 +200,9 @@ class Handler
 
         $text = $this->matter($data) . PHP_EOL . $data['content'];
 
-        $path = $this->content->path();
+        $pages = $this->content->path('pages');
 
-        $filename = $path . '/pages/' . $name;
+        $filename = $pages . '/' . $name;
 
         file_put_contents($filename, $text);
 

@@ -13,31 +13,60 @@ use Staticka\Matter;
 class Content
 {
     /**
-     * @var string
-     */
-    protected $path = '';
-
-    /**
      * @var \Staticka\Expresso\Composer
      */
     protected $composer;
 
     /**
+     * @var string
+     */
+    protected $pages = '';
+
+    /**
+     * @var string
+     */
+    protected $plates = '';
+
+    /**
      * Initializes the content instance.
      *
-     * @param string                      $path
      * @param \Staticka\Expresso\Composer $composer
+     * @param string                      $pages
+     * @param string                      $plates
      */
-    public function __construct($path, Composer $composer)
+    public function __construct(Composer $composer, $pages, $plates)
     {
-        $this->path = (string) $path;
-
-        if (! file_exists($path . '/pages'))
+        if (! file_exists($pages))
         {
-            mkdir((string) $path . '/pages');
+            mkdir((string) $pages);
         }
 
+        $this->plates = $plates;
+
+        $this->pages = $pages;
+
         $this->composer = $composer;
+
+        if (! file_exists($plates))
+        {
+            mkdir((string) $plates);
+        }
+    }
+
+    /**
+     * Returns the path of the composer.json file.
+     *
+     * @param  string $type
+     * @return string
+     */
+    public function path($type)
+    {
+        return $type === 'pages' ? $this->pages : $this->plates;
+    }
+
+    public function root()
+    {
+        return $this->composer->path();
     }
 
     /**
@@ -57,7 +86,7 @@ class Content
      */
     public function pages()
     {
-        $files = glob($this->path . '/pages/*');
+        $files = glob($this->pages . '/*');
 
         $pages = array();
 
@@ -100,23 +129,13 @@ class Content
     }
 
     /**
-     * Returns the defined root path.
-     *
-     * @return string
-     */
-    public function path()
-    {
-        return $this->path;
-    }
-
-    /**
      * Returns the defined templates.
      *
      * @return array
      */
     public function plates()
     {
-        $items = glob($this->path . '/plates/*');
+        $items = glob($this->plates . '/*');
 
         $plates = array();
 

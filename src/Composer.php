@@ -13,12 +13,19 @@ use Zapheus\Provider\Configuration;
 class Composer extends Configuration
 {
     /**
+     * @var string
+     */
+    protected $path = '';
+
+    /**
      * Initializes the reader instance.
      *
-     * @param string $json
+     * @param string $path
      */
-    public function __construct($json)
+    public function __construct($path)
     {
+        $json = file_get_contents($path);
+
         $this->data = json_decode($json, true);
 
         if ($this->get('expresso.fields'))
@@ -30,6 +37,18 @@ class Composer extends Configuration
             $this->set('expresso.fields', $fields);
         }
 
+        $this->path = substr($path, 0, -14);
+
         $this->data = $this->get('expresso');
+    }
+
+    /**
+     * Returns the path of the composer.json file.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        return $this->path;
     }
 }

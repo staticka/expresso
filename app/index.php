@@ -4,9 +4,6 @@ use Staticka\Expresso\Composer;
 use Staticka\Expresso\Content;
 use Staticka\Expresso\Expresso;
 use Staticka\Expresso\Renderer;
-use Staticka\Website;
-use Zapheus\Http\Message\RequestInterface;
-use Zapheus\Http\Message\ResponseInterface;
 
 $global = __DIR__ . '/../../../autoload.php';
 
@@ -16,21 +13,29 @@ file_exists($global) && $autoload = $global;
 
 require realpath((string) $autoload);
 
-$search = 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+$root = (string) substr(realpath($autoload), 0, -19);
 
-$current = str_replace($search, '', realpath($autoload));
+$composer = new Composer($root . '/composer.json');
 
-$paths = array(__DIR__ . '/../tpl', $current . '/plates');
+$default = array($root . '/pages', $root . '/plates');
 
-$content = file_get_contents($current . '/composer.json');
+$pages = $composer->get('paths.pages', $default[0]);
 
-$composer = new Composer($content);
+$search = (string) '%%CURRENT_DIRECTORY%%';
 
-$content = new Content($current, $composer);
+$pages = str_replace($search, $root, (string) $pages);
+
+$plates = $composer->get('paths.plates', $default[1]);
+
+$plates = str_replace($search, $root, $plates);
+
+$content = new Content($composer, $pages, $plates);
+
+$paths = array(__DIR__ . '/../tpl', (string) $plates);
 
 $renderer = new Renderer($paths);
 
-$website = new Website($renderer);
+$website = new Staticka\Website($renderer);
 
 $app = new Expresso($website);
 

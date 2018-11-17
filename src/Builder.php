@@ -45,9 +45,11 @@ class Builder
 
         $variables['pages'] = (array) $pages;
 
+        $path = realpath($content->path('pages'));
+
         $this->pages($pages, (array) $variables);
 
-        $path = $content->path() . '/build';
+        $path = $content->root() . '/build';
 
         $this->website->compile((string) $path);
     }
