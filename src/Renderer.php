@@ -2,9 +2,6 @@
 
 namespace Staticka\Expresso;
 
-use Staticka\Filter\HtmlMinifier;
-use Staticka\Filter\ScriptMinifier;
-use Staticka\Filter\StyleMinifier;
 use Zapheus\Renderer\RendererInterface;
 
 /**

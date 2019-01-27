@@ -3,6 +3,8 @@
 namespace Staticka\Expresso;
 
 use Staticka\Filter\HtmlMinifier;
+use Staticka\Filter\ScriptMinifier;
+use Staticka\Filter\StyleMinifier;
 use Staticka\Website;
 use Zapheus\Http\Message\RequestInterface;
 use Zapheus\Http\Message\ResponseInterface;
@@ -60,7 +62,7 @@ class Handler
      */
     public function create(RendererInterface $renderer)
     {
-        return $renderer->render('e.page', $this->data());
+        return $this->render($renderer, 'e.page', $this->data());
     }
 
     /**
@@ -71,7 +73,7 @@ class Handler
      */
     public function index(RendererInterface $renderer)
     {
-        return $renderer->render('e.pages', $this->data());
+        return $this->render($renderer, 'e.pages', $this->data());
     }
 
     /**
@@ -97,7 +99,7 @@ class Handler
             }
         }
 
-        return $renderer->render('e.page', $data);
+        return $this->render($renderer, 'e.page', $data);
     }
 
     /**
@@ -181,6 +183,31 @@ class Handler
         $data = array((string) $link);
 
         return $response->push('headers', $data, 'Location');
+    }
+
+    /**
+     * Renders the template and minifies it after.
+     *
+     * @param  \Zapheus\Renderer\RendererInterface $renderer
+     * @param  string                              $name
+     * @param  array                               $data
+     * @return string
+     */
+    protected function render(RendererInterface $renderer, $name, $data = array())
+    {
+        $output = $renderer->render($name, $data);
+
+        $style = new StyleMinifier;
+
+        $output = $style->filter($output);
+
+        $html = new HtmlMinifier;
+
+        $output = $html->filter($output);
+
+        $script = new ScriptMinifier;
+
+        return $script->filter($output);
     }
 
     /**

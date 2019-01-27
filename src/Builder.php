@@ -81,6 +81,8 @@ class Builder
         {
             $variables['tag_items'] = $page['tag_items'];
 
+            $variables['item'] = $page;
+
             $this->website->page($page['file'], $variables);
         }
     }
