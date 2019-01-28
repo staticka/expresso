@@ -1,94 +1,96 @@
 {% extends 'e.layout.twig' %}
 
 {% block title %}
-  {{ item.filename ? 'Pages Details' : 'New Page' }}
+  {{ item.filename ? 'Page Details' : 'New Page' }}
+{% endblock %}
+
+{% block styles %}
+  <style>
+    .CodeMirror
+    {
+      height: auto;
+      padding: 0.375rem 0.75rem;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+    }
+
+    .CodeMirror pre
+    {
+      font-size: 0.9375rem;
+      padding: 0px;
+    }
+
+    .CodeMirror-scroll
+    {
+      overflow: hidden !important;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
+  <h2 style="margin-bottom: 2rem;">{{ item.filename ? 'Page Details' : 'New Page' }}</h2>
+
   <div id="app">
-    <div style="margin-top: 1rem; margin-bottom: 1rem">
-      <ul class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="#">{{ e.get('website.name', 'Expresso') }}</a>
-        </li>
-        <li class="breadcrumb-item">
-          <a href="/">Pages</a>
-        </li>
-        <li class="breadcrumb-item">
-          <a href="#">{{ item.filename ? 'Pages Details' : 'New Page' }}</a>
-        </li>
-      </ul>
-    </div>
-    <!-- <h1 style="margin-top: 20px; margin-bottom: 20px;">Page Details</h1> -->
     <form id="form" action="{{ item.filename ? '/pages/' ~ item.id : '/pages' }}" method="POST">
       <div class="form-group">
         <a class="btn btn-secondary" href="/">Cancel</a>&nbsp;
         <button type="submit" class="btn btn-primary">Save Changes</button>
+        <div class="dropdown float-right">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Additional Fields
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2" style="min-width: 20rem">
+            <div class="px-4 py-3">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" class="form-control" id="name" value="{{ item.name }}" v-model="name">
+              </div>
+              <div class="form-group">
+                <label for="permalink">Permalink (Slug)</label>
+                <input type="text" name="permalink" class="form-control" value="{{ item.permalink }}" id="permalink" v-model="slug">
+              </div>
+              <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" name="description" class="form-control" id="description" value="{{ item.description }}">
+              </div>
+              <div class="form-group">
+                <label for="permalink">Layout</label>
+                <select name="layout" class="form-control">
+                  {% for index, plate in plates %}
+                    <option value="{{ index }}" {{ index is same as(item.layout) ? 'selected' : '' }}>{{ plate }}</option>  
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" name="category" class="form-control" id="category" value="{{ item.category }}">
+              </div>
+              {% for row in e.get('fields', []) %}
+                {% for field in row %}
+                  <div class="form-group">
+                    <label for="{{ field.name }}">{{ field.label }}</label>
+                    <input type="text" name="{{ field.name }}" class="form-control" id="{{ field.name }}" value="{{ attribute(item, field.name) }}" v-model="{{ field.name }}">
+                  </div>
+                {% endfor %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
       </div>
       <input type="hidden" name="filename" value="{{ item.filename }}">
-      <div class="columns">
-        <div class="column col-sm-6">
+      <div class="row">
+        <div class="col-sm-12">
           <div class="form-group">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" name="name" class="form-input" id="name" value="{{ item.name }}" v-model="name" required>
-          </div>
-        </div>
-        <div class="column col-sm-6">
-          <div class="form-group">
-            <label for="permalink" class="form-label">Permalink (Slug)</label>
-            <input type="text" name="permalink" class="form-input" value="{{ item.permalink }}" id="permalink" v-model="slug">
+            <label for="title">Title</label>
+            <input type="text" name="title" class="form-control" id="title" value="{{ item.title }}" v-model="title" required>
           </div>
         </div>
       </div>
-      <div class="columns">
-        <div class="column col-sm-6">
+      <div class="row">
+        <div class="col-sm-12">
           <div class="form-group">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" name="title" class="form-input" id="title" value="{{ item.title }}" v-model="title" required>
-          </div>
-        </div>
-        <div class="column col-sm-6">
-          <div class="form-group">
-            <label for="description" class="form-label">Description</label>
-            <input type="text" name="description" class="form-input" id="description" value="{{ item.description }}">
-          </div>
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column col-sm-6">
-          <div class="form-group">
-            <label for="permalink" class="form-label">Layout</label>
-            <select name="layout" class="form-input">
-              {% for index, plate in plates %}
-                <option value="{{ index }}" {{ index is same as(item.layout) ? 'selected' : '' }}>{{ plate }}</option>  
-              {% endfor %}
-            </select>
-          </div>
-        </div>
-        <div class="column col-sm-6">
-          <div class="form-group">
-            <label for="category" class="form-label">Category</label>
-            <input type="text" name="category" class="form-input" id="category" value="{{ item.category }}">
-          </div>
-        </div>
-      </div>
-      {% for row in e.get('fields', []) %}
-        <div class="columns">
-          {% for field in row %}
-            <div class="column col-sm-6">
-              <div class="form-group">
-                <label for="{{ field.name }}" class="form-label">{{ field.label }}</label>
-                <input type="text" name="{{ field.name }}" class="form-input" id="{{ field.name }}" value="{{ attribute(item, field.name) }}" v-model="{{ field.name }}">
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-      {% endfor %}
-      <div class="columns">
-        <div class="column col-sm-12">
-          <div class="form-group">
-            <label for="content" class="form-label">Content</label>
-            <textarea name="content" class="form-input" id="content" cols="30" rows="30">{{ item.content }}</textarea>
+            <label for="content">Content</label>
+            <textarea name="content" class="form-control" id="content" cols="30" rows="30">{{ item.content }}</textarea>
           </div>
         </div>
       </div>
@@ -112,9 +114,9 @@
 
     var title = '{{ item.title }}';
 
-    var app = { el: '#app', data: { name: null } };
+    var app = { el: '#app', data: { title: null } };
 
-    app.data.name = '{{ item.name }}';
+    /*app.data.name = '{{ item.name }}';*/
 
     {% for row in e.get('fields', []) %}
       {% for field in row %}
@@ -126,7 +128,7 @@
     {
       slug: function ()
       {
-        var name = this.name ? this.name : '';
+        var name = this.title ? this.title : '';
 
         var lowered = name.toLowerCase();
 
@@ -136,13 +138,14 @@
 
         return '/' + replaced.toLowerCase();
       },
-      title: function ()
+      name: function ()
       {
-        return this.name;
+        console.log(this.title);
+        return this.title;
       }
     };
 
-    {{ item.filename ? '' : 'new Vue(app)' }}
+    {{ item.filename ? '' : 'new Vue(app);' }}
 
     var options = { tabSize: 2, lineWrapping: true };
 
@@ -151,5 +154,10 @@
     CodeMirror.fromTextArea(content, options);
 
     $('#form').areYouSure();
+
+    $('.dropdown-menu').click(function (e)
+    {
+      e.stopPropagation();
+    });
   </script>
 {% endblock %}
