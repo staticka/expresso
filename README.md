@@ -7,7 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Expresso is a simple flat-file and static blogging platform on top of [Staticka](/staticka/). It creates [Markdown](https://en.wikipedia.org/wiki/Markdown) files for the content and generates the static pages using [Parsedown](http://parsedown.org/) and [Twig](https://twig.symfony.com/) templating system.
+Expresso is a simple flat-file and static blogging platform on top of [Staticka](https://roug.in/staticka/). It creates [Markdown](https://en.wikipedia.org/wiki/Markdown) files for the content and generates the static pages using [Parsedown](http://parsedown.org/) and [Twig](https://twig.symfony.com/) templating system.
 
 ## Installation
 
