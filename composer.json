@@ -2,15 +2,15 @@
     "name": "staticka/expresso",
     "description": "A simple flat-file and static blogging platform.",
     "keywords": ["blogging", "expresso", "flat-file", "static site"],
-    "homepage": "https://github.com/staticka/expresso",
+    "homepage": "https://staticka.github.io/expresso/",
     "license": "MIT",
     "authors":
     [
         {
             "name": "Rougin Gutib",
             "email": "rougingutib@gmail.com",
-            "homepage": "https://rougin.github.io",
-            "role": "Developer"
+            "homepage": "https://roug.in/",
+            "role": "Software Engineer"
         }
     ],
     "require":
