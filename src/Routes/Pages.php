@@ -3,6 +3,7 @@
 namespace Staticka\Expresso\Routes;
 
 use Staticka\Expresso\Render;
+use Staticka\Helper\PagesHelper;
 
 /**
  * @package Staticka
@@ -12,10 +13,29 @@ use Staticka\Expresso\Render;
 class Pages
 {
     /**
+     * @var \Staticka\Helper\PagesHelper
+     */
+    protected $helper;
+
+    /**
+     * @param \Staticka\Helper\PagesHelper $helper
+     */
+    public function __construct(PagesHelper $helper)
+    {
+        $this->helper = $helper;
+    }
+
+    /**
      * @return string
      */
     public function index(Render $render)
     {
-        return $render->render('pages/index');
+        $data = array('items' => array());
+
+        $data['items'] = $this->helper->get();
+
+        $plate = 'pages/index';
+
+        return $render->render($plate, $data);
     }
 }

@@ -52,13 +52,16 @@ class Package implements IntegrationInterface
         $app->setParser($parser);
         // -------------------------------------------
 
-        // Initialize the Layout instance --------------------
-        $pages = $app->getPages();
-        $layout = $this->getLayout($config, $reflect, $pages);
+        // Initialize the Layout instance ------------
+        $pages = new PagesHelper($app->getPages());
+        $container->set(get_class($pages), $pages);
+
+        $layout = $this->getLayout($config, $reflect);
+        $layout->addHelper($pages);
 
         $name = get_class($layout);
         $container->set($name, $layout);
-        // ---------------------------------------------------
+        // -------------------------------------------
 
         // Initialize the Site instance ---
         /** @var array<string, mixed> */
@@ -75,11 +78,10 @@ class Package implements IntegrationInterface
     /**
      * @param \Rougin\Slytherin\Integration\Configuration     $config
      * @param \Rougin\Slytherin\Container\ReflectionContainer $container
-     * @param \Staticka\Page[]                                $pages
      *
      * @return \Staticka\Layout
      */
-    protected function getLayout(Configuration $config, ReflectionContainer $container, $pages)
+    protected function getLayout(Configuration $config, ReflectionContainer $container)
     {
         // Return the RenderInterface from container ---
         $render = 'Staticka\Render\RenderInterface';
@@ -126,7 +128,7 @@ class Package implements IntegrationInterface
         }
         // ------------------------------------------------
 
-        return $layout->addHelper(new PagesHelper($pages));
+        return $layout;
     }
 
     /**

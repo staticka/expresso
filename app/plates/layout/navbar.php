@@ -1,5 +1,5 @@
 <div class="mb-3">
-  <div class="navbar navbar-expand-lg bg-black" data-bs-theme="dark">
+  <div class="navbar py-0 navbar-expand-lg bg-black" data-bs-theme="dark">
     <div class="container py-3">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <span class="navbar-brand mb-1 h1">Expresso</span>
