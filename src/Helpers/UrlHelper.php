@@ -17,7 +17,7 @@ class UrlHelper extends LinkHelper
     protected $server;
 
     /**
-     * @param string $base
+     * @param string                $base
      * @param array<string, string> $server
      */
     public function __construct($base, $server = array())
@@ -55,7 +55,8 @@ class UrlHelper extends LinkHelper
 
     /**
      * @param string $link
-     * @return string
+     *
+     * @return boolean
      */
     public function isCurrent($link)
     {
