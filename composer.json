@@ -1,48 +1,51 @@
 {
-    "name": "staticka/expresso",
-    "description": "A simple flat-file and static blogging platform.",
-    "keywords": ["blogging", "expresso", "flat-file", "static site"],
-    "homepage": "https://staticka.github.io/expresso/",
-    "license": "MIT",
-    "authors":
-    [
-        {
-            "name": "Rougin Gutib",
-            "email": "rougingutib@gmail.com",
-            "homepage": "https://roug.in/",
-            "role": "Software Engineer"
-        }
-    ],
-    "require":
+  "name": "staticka/expresso",
+  "description": "Static blog platform based on Staticka.",
+  "keywords": [ "php-blog", "static-blog", "static-site" ],
+  "homepage": "https://roug.in/staticka/",
+  "license": "MIT",
+  "authors":
+  [
     {
-        "php": ">=5.3.0",
-        "staticka/staticka": "~0.1",
-        "twig/twig": "~1.3"
-    },
-    "require-dev":
-    {
-        "phpunit/phpunit": "~4.2|~5.7",
-        "scrutinizer/ocular": "~1.1.0"
-    },
-    "autoload":
-    {
-        "psr-4":
-        {
-            "Staticka\\Expresso\\": "src"
-        }
-    },
-    "autoload-dev":
-    {
-        "psr-4":
-        {
-            "Staticka\\Expresso\\": "tests"
-        }
-    },
-    "extra":
-    {
-        "branch-alias":
-        {
-            "dev-master": "1.0-dev"
-        }
+      "email": "rougingutib@gmail.com",
+      "homepage": "https://roug.in/",
+      "name": "Rougin Gutib",
+      "role": "Software Engineer"
     }
+  ],
+  "require":
+  {
+    "php": ">=5.3.0",
+    "staticka/staticka": "dev-master"
+  },
+  "require-dev":
+  {
+    "phpunit/phpunit": "~4.2|~5.7|~6.0|~7.0|~8.0|~9.0",
+    "sanmai/phpunit-legacy-adapter": "~6.1|~8.0"
+  },
+  "bin":
+  [
+    "bin/staticka"
+  ],
+  "autoload":
+  {
+    "psr-4":
+    {
+      "Staticka\\Expresso\\": "src"
+    }
+  },
+  "autoload-dev":
+  {
+    "psr-4":
+    {
+      "Staticka\\Expresso\\": "tests"
+    }
+  },
+  "extra":
+  {
+    "branch-alias":
+    {
+      "dev-master": "1.0-dev"
+    }
+  }
 }
