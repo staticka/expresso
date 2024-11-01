@@ -27,10 +27,8 @@ class Package implements IntegrationInterface
      */
     public function define(ContainerInterface $container, Configuration $config)
     {
-        $class = 'Staticka\System';
-
         /** @var \Staticka\System */
-        $app = $container->get($class);
+        $app = $container->get('Staticka\System');
 
         // Initialize the Render instance --------------
         $name = 'Staticka\Render\RenderInterface';
@@ -71,7 +69,7 @@ class Package implements IntegrationInterface
         $container->set($name, $site);
         // --------------------------------
 
-        return $container->set($class, $app);
+        return $container->set('Staticka\System', $app);
     }
 
     /**
@@ -83,12 +81,12 @@ class Package implements IntegrationInterface
      */
     protected function getLayout(Configuration $config, ReflectionContainer $container, $pages)
     {
-        // Return the RenderInterface from container ------
+        // Return the RenderInterface from container ---
         $render = 'Staticka\Render\RenderInterface';
 
         /** @var \Staticka\Render\RenderInterface */
         $render = $container->get($render);
-        // ------------------------------------------------
+        // ---------------------------------------------
 
         $layout = new Layout;
 
@@ -102,7 +100,7 @@ class Package implements IntegrationInterface
         }
         // -----------------------------------
 
-        // Initialize the defined filters ---------------------
+        // Initialize the defined filters -----------------
         /** @var class-string[] */
         $filters = $config->get('layout.filters', array());
 
@@ -113,9 +111,9 @@ class Package implements IntegrationInterface
 
             $layout->addFilter($filter);
         }
-        // ----------------------------------------------------
+        // ------------------------------------------------
 
-        // Initialize the defined helpers ---------------------
+        // Initialize the defined helpers -----------------
         /** @var class-string[] */
         $helpers = $config->get('layout.helpers', array());
 
@@ -126,7 +124,7 @@ class Package implements IntegrationInterface
 
             $layout->addHelper($helper);
         }
-        // ----------------------------------------------------
+        // ------------------------------------------------
 
         return $layout->addHelper(new PagesHelper($pages));
     }
@@ -141,7 +139,7 @@ class Package implements IntegrationInterface
     {
         $parser = new Parser;
 
-        // Initialize the defined filters ---------------------
+        // Initialize the defined filters -----------------
         /** @var class-string[] */
         $filters = $config->get('parser.filters', array());
 
@@ -152,7 +150,7 @@ class Package implements IntegrationInterface
 
             $parser->addFilter($filter);
         }
-        // ----------------------------------------------------
+        // ------------------------------------------------
 
         return $parser;
     }

@@ -1,27 +1,14 @@
 <?php
 
-use Rougin\Slytherin\System\Routing;
-use Staticka\Expresso\Package as Expresso;
-use Staticka\Package as Staticka;
+use Staticka\Expresso\Express;
 
 $root = dirname(dirname(__DIR__));
 
 require $root . '/vendor/autoload.php';
 
-$app = new Routing;
+/** @var string */
+$appPath = realpath($root . '/app');
 
-$path = $root . '/app';
+$app = new Express;
 
-$app->get('/', function ()
-{
-    return 'Hello world!';
-});
-
-$staticka = new Staticka($path);
-$staticka->setPathsFromRoot();
-$app->integrate($staticka);
-
-$expresso = new Expresso($path);
-$app->integrate($expresso);
-
-$app->run();
+$app->setRootPath($appPath)->run();
