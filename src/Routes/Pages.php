@@ -2,18 +2,20 @@
 
 namespace Staticka\Expresso\Routes;
 
+use Staticka\Expresso\Render;
+
 /**
  * @package Staticka
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Welcome
+class Pages
 {
     /**
      * @return string
      */
-    public function index()
+    public function index(Render $render)
     {
-        return 'Hello!';
+        return $render->render('pages/index');
     }
 }

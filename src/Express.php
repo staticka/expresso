@@ -5,6 +5,7 @@ namespace Staticka\Expresso;
 use Rougin\Slytherin\Http\HttpIntegration;
 use Rougin\Slytherin\Routing\RoutingIntegration;
 use Rougin\Slytherin\System;
+use Rougin\Slytherin\Template\RendererIntegration;
 use Staticka\Expresso\Package as Expresso;
 use Staticka\Package as Staticka;
 
@@ -25,6 +26,12 @@ class Express extends System
      */
     public function run()
     {
+        // Prepare the RendererIntegration -------------------------
+        $this->config->set('app.views', __DIR__ . '/../app/plates');
+
+        $this->integrate(new RendererIntegration);
+        // ---------------------------------------------------------
+
         // Prepare the HttpIntegration -------------------
         $this->config->set('app.http.cookies', $_COOKIE);
 
