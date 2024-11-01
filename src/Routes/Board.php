@@ -2,7 +2,7 @@
 
 namespace Staticka\Expresso\Routes;
 
-use Staticka\Expresso\Render;
+use Staticka\Expresso\Plate;
 
 /**
  * @package Staticka
@@ -14,8 +14,8 @@ class Board
     /**
      * @return string
      */
-    public function index(Render $render)
+    public function index(Plate $plate)
     {
-        return $render->render('board');
+        return $plate->view('board');
     }
 }

@@ -4,6 +4,9 @@ namespace Staticka\Expresso;
 
 use Rougin\Slytherin\Template\RendererInterface;
 use Staticka\Expresso\Helpers\UrlHelper;
+use Staticka\Filter\LayoutFilter;
+use Staticka\Helper\BlockHelper;
+use Staticka\Helper\LayoutHelper;
 use Staticka\Helper\PlateHelper;
 use Staticka\Render\RenderInterface;
 
@@ -12,7 +15,7 @@ use Staticka\Render\RenderInterface;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class Render implements RenderInterface
+class Plate implements RenderInterface
 {
     /**
      * @var \Rougin\Slytherin\Template\RendererInterface
@@ -36,6 +39,20 @@ class Render implements RenderInterface
      */
     public function render($name, $data = array())
     {
+        return $this->parent->render($name, $data);
+    }
+
+    /**
+     * TODO: Should be using render instead.
+     *
+     * @param string               $name
+     * @param array<string, mixed> $data
+     *
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    public function view($name, $data = array())
+    {
         $data['plate'] = new PlateHelper($this);
 
         // TODO: Put this in an ".env.example" file ---
@@ -46,6 +63,14 @@ class Render implements RenderInterface
         $data['url'] = new UrlHelper($baseUrl, $_SERVER);
         // ----------------------------------------------
 
-        return $this->parent->render($name, $data);
+        $data['layout'] = new LayoutHelper($this);
+
+        $data['block'] = new BlockHelper;
+
+        $html = $this->render($name, $data);
+
+        $layout = new LayoutFilter;
+
+        return $layout->filter($html);
     }
 }

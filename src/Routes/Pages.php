@@ -2,7 +2,7 @@
 
 namespace Staticka\Expresso\Routes;
 
-use Staticka\Expresso\Render;
+use Staticka\Expresso\Plate;
 use Staticka\Helper\PagesHelper;
 
 /**
@@ -28,14 +28,10 @@ class Pages
     /**
      * @return string
      */
-    public function index(Render $render)
+    public function index(Plate $plate)
     {
-        $data = array('items' => array());
+        $data = array('items' => $this->helper->get());
 
-        $data['items'] = $this->helper->get();
-
-        $plate = 'pages/index';
-
-        return $render->render($plate, $data);
+        return $plate->view('pages', $data);
     }
 }
