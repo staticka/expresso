@@ -2,6 +2,9 @@
 
 namespace Staticka\Expresso\Depots;
 
+use Staticka\Helper\PagesHelper;
+use Staticka\System;
+
 /**
  * TODO: Migrate code to "staticka/staticka" instead.
  *
@@ -11,15 +14,40 @@ namespace Staticka\Expresso\Depots;
  */
 class PageDepot
 {
+    const SORT_ASC = 0;
+
+    const SORT_DESC = 1;
+
+    /**
+     * @var \Staticka\System
+     */
+    protected $app;
+
+    /**
+     * @var \Staticka\Helper\PagesHelper
+     */
+    protected $pages;
+
+    /**
+     * @param \Staticka\Helper\PagesHelper $pages
+     * @param \Staticka\System             $app
+     */
+    public function __construct(PagesHelper $pages, System $app)
+    {
+        $this->app = $app;
+
+        $this->pages = $pages;
+    }
+
     /**
      * @param array<string, string> $data
-     * @param string                $path
-     * @param string|null           $timezone
      *
      * @return boolean
      */
-    public function create($data, $path, $timezone = null)
+    public function create($data)
     {
+        $path = $this->app->getPagesPath();
+
         // @codeCoverageIgnoreStart
         if (! is_dir($path))
         {
@@ -27,34 +55,79 @@ class PageDepot
         }
         // @endCoverageIgnoreEnd
 
-        if ($timezone)
+        if ($timezone = $this->app->getTimezone())
         {
             date_default_timezone_set($timezone);
         }
 
-        // Set the file name of the new page ---------------
-        $slug = $this->getSlug($data['name']);
+        $file = $this->setFilename($data);
 
-        if (array_key_exists('link', $data))
-        {
-            $slug = str_replace('/', '', $data['link']);
-        }
-
-        $prefix = date('YmdHis');
-
-        $file = $path . '/' . $prefix . '_' . $slug . '.md';
-        // -------------------------------------------------
-
-        $text = '';
-
-        if (array_key_exists('description', $data))
-        {
-            $text = $data['description'];
-        }
-
-        $data = $this->setData($data['name'], $text, $slug);
+        $data = $this->setTemplate($data);
 
         return file_put_contents($file, $data) !== false;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return \Staticka\Page|null
+     */
+    public function findByName($name)
+    {
+        $result = null;
+
+        foreach ($this->get() as $page)
+        {
+            if ($page->getName() === $name)
+            {
+                $result = $page;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $link
+     *
+     * @return \Staticka\Page|null
+     */
+    public function findByLink($link)
+    {
+        $result = null;
+
+        foreach ($this->get() as $page)
+        {
+            if ($page->getLink() === $link)
+            {
+                $result = $page;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return \Staticka\Page[]
+     */
+    public function get()
+    {
+        return $this->pages->getPages();
+    }
+
+    /**
+     * @param integer $sort
+     *
+     * @return array<string, mixed>[]
+     */
+    public function getWithData($sort = self::SORT_ASC)
+    {
+        if ($sort === self::SORT_DESC)
+        {
+            $this->pages->sortDesc();
+        }
+
+        return $this->pages->get();
     }
 
     /**
@@ -94,30 +167,56 @@ class PageDepot
     }
 
     /**
-     * @param string      $name
-     * @param string      $description
-     * @param string|null $link
+     * @param array<string, string> $data
      *
      * @return string
      */
-    protected function setData($name, $description, $link = null)
+    protected function setFilename($data)
+    {
+        $slug = $this->getSlug($data['name']);
+
+        if (array_key_exists('link', $data))
+        {
+            $slug = str_replace('/', '', $data['link']);
+        }
+
+        $prefix = date('YmdHis');
+
+        $file = $prefix . '_' . $slug . '.md';
+
+        $path = $this->app->getPagesPath();
+
+        return (string) $path . '/' . $file;
+    }
+
+    /**
+     * @param array<string, string> $data
+     *
+     * @return string
+     */
+    protected function setTemplate($data)
     {
         // TODO: Contents should be returned as constant in Page ---
         $path = __DIR__ . '/../Plates/default.md';
 
         /** @var string */
-        $data = file_get_contents($path);
+        $md = file_get_contents($path);
         // ---------------------------------------------------------
 
-        $data = str_replace('[TITLE]', $name, $data);
+        $exists = array_key_exists('description', $data);
 
-        $data = str_replace('[DESCRIPTION]', $description, $data);
+        $text = $exists ? $data['description'] : '';
 
-        if (! $link)
-        {
-            $link = $this->getSlug($name);
-        }
+        $md = str_replace('[TITLE]', $data['name'], $md);
 
-        return str_replace('[LINK]', $link, $data);
+        $md = str_replace('[DESCRIPTION]', $text, $md);
+
+        $slug = $this->getSlug($data['name']);
+
+        $exists = array_key_exists('link', $data);
+
+        $slug = $exists ? $data['link'] : $slug;
+
+        return str_replace('[LINK]', $slug, $md);
     }
 }

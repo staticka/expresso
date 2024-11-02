@@ -15,30 +15,23 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Link</th>
-          <th>Timestamp</th>
-          <th width="5%"></th>
+          <th width="20%">Name</th>
+          <th width="15%">URL Link</th>
+          <th width="30%">Description</th>
+          <th width="15%">Tags</th>
+          <th width="15%">Created At</th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($items as $item): ?>
           <tr>
             <td><?= $item['name'] ?></td>
-            <td><?= $item['description'] ?></td>
-            <td><?= $item['link'] ?></td>
-            <td><?= date('d M Y h:i:s A', $item['created_at']) ?></td>
             <td>
-              <div class="d-flex">
-                <span>
-                  <a class="btn btn-dark btn-sm" href="javascript:void(0)">Edit</a>
-                </span>
-                <span>
-                  <a class="btn btn-link btn-sm text-danger text-decoration-none" href="javascript:void(0)">Delete</a>
-                </span>
-              </div>
+              <a href="<?= $url->set($item['link']) ?>" target="_blank"><?= $item['link'] ?></a>
             </td>
+            <td><?= $str->truncate($item['description']) ?></td>
+            <td><?= isset($item['tags']) ? $item['tags'] : '' ?></td>
+            <td><?= date('d M Y h:i:s A', $item['created_at']) ?></td>
           </tr>
         <?php endforeach ?>
       </tbody>

@@ -14,13 +14,16 @@
             </template>
           </div>
           <div class="mb-3">
-            <label class="form-label mb-0">URL Link</label>
-            <input type="text" name="link" class="form-control" x-model="link" :disabled="loading">
-            <span class="small text-muted">If not specified, Expresso will try to guess it based on the Page title.</span>
-          </div>
-          <div>
             <label class="form-label mb-0">Description</label>
             <input type="text" name="description" class="form-control" x-model="description" :disabled="loading">
+          </div>
+          <div>
+            <label class="form-label mb-0">URL Link</label>
+            <input type="text" name="link" class="form-control" x-model="link" :disabled="loading">
+            <span class="small text-muted">If not specified, Expresso will try to guess it based on the Page Title.</span>
+            <template x-if="error.link">
+              <p class="text-danger small mb-0" x-text="error.link[0]"></p>
+            </template>
           </div>
         </div>
         <div class="modal-footer border-top-0 bg-light">

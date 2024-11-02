@@ -7,8 +7,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Staticka\Expresso\Checks\PageCheck;
 use Staticka\Expresso\Depots\PageDepot;
 use Staticka\Expresso\Plate;
-use Staticka\Helper\PagesHelper;
-use Staticka\System;
 
 /**
  * @package Staticka
@@ -17,11 +15,6 @@ use Staticka\System;
  */
 class Pages
 {
-    /**
-     * @var \Staticka\Helper\PagesHelper
-     */
-    protected $helper;
-
     /**
      * @var \Psr\Http\Message\ServerRequestInterface
      */
@@ -33,38 +26,37 @@ class Pages
     protected $response;
 
     /**
-     * @param \Staticka\Helper\PagesHelper             $helper
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param \Psr\Http\Message\ResponseInterface      $response
      */
-    public function __construct(PagesHelper $helper, ServerRequestInterface $request, ResponseInterface $response)
+    public function __construct(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $this->helper = $helper;
+        $this->request = $request;
 
         $this->response = $response;
-
-        $this->request = $request;
-    }
-
-    /**
-     * @return string
-     */
-    public function index(Plate $plate)
-    {
-        $data = array('items' => $this->helper->get());
-
-        return $plate->view('pages', $data);
     }
 
     /**
      * @param \Staticka\Expresso\Depots\PageDepot $page
-     * @param \Staticka\System                    $app
+     * @param \Staticka\Expresso\Plate            $plate
+     *
+     * @return string
+     */
+    public function index(PageDepot $page, Plate $plate)
+    {
+        $items = $page->getWithData(PageDepot::SORT_DESC);
+
+        return $plate->view('pages', compact('items'));
+    }
+
+    /**
+     * @param \Staticka\Expresso\Depots\PageDepot $page
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function store(PageDepot $page, System $app)
+    public function store(PageDepot $page)
     {
-        $check = new PageCheck;
+        $check = new PageCheck($page);
 
         /** @var array<string, string> */
         $data = $this->request->getParsedBody();
@@ -74,11 +66,7 @@ class Pages
             return $this->toJson($check->errors(), 422);
         }
 
-        $timezone = $app->getTimezone();
-
-        $path = $app->getPagesPath();
-
-        $page->create($data, $path, $timezone);
+        $page->create($data);
 
         return $this->toJson('Page created!', 201);
     }

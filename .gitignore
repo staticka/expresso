@@ -1,6 +1,8 @@
 .env
 .php-cs-fixer.cache
 .phpunit.result.cache
+app/build
+app/pages
 build
 composer.lock
 vendor

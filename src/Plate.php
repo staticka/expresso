@@ -8,6 +8,7 @@ use Staticka\Filter\LayoutFilter;
 use Staticka\Helper\BlockHelper;
 use Staticka\Helper\LayoutHelper;
 use Staticka\Helper\PlateHelper;
+use Staticka\Helper\StringHelper;
 use Staticka\Render\RenderInterface;
 
 /**
@@ -66,6 +67,8 @@ class Plate implements RenderInterface
         $data['layout'] = new LayoutHelper($this);
 
         $data['block'] = new BlockHelper;
+
+        $data['str'] = new StringHelper;
 
         $html = $this->render($name, $data);
 
