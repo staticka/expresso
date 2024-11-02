@@ -5,6 +5,8 @@ namespace Staticka\Expresso;
 use Valitron\Validator;
 
 /**
+ * TODO: Seperate from "rougin/weasley" and create it as a new package.
+ *
  * @package Staticka
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
