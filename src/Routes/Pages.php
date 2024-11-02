@@ -44,7 +44,7 @@ class Pages
      */
     public function index(PageDepot $page, Plate $plate)
     {
-        $items = $page->getWithData(PageDepot::SORT_DESC);
+        $items = $page->getAsData(PageDepot::SORT_DESC);
 
         return $plate->view('pages', compact('items'));
     }

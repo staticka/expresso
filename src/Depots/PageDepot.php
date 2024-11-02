@@ -2,7 +2,6 @@
 
 namespace Staticka\Expresso\Depots;
 
-use Staticka\Helper\PagesHelper;
 use Staticka\System;
 
 /**
@@ -24,19 +23,11 @@ class PageDepot
     protected $app;
 
     /**
-     * @var \Staticka\Helper\PagesHelper
+     * @param \Staticka\System $app
      */
-    protected $pages;
-
-    /**
-     * @param \Staticka\Helper\PagesHelper $pages
-     * @param \Staticka\System             $app
-     */
-    public function __construct(PagesHelper $pages, System $app)
+    public function __construct(System $app)
     {
         $this->app = $app;
-
-        $this->pages = $pages;
     }
 
     /**
@@ -112,7 +103,7 @@ class PageDepot
      */
     public function get()
     {
-        return $this->pages->getPages();
+        return $this->app->getPages();
     }
 
     /**
@@ -120,14 +111,23 @@ class PageDepot
      *
      * @return array<string, mixed>[]
      */
-    public function getWithData($sort = self::SORT_ASC)
+    public function getAsData($sort = self::SORT_ASC)
     {
+        $pages = $this->get();
+
         if ($sort === self::SORT_DESC)
         {
-            $this->pages->sortDesc();
+            $pages = array_reverse($pages);
         }
 
-        return $this->pages->get();
+        $items = array();
+
+        foreach ($pages as $page)
+        {
+            $items[] = $page->getData();
+        }
+
+        return $items;
     }
 
     /**
