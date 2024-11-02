@@ -31,26 +31,6 @@ class Express extends System
      */
     public function run()
     {
-        // Prepare the RendererIntegration ---------
-        $path = (string) __DIR__ . '/../app/plates';
-
-        $this->config->set('app.views', $path);
-
-        $this->integrate(new RendererIntegration);
-        // -----------------------------------------
-
-        // Prepare from Staticka instance --------------
-        $staticka = new Staticka($this->root);
-
-        $this->integrate($staticka->setPathsFromRoot());
-        // ---------------------------------------------
-
-        // Modify Staticka instance for Expresso -------
-        $this->config->set('app.fields', $this->fields);
-
-        $this->integrate(new Expresso);
-        // ---------------------------------------------
-
         // Prepare the HttpIntegration -------------------
         $this->config->set('app.http.cookies', $_COOKIE);
 
@@ -70,6 +50,26 @@ class Express extends System
 
         $this->container->set(System::ROUTER, new Router);
         // -----------------------------------------------
+
+        // Prepare the RendererIntegration ---------
+        $path = (string) __DIR__ . '/../app/plates';
+
+        $this->config->set('app.views', $path);
+
+        $this->integrate(new RendererIntegration);
+        // -----------------------------------------
+
+        // Prepare from Staticka instance --------------
+        $staticka = new Staticka($this->root);
+
+        $this->integrate($staticka->setPathsFromRoot());
+        // ---------------------------------------------
+
+        // Modify Staticka instance for Expresso -------
+        $this->config->set('app.fields', $this->fields);
+
+        $this->integrate(new Expresso);
+        // ---------------------------------------------
 
         parent::run();
     }

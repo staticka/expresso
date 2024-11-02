@@ -27,6 +27,8 @@ class Router extends Slytherin
 
         $this->post('/pages', 'Pages@store');
 
+        $this->post('/pages/:link', 'Pages@update');
+
         $this->get('/', 'Board@index');
 
         return $this->routes;

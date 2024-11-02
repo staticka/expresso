@@ -4,6 +4,7 @@ namespace Staticka\Expresso\Depots;
 
 use Staticka\Page;
 use Staticka\System;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * TODO: Migrate code to "staticka/staticka" instead.
@@ -68,26 +69,6 @@ class PageDepot
     }
 
     /**
-     * @param string $name
-     *
-     * @return \Staticka\Page|null
-     */
-    public function findByName($name)
-    {
-        $result = null;
-
-        foreach ($this->get() as $page)
-        {
-            if ($page->getName() === $name)
-            {
-                $result = $this->parsePage($page);
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * @param string $link
      *
      * @return \Staticka\Page|null
@@ -108,6 +89,30 @@ class PageDepot
             if ($page->getLink() === $link)
             {
                 $result = $this->parsePage($page);
+
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return \Staticka\Page|null
+     */
+    public function findByName($name)
+    {
+        $result = null;
+
+        foreach ($this->get() as $page)
+        {
+            if (strtolower($page->getName()) === strtolower($name))
+            {
+                $result = $this->parsePage($page);
+
+                break;
             }
         }
 
@@ -161,7 +166,7 @@ class PageDepot
      *
      * @return string
      */
-    protected function getSlug($text)
+    public function getSlug($text)
     {
         // Convert to entities --------------------------
         $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
@@ -188,6 +193,40 @@ class PageDepot
 
         return strtolower($text);
         // ----------------------------------
+    }
+
+    /**
+     * @param  string $link
+     * @param  array<string, mixed> $data
+     * @return \Staticka\Page|null
+     */
+    public function update($link, $data)
+    {
+        $page = $this->findByLink($link);
+
+        if (! $page)
+        {
+            return null;
+        }
+
+        $file = $page->getFile();
+
+        /** @var string */
+        $body = $data['body'];
+
+        unset($data['body']);
+
+        unset($data['html']);
+
+        $md = '---' . PHP_EOL;
+        $md .= Yaml::dump($data);
+        $md .= '---' . PHP_EOL . PHP_EOL;
+
+        $md .= $body;
+
+        file_put_contents($file, $md);
+
+        return $this->findByLink($link);
     }
 
     /**

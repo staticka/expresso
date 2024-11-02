@@ -7,11 +7,12 @@
 <?= $block->body() ?>
   <?= $plate->add('navbar', compact('url')) ?>
 
-  <div class="container mb-3">
-    <a href="<?= $url->set('/pages') ?>" class="btn btn-dark shadow-lg">Back to Pages</a>
-  </div>
-
   <div x-data="editor">
+    <div class="container mb-3">
+      <a href="<?= $url->set('/pages') ?>" class="btn btn-outline-dark shadow-lg">Back to Pages</a>
+      <button type="button" class="btn btn-dark shadow-lg" @click="save()">Save Details</button>
+    </div>
+
     <div class="container mb-3">
       <div class="card shadow-lg">
         <div class="card-body pb-0">
@@ -19,7 +20,10 @@
             <?php foreach ($fields as $field): ?>
               <div class="col-sm-3 mb-3">
                 <label for="<?= $field ?>" class="form-label mb-0"><?= ucfirst($field) ?></label>
-                <input type="text" name="<?= $field ?>" class="form-control" x-model="<?= $field ?>">
+                <input type="text" name="<?= $field ?>" class="form-control" x-model="input.<?= $field ?>" :disabled="loading">
+                <template x-if="error.<?= $field ?>">
+                  <p class="text-danger small mb-0" x-text="error.<?= $field ?>[0]"></p>
+                </template>
               </div>
             <?php endforeach ?>
           </div>
@@ -27,10 +31,10 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container mb-5">
       <div class="row">
         <div class="col-sm-6">
-          <div class="card shadow-lg h-100" style="max-height: 700px;">
+          <div class="card shadow-lg h-100" style="max-height: 600px;">
             <div class="card-header">
               <div class="nav nav-tabs card-header-tabs">
                 <div class="nav-item">
@@ -40,7 +44,7 @@
             </div>
             <div class="card-body p-0 text-start">
               <div x-init="$watch('body', value => parse())">
-                <textarea class="form-control rounded-0 rounded-bottom font-monospace h-100 border-0" rows="25" x-model="body" :disabled="loading"></textarea>
+                <textarea class="form-control rounded-0 rounded-bottom font-monospace h-100 border-0" rows="21" x-model="body" :disabled="loading"></textarea>
               </div>
               <div class="px-2">
                 <small><i class="bi bi-question-circle"></i> The above textbox follows the <a target="_blank" href="https://www.markdownguide.org/basic-syntax/">Markdown format</a>.</small>
@@ -49,7 +53,7 @@
           </div>
         </div>
         <div class="col-sm-6">
-          <div class="card shadow-lg h-100" style="max-height: 700px;">
+          <div class="card shadow-lg h-100" style="max-height: 600px;">
             <div class="card-header">
               <div class="nav nav-tabs card-header-tabs">
                 <div class="nav-item">
@@ -68,19 +72,16 @@
 <?= $block->end() ?>
 
 <?= $block->set('scripts') ?>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
   <script>
-    let editor =
-    {
-      <?php foreach ($fields as $field): ?>
-        <?php if (array_key_exists($field, $page)): ?>
-          <?= $field ?>: <?= json_encode($page[$field]) ?>,
-        <?php endif ?>
-      <?php endforeach ?>
-      body: <?= $page['body'] ?>,
-      html: null,
-      loading: false,
-    }
+    let editor = <?= $data ?>
+
+    const link = '<?= $url->set('/pages' . $page['link']) ?>'
+
+    editor.error = {}
 
     editor.init = function ()
     {
@@ -90,6 +91,38 @@
     editor.parse = function ()
     {
       this.html = marked.parse(this.body)
+    }
+
+    editor.save = function ()
+    {
+      const self = this
+
+      let input = self.input
+      input.body = self.body
+
+      const form = new FormData
+
+      for (const key of Object.keys(input))
+      {
+        form.append(key, input[key])
+      }
+
+      self.error = {}
+      self.loading = true
+
+      axios.post(link, form)
+        .then(function ()
+        {
+          console.log('Updated successfully!')
+        })
+        .catch(function (error)
+        {
+          self.error = error.response.data
+        })
+        .finally(function ()
+        {
+          self.loading = false
+        })
     }
   </script>
 <?= $block->end() ?>

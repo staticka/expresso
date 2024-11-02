@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticka\Expresso\Checks\PageCheck;
 use Staticka\Expresso\Depots\PageDepot;
+use Staticka\Expresso\Helpers\FieldHelper;
 use Staticka\Expresso\Plate;
 
 /**
@@ -65,13 +66,17 @@ class Pages
             return $this->asNotFound($link);
         }
 
-        $item = array('fields' => $page->getFields());
+        $fields = $page->getFields();
 
-        $item['page'] = $result->getData();
+        $data = $result->getData();
 
-        $body = json_encode($result->getBody());
+        $item = array('fields' => $fields);
 
-        $item['page']['body'] = $body;
+        $item['page'] = $data;
+
+        $helper = new FieldHelper;
+
+        $item['data'] = $helper->toJson($fields, $data);
 
         return $plate->view('editor', $item);
     }
@@ -96,6 +101,29 @@ class Pages
         $page->create($data);
 
         return $this->toJson('Page created!', 201);
+    }
+
+    /**
+     * @param string $link
+     * @param \Staticka\Expresso\Depots\PageDepot $page
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function update($link, PageDepot $page)
+    {
+        $check = new PageCheck($page, $link);
+
+        /** @var array<string, string> */
+        $data = $this->request->getParsedBody();
+
+        if (! $check->valid($data))
+        {
+            return $this->toJson($check->errors(), 422);
+        }
+
+        $page->update($link, $data);
+
+        return $this->toJson('Page updated!', 204);
     }
 
     /**

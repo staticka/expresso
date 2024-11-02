@@ -29,15 +29,23 @@ class PageCheck extends Check
     );
 
     /**
+     * @var string|null
+     */
+    protected $link = null;
+
+    /**
      * @var \Staticka\Expresso\Depots\PageDepot
      */
     protected $page;
 
     /**
      * @param \Staticka\Expresso\Depots\PageDepot $page
+     * @param string|null $link
      */
-    public function __construct(PageDepot $page)
+    public function __construct(PageDepot $page, $link = null)
     {
+        $this->link = $link;
+
         $this->page = $page;
     }
 
@@ -55,27 +63,45 @@ class PageCheck extends Check
             return false;
         }
 
+        /** @var string */
+        $name = $data['name'];
+
+        $link = $this->page->getSlug($name);
+
         if (array_key_exists('link', $data))
         {
             /** @var string */
             $link = $data['link'];
+        }
 
-            $page = $this->page->findByLink($link);
+        $page = $this->page->findByLink($link);
 
-            if ($page)
+        if (! $this->link && $page)
+        {
+            $this->setError('link', 'URL Link already exists');
+        }
+
+        if ($this->link)
+        {
+            if ($page && $page->getLink() !== '/' . $this->link)
             {
                 $this->setError('link', 'URL Link already exists');
             }
         }
 
-        /** @var string */
-        $name = $data['name'];
-
         $page = $this->page->findByName($name);
 
-        if ($page)
+        if (! $this->link && $page)
         {
             $this->setError('name', 'Page Title already exists');
+        }
+
+        if ($this->link)
+        {
+            if ($page && strtolower($page->getName()) !== strtolower($name))
+            {
+                $this->setError('name', 'Page Title already exists');
+            }
         }
 
         return count($this->errors) === 0;
