@@ -6,10 +6,18 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link <?= $url->isCurrent('/') ? 'active' : '' ?>" href="<?= $url->set('/'); ?>">Dashboard</a>
+              <?php if ($url->isCurrent('/')): ?>
+                <div class="nav-link active">Dashboard</div>
+              <?php else: ?>
+                <a class="nav-link" href="<?= $url->set('/'); ?>">Dashboard</a>
+              <?php endif ?>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?= $url->isCurrent('pages') ? 'active' : '' ?>" href="<?= $url->set('/pages'); ?>">Pages</a>
+              <?php if ($url->isCurrent('pages')): ?>
+                <div class="nav-link active">Pages</div>
+              <?php else: ?>
+                <a class="nav-link" href="<?= $url->set('/pages'); ?>">Pages</a>
+              <?php endif ?>
             </li>
           </ul>
         </div>

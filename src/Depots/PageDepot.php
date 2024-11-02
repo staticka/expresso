@@ -2,6 +2,7 @@
 
 namespace Staticka\Expresso\Depots;
 
+use Staticka\Page;
 use Staticka\System;
 
 /**
@@ -71,7 +72,7 @@ class PageDepot
         {
             if ($page->getName() === $name)
             {
-                $result = $page;
+                $result = $this->parsePage($page);
             }
         }
 
@@ -87,11 +88,18 @@ class PageDepot
     {
         $result = null;
 
+        // Link should always start with "/" ---
+        if ($link[0] !== '/')
+        {
+            $link = '/' . $link;
+        }
+        // -------------------------------------
+
         foreach ($this->get() as $page)
         {
             if ($page->getLink() === $link)
             {
-                $result = $page;
+                $result = $this->parsePage($page);
             }
         }
 
@@ -164,6 +172,17 @@ class PageDepot
 
         return strtolower($text);
         // ----------------------------------
+    }
+
+    /**
+     * @param  \Staticka\Page   $page
+     * @return \Staticka\Page
+     */
+    protected function parsePage(Page $page)
+    {
+        $parser = $this->app->getParser();
+
+        return $parser->parsePage($page);
     }
 
     /**

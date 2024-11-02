@@ -50,6 +50,27 @@ class Pages
     }
 
     /**
+     * @param string $link
+     * @param \Staticka\Expresso\Depots\PageDepot $page
+     * @param \Staticka\Expresso\Plate            $plate
+     *
+     * @return string
+     */
+    public function show($link, PageDepot $page, Plate $plate)
+    {
+        $item = $page->findByLink($link);
+
+        if (! $item)
+        {
+            return $this->asNotFound($link);
+        }
+
+        $item = array('page' => $item);
+
+        return $plate->view('editor', $item);
+    }
+
+    /**
      * @param \Staticka\Expresso\Depots\PageDepot $page
      *
      * @return \Psr\Http\Message\ResponseInterface
@@ -72,15 +93,22 @@ class Pages
     }
 
     /**
-     * Returns the specified data to JSON.
-     *
+     * @param  string $link
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function asNotFound($link)
+    {
+        return $this->withError('Page (' . $link . ') not found', 422);
+    }
+
+    /**
      * @param mixed   $data
      * @param integer $code
      * @param integer $options
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function toJson($data, $code = 200, $options = 0)
+    protected function toJson($data, $code = 200, $options = 0)
     {
         $response = $this->response->withStatus($code);
 
@@ -90,5 +118,19 @@ class Pages
         $response->getBody()->write($stream);
 
         return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    /**
+     * @param  string $text
+     * @param  integer $code
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function withError($text, $code)
+    {
+        $response = $this->response->withStatus($code);
+
+        $response->getBody()->write($text);
+
+        return $response;
     }
 }

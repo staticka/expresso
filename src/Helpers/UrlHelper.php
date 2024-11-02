@@ -60,9 +60,16 @@ class UrlHelper extends LinkHelper
      */
     public function isCurrent($link)
     {
+        $isMain = $link === '/';
+
         $link = $this->set($link);
 
         $current = $this->getCurrent();
+
+        if (! $isMain)
+        {
+            return strpos($current, $link) !== false;
+        }
 
         return $current === $link;
     }

@@ -8,8 +8,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <?= $block->add('styles') ?>
-  <style type="text/css">html, body { font-family: 'Roboto'; }</style>
+  <style type="text/css">
+    html, body { font-family: 'Roboto'; }
+    .ex-pointer { cursor: pointer; }
+  </style>
 </head>
 <body>
   <?= $block->content() ?>
