@@ -11,4 +11,16 @@ $appPath = realpath($root . '/app');
 
 $app = new Express;
 
-$app->setRootPath($appPath)->run();
+$fields = array('name');
+$fields[] = 'title';
+$fields[] = 'link';
+$fields[] = 'description';
+$fields[] = 'plate';
+$fields[] = 'category';
+$fields[] = 'tags';
+
+$app->setFields($fields);
+
+$app->setRootPath($appPath);
+
+$app->run();

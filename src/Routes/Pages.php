@@ -58,14 +58,20 @@ class Pages
      */
     public function show($link, PageDepot $page, Plate $plate)
     {
-        $item = $page->findByLink($link);
+        $result = $page->findByLink($link);
 
-        if (! $item)
+        if (! $result)
         {
             return $this->asNotFound($link);
         }
 
-        $item = array('page' => $item);
+        $item = array('fields' => $page->getFields());
+
+        $item['page'] = $result->getData();
+
+        $body = json_encode($result->getBody());
+
+        $item['page']['body'] = $body;
 
         return $plate->view('editor', $item);
     }

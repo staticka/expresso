@@ -6,6 +6,7 @@ use Rougin\Slytherin\Container\ContainerInterface;
 use Rougin\Slytherin\Container\ReflectionContainer;
 use Rougin\Slytherin\Integration\Configuration;
 use Rougin\Slytherin\Integration\IntegrationInterface;
+use Staticka\Expresso\Depots\PageDepot;
 use Staticka\Helper\PagesHelper;
 use Staticka\Layout;
 use Staticka\Parser;
@@ -71,6 +72,12 @@ class Package implements IntegrationInterface
         $name = get_class($site);
         $container->set($name, $site);
         // --------------------------------
+
+        /** @var string[] */
+        $fields = $config->get('app.fields');
+
+        $depot = new PageDepot($app, $fields);
+        $container->set(get_class($depot), $depot);
 
         return $container->set('Staticka\System', $app);
     }

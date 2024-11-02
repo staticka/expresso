@@ -17,6 +17,11 @@ use Staticka\Package as Staticka;
 class Express extends System
 {
     /**
+     * @var string[]
+     */
+    protected $fields = array();
+
+    /**
      * @var string
      */
     protected $root;
@@ -26,11 +31,25 @@ class Express extends System
      */
     public function run()
     {
-        // Prepare the RendererIntegration -------------------------
-        $this->config->set('app.views', __DIR__ . '/../app/plates');
+        // Prepare the RendererIntegration ---------
+        $path = (string) __DIR__ . '/../app/plates';
+
+        $this->config->set('app.views', $path);
 
         $this->integrate(new RendererIntegration);
-        // ---------------------------------------------------------
+        // -----------------------------------------
+
+        // Prepare from Staticka instance --------------
+        $staticka = new Staticka($this->root);
+
+        $this->integrate($staticka->setPathsFromRoot());
+        // ---------------------------------------------
+
+        // Modify Staticka instance for Expresso -------
+        $this->config->set('app.fields', $this->fields);
+
+        $this->integrate(new Expresso);
+        // ---------------------------------------------
 
         // Prepare the HttpIntegration -------------------
         $this->config->set('app.http.cookies', $_COOKIE);
@@ -52,17 +71,18 @@ class Express extends System
         $this->container->set(System::ROUTER, new Router);
         // -----------------------------------------------
 
-        // Prepare from Staticka instance --------------
-        $staticka = new Staticka($this->root);
-
-        $this->integrate($staticka->setPathsFromRoot());
-        // ---------------------------------------------
-
-        // Modify Staticka instance for Expresso ---
-        $this->integrate(new Expresso);
-        // -----------------------------------------
-
         parent::run();
+    }
+
+    /**
+     * @param string[] $fields
+     * @return self
+     */
+    public function setFields($fields)
+    {
+        $this->fields = $fields;
+
+        return $this;
     }
 
     /**

@@ -24,11 +24,19 @@ class PageDepot
     protected $app;
 
     /**
-     * @param \Staticka\System $app
+     * @var string[]
      */
-    public function __construct(System $app)
+    protected $fields = array();
+
+    /**
+     * @param \Staticka\System $app
+     * @param string[] $fields
+     */
+    public function __construct(System $app, $fields = array())
     {
         $this->app = $app;
+
+        $this->fields = $fields;
     }
 
     /**
@@ -136,6 +144,14 @@ class PageDepot
         }
 
         return $items;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getFields()
+    {
+        return $this->fields;
     }
 
     /**
