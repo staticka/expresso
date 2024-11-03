@@ -9,9 +9,9 @@ use Rougin\Slytherin\System;
 use Rougin\Slytherin\Template\RendererIntegration;
 use Staticka\Expresso\Depots\PageDepot;
 use Staticka\Expresso\Helpers\LinkHelper as ExpressoLink;
-use Staticka\Expresso\Package as Expresso;
 use Staticka\Helper\LinkHelper as StatickaLink;
-use Staticka\Package as Staticka;
+use Staticka\Package;
+use Staticka\Render;
 
 /**
  * @package Staticka
@@ -94,10 +94,6 @@ class Express extends System
         $this->setApp();
 
         $this->setLink();
-
-        // Modify Staticka instance for Expresso ---
-        $this->integrate(new Expresso);
-        // -----------------------------------------
 
         $this->setPlate();
 
@@ -245,6 +241,17 @@ class Express extends System
 
         $this->container->set(get_class($depot), $depot);
         // ----------------------------------------------
+
+        // Initialize the Render instance --------------
+        $name = 'Staticka\Render\RenderInterface';
+
+        if (! $this->container->has($name))
+        {
+            $render = new Render($app->getPlatesPath());
+
+            $this->container->set($name, $render);
+        }
+        // ---------------------------------------------
     }
 
     /**
@@ -295,7 +302,7 @@ class Express extends System
             $this->rootPath = self::getAppPath();
         }
 
-        $package = new Staticka($this->rootPath);
+        $package = new Package($this->rootPath);
 
         $package->setPathsFromRoot();
 
