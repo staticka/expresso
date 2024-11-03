@@ -216,10 +216,15 @@ class PageDepot
 
         unset($data['body']);
 
-        unset($data['html']);
+        if (array_key_exists('html', $data))
+        {
+            unset($data['html']);
+        }
+
+        $dump = Yaml::dump($data);
 
         $md = '---' . PHP_EOL;
-        $md .= Yaml::dump($data);
+        $md .= str_replace("'null'", '', $dump);
         $md .= '---' . PHP_EOL . PHP_EOL;
 
         $md .= $body;
