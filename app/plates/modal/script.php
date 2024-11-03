@@ -1,5 +1,5 @@
 <script>
-  const link = '<?= $url->set('/pages') ?>'
+  const link = '<?= $link->set('/pages') ?>'
 
   const modal =
   {

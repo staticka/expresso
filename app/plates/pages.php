@@ -1,7 +1,7 @@
 <?= $layout->load('main'); ?>
 
 <?= $block->body() ?>
-  <?= $plate->add('navbar', compact('url')) ?>
+  <?= $plate->add('navbar', compact('link')) ?>
 
   <div class="container mb-3">
     <button type="button" class="btn btn-dark shadow-lg" data-bs-toggle="modal" data-bs-target="#create-page-modal">
@@ -28,7 +28,7 @@
             <?php foreach ($items as $item): ?>
               <tr>
                 <td>
-                  <a href="<?= $url->set('/pages/' . $item['id']) ?>"><?= $item['name'] ?></a>
+                  <a href="<?= $link->set('/pages/' . $item['id']) ?>"><?= $item['name'] ?></a>
                 </td>
                 <td>
                   <a href="<?= $url->set($item['link']) ?>" target="_blank"><?= $item['link'] ?></a>

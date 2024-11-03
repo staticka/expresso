@@ -3,10 +3,11 @@
 namespace Staticka\Expresso;
 
 use Rougin\Slytherin\Template\RendererInterface;
-use Staticka\Expresso\Helpers\UrlHelper;
+use Staticka\Expresso\Helpers\LinkHelper;
 use Staticka\Filter\LayoutFilter;
 use Staticka\Helper\BlockHelper;
 use Staticka\Helper\LayoutHelper;
+use Staticka\Helper\LinkHelper as StatickaLink;
 use Staticka\Helper\PlateHelper;
 use Staticka\Helper\StringHelper;
 use Staticka\Render\RenderInterface;
@@ -57,12 +58,18 @@ class Plate implements RenderInterface
         $data['plate'] = new PlateHelper($this);
 
         // TODO: Put this in an ".env.example" file ---
-        $baseUrl = 'http://localhost:3977';
+        $appUrl = 'http://localhost:3977';
         // --------------------------------------------
 
-        // TODO: Do not use the "$_SERVER" variable -----
-        $data['url'] = new UrlHelper($baseUrl, $_SERVER);
-        // ----------------------------------------------
+        // TODO: Do not use the "$_SERVER" variable ------
+        $data['link'] = new LinkHelper($appUrl, $_SERVER);
+        // -----------------------------------------------
+
+        // TODO: Put this in an ".env.example" file ---
+        $baseUrl = 'http://localhost:3978';
+
+        $data['url'] = new StatickaLink($baseUrl);
+        // --------------------------------------------
 
         $data['layout'] = new LayoutHelper($this);
 

@@ -9,7 +9,7 @@
 
   <div x-data="editor">
     <div class="container mb-3">
-      <a href="<?= $url->set('/pages') ?>" class="btn btn-outline-dark shadow-lg">Back to Pages</a>
+      <a href="<?= $link->set('/pages') ?>" class="btn btn-outline-dark shadow-lg">Back to Pages</a>
       <button type="button" class="btn btn-dark shadow-lg" @click="save()">Save Details</button>
     </div>
 
@@ -79,7 +79,7 @@
   <script>
     let editor = <?= $data ?>
 
-    const link = '<?= $url->set('/pages/' . $page['id']) ?>'
+    const link = '<?= $link->set('/pages/' . $page['id']) ?>'
 
     editor.error = {}
 

@@ -2,14 +2,14 @@
 
 namespace Staticka\Expresso\Helpers;
 
-use Staticka\Helper\LinkHelper;
+use Staticka\Helper\LinkHelper as Staticka;
 
 /**
  * @package Staticka
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class UrlHelper extends LinkHelper
+class LinkHelper extends Staticka
 {
     /**
      * @var array<string, string>
