@@ -8,6 +8,7 @@ require $root . '/vendor/autoload.php';
 
 $app = new Express;
 
-$app->setRootPath($root . '/app');
+$app->setAppUrl('http://localhost:3977');
+$app->setSiteUrl('http://localhost:3978');
 
 $app->run();
