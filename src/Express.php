@@ -25,6 +25,11 @@ class Express extends System
     protected $fields = array();
 
     /**
+     * @var \Staticka\Package|null
+     */
+    protected $package = null;
+
+    /**
      * @var string
      */
     protected $root;
@@ -66,6 +71,17 @@ class Express extends System
     }
 
     /**
+     * @param \Staticka\Package $package
+     * @return self
+     */
+    public function setPackage(Staticka $package)
+    {
+        $this->package = $package;
+
+        return $this;
+    }
+
+    /**
      * @param string $root
      *
      * @return self
@@ -78,15 +94,30 @@ class Express extends System
     }
 
     /**
+     * @return string
+     */
+    public static function getAppPath()
+    {
+        return dirname(dirname(__FILE__)) . '/app';
+    }
+
+    /**
      * @return void
      */
     protected function setApp()
     {
-        // Prepare from Staticka instance --------------
-        $staticka = new Staticka($this->root);
+        // Prepare from Staticka instance -------
+        if (! $this->package)
+        {
+            $package = new Staticka($this->root);
 
-        $this->integrate($staticka->setPathsFromRoot());
-        // ---------------------------------------------
+            $package->setPathsFromRoot();
+
+            $this->package = $package;
+        }
+
+        $this->integrate($this->package);
+        // --------------------------------------
 
         // Define the fields for each page for Expresso ----
         /** @var \Staticka\System */
