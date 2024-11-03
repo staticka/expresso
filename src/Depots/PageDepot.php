@@ -31,7 +31,7 @@ class PageDepot
 
     /**
      * @param \Staticka\System $app
-     * @param string[] $fields
+     * @param string[]         $fields
      */
     public function __construct(System $app, $fields = array())
     {
@@ -130,7 +130,9 @@ class PageDepot
 
         foreach ($this->get() as $page)
         {
-            if (strtolower($page->getName()) === strtolower($name))
+            $pageName = strtolower((string) $page->getName());
+
+            if ($pageName === strtolower($name))
             {
                 $result = $this->parsePage($page);
 
@@ -218,8 +220,9 @@ class PageDepot
     }
 
     /**
-     * @param  string $id
-     * @param  array<string, mixed> $data
+     * @param integer              $id
+     * @param array<string, mixed> $data
+     *
      * @return \Staticka\Page|null
      */
     public function update($id, $data)
@@ -232,6 +235,11 @@ class PageDepot
         }
 
         $file = $page->getFile();
+
+        if (! $file)
+        {
+            return null;
+        }
 
         /** @var string */
         $body = $data['body'];
@@ -251,7 +259,7 @@ class PageDepot
         $dump = Yaml::dump($data);
 
         $md = '---' . PHP_EOL;
-        $md .= str_replace("'null'", '', $dump);
+        $md .= str_replace('\'null\'', '', $dump);
         $md .= '---' . PHP_EOL . PHP_EOL;
 
         $md .= $body;
@@ -262,7 +270,8 @@ class PageDepot
     }
 
     /**
-     * @param  \Staticka\Page   $page
+     * @param \Staticka\Page $page
+     *
      * @return \Staticka\Page
      */
     protected function parsePage(Page $page)

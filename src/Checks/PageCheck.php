@@ -40,7 +40,7 @@ class PageCheck extends Check
 
     /**
      * @param \Staticka\Expresso\Depots\PageDepot $page
-     * @param integer|null $id
+     * @param integer|null                        $id
      */
     public function __construct(PageDepot $page, $id = null)
     {
@@ -96,9 +96,11 @@ class PageCheck extends Check
             $this->setError('name', 'Page Title already exists');
         }
 
-        if ($this->id)
+        if ($this->id && $page)
         {
-            if ($page && strtolower($page->getName()) !== strtolower($name))
+            $pageName = strtolower((string) $page->getName());
+
+            if ($pageName !== strtolower($name))
             {
                 $this->setError('name', 'Page Title already exists');
             }

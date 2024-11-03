@@ -10,11 +10,12 @@ namespace Staticka\Expresso\Helpers;
 class FieldHelper
 {
     /**
-     * @param  string[] $fields
+     * @param string[]             $fields
      * @param array<string, mixed> $data
+     *
      * @return string
      */
-    public function toJson($fields, $data = array())
+    public static function toJson($fields, $data = array())
     {
         $result = array('input' => array());
 

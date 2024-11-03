@@ -73,4 +73,12 @@ class LinkHelper extends Staticka
 
         return $current === $link;
     }
+
+    /**
+     * @return string
+     */
+    public function name()
+    {
+        return 'link';
+    }
 }

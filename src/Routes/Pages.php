@@ -51,11 +51,11 @@ class Pages
     }
 
     /**
-     * @param integer $id
+     * @param integer                             $id
      * @param \Staticka\Expresso\Depots\PageDepot $page
      * @param \Staticka\Expresso\Plate            $plate
      *
-     * @return string
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function show($id, PageDepot $page, Plate $plate)
     {
@@ -74,10 +74,9 @@ class Pages
 
         $item['page'] = $data;
 
-        $helper = new FieldHelper;
+        $item['data'] = FieldHelper::toJson($fields, $data);
 
-        $item['data'] = $helper->toJson($fields, $data);
-
+        /** @var \Psr\Http\Message\ResponseInterface */
         return $plate->view('editor', $item);
     }
 
@@ -104,7 +103,7 @@ class Pages
     }
 
     /**
-     * @param integer $id
+     * @param integer                             $id
      * @param \Staticka\Expresso\Depots\PageDepot $page
      *
      * @return \Psr\Http\Message\ResponseInterface
@@ -127,7 +126,8 @@ class Pages
     }
 
     /**
-     * @param  integer $id
+     * @param integer $id
+     *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function asNotFound($id)
@@ -155,8 +155,9 @@ class Pages
     }
 
     /**
-     * @param  string $text
-     * @param  integer $code
+     * @param string  $text
+     * @param integer $code
+     *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function withError($text, $code)

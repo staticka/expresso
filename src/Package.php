@@ -6,6 +6,7 @@ use Rougin\Slytherin\Container\ContainerInterface;
 use Rougin\Slytherin\Container\ReflectionContainer;
 use Rougin\Slytherin\Integration\Configuration;
 use Rougin\Slytherin\Integration\IntegrationInterface;
+use Rougin\Slytherin\System;
 use Staticka\Expresso\Depots\PageDepot;
 use Staticka\Helper\PagesHelper;
 use Staticka\Layout;
@@ -73,11 +74,13 @@ class Package implements IntegrationInterface
         $container->set($name, $site);
         // --------------------------------
 
+        // Initialize the PageDepot ---------------
         /** @var string[] */
         $fields = $config->get('app.fields');
 
         $depot = new PageDepot($app, $fields);
         $container->set(get_class($depot), $depot);
+        // ----------------------------------------
 
         return $container->set('Staticka\System', $app);
     }
@@ -174,5 +177,43 @@ class Package implements IntegrationInterface
         $site = new Site;
 
         return $site->setData($data);
+    }
+
+    /**
+     * @param \Rougin\Slytherin\Integration\Configuration     $config
+     * @param \Rougin\Slytherin\Container\ReflectionContainer $container
+     *
+     * @return \Staticka\Expresso\Plate
+     */
+    protected function getPlate(Configuration $config, ReflectionContainer $container)
+    {
+        /** @var \Rougin\Slytherin\Template\RendererInterface */
+        $renderer = $container->get(System::TEMPLATE);
+
+        $plate = new Plate($renderer);
+
+        /** @var string[] */
+        $filters = $config->get('app.filters', array());
+
+        foreach ($filters as $filter)
+        {
+            /** @var \Staticka\Filter\FilterInterface */
+            $filter = $container->get($filter);
+
+            $plate->addFilter($filter);
+        }
+
+        /** @var string[] */
+        $helpers = $config->get('app.helpers', array());
+
+        foreach ($helpers as $helper)
+        {
+            /** @var \Staticka\Helper\HelperInterface */
+            $helper = $container->get($helper);
+
+            $plate->addHelper($helper);
+        }
+
+        return $plate;
     }
 }
