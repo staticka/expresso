@@ -9,8 +9,8 @@
 
   <div x-data="editor">
     <div class="container mb-3">
-      <a href="<?= $link->set('/pages') ?>" class="btn btn-outline-dark shadow-lg">Back to Pages</a>
-      <button type="button" class="btn btn-dark shadow-lg" @click="save()">Save Details</button>
+      <a href="<?= $link->set('/pages') ?>" class="btn btn-outline-dark shadow-lg" :disabled="loading">Back to Pages</a>
+      <button type="button" class="btn btn-dark shadow-lg" @click="save()" :disabled="loading">Save Details</button>
     </div>
 
     <div class="container mb-3">
