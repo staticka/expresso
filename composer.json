@@ -24,10 +24,6 @@
     "sanmai/phpunit-legacy-adapter": "~6.1|~8.0",
     "vlucas/valitron": "~1.4"
   },
-  "bin":
-  [
-    "bin/staticka"
-  ],
   "autoload":
   {
     "psr-4":
