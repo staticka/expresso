@@ -5,7 +5,7 @@
 <?= $block->end() ?>
 
 <?= $block->body() ?>
-  <?= $plate->add('navbar', compact('url')) ?>
+  <?= $plate->add('navbar', compact('link')) ?>
 
   <div x-data="editor">
     <div class="container mb-3">
