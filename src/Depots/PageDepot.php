@@ -69,6 +69,28 @@ class PageDepot
     }
 
     /**
+     * @param integer $id
+     *
+     * @return \Staticka\Page|null
+     */
+    public function find($id)
+    {
+        $result = null;
+
+        foreach ($this->get() as $page)
+        {
+            if ($page->getId() === ((int) $id))
+            {
+                $result = $this->parsePage($page);
+
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @param string $link
      *
      * @return \Staticka\Page|null
@@ -196,13 +218,13 @@ class PageDepot
     }
 
     /**
-     * @param  string $link
+     * @param  string $id
      * @param  array<string, mixed> $data
      * @return \Staticka\Page|null
      */
-    public function update($link, $data)
+    public function update($id, $data)
     {
-        $page = $this->findByLink($link);
+        $page = $this->find($id);
 
         if (! $page)
         {
@@ -214,12 +236,17 @@ class PageDepot
         /** @var string */
         $body = $data['body'];
 
-        unset($data['body']);
+        // The following excluded should not be saved to file ---
+        $excluded = array('body', 'created_at', 'html', 'id');
 
-        if (array_key_exists('html', $data))
+        foreach ($excluded as $item)
         {
-            unset($data['html']);
+            if (array_key_exists($item, $data))
+            {
+                unset($data[$item]);
+            }
         }
+        // ------------------------------------------------------
 
         $dump = Yaml::dump($data);
 
@@ -231,7 +258,7 @@ class PageDepot
 
         file_put_contents($file, $md);
 
-        return $this->findByLink($link);
+        return $this->find($id);
     }
 
     /**

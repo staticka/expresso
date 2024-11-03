@@ -51,19 +51,19 @@ class Pages
     }
 
     /**
-     * @param string $link
+     * @param integer $id
      * @param \Staticka\Expresso\Depots\PageDepot $page
      * @param \Staticka\Expresso\Plate            $plate
      *
      * @return string
      */
-    public function show($link, PageDepot $page, Plate $plate)
+    public function show($id, PageDepot $page, Plate $plate)
     {
-        $result = $page->findByLink($link);
+        $result = $page->find($id);
 
         if (! $result)
         {
-            return $this->asNotFound($link);
+            return $this->asNotFound($id);
         }
 
         $fields = $page->getFields();
@@ -104,14 +104,14 @@ class Pages
     }
 
     /**
-     * @param string $link
+     * @param integer $id
      * @param \Staticka\Expresso\Depots\PageDepot $page
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function update($link, PageDepot $page)
+    public function update($id, PageDepot $page)
     {
-        $check = new PageCheck($page, $link);
+        $check = new PageCheck($page, $id);
 
         /** @var array<string, string> */
         $data = $this->request->getParsedBody();
@@ -121,18 +121,18 @@ class Pages
             return $this->toJson($check->errors(), 422);
         }
 
-        $page->update($link, $data);
+        $page->update($id, $data);
 
         return $this->toJson('Page updated!', 204);
     }
 
     /**
-     * @param  string $link
+     * @param  integer $id
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function asNotFound($link)
+    protected function asNotFound($id)
     {
-        return $this->withError('Page (' . $link . ') not found', 422);
+        return $this->withError('Page (' . $id . ') not found', 422);
     }
 
     /**

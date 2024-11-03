@@ -29,9 +29,9 @@ class PageCheck extends Check
     );
 
     /**
-     * @var string|null
+     * @var integer|null
      */
-    protected $link = null;
+    protected $id = null;
 
     /**
      * @var \Staticka\Expresso\Depots\PageDepot
@@ -40,11 +40,11 @@ class PageCheck extends Check
 
     /**
      * @param \Staticka\Expresso\Depots\PageDepot $page
-     * @param string|null $link
+     * @param integer|null $id
      */
-    public function __construct(PageDepot $page, $link = null)
+    public function __construct(PageDepot $page, $id = null)
     {
-        $this->link = $link;
+        $this->id = $id;
 
         $this->page = $page;
     }
@@ -76,14 +76,14 @@ class PageCheck extends Check
 
         $page = $this->page->findByLink($link);
 
-        if (! $this->link && $page)
+        if (! $this->id && $page)
         {
             $this->setError('link', 'URL Link already exists');
         }
 
-        if ($this->link)
+        if ($this->id)
         {
-            if ($page && $page->getLink() !== '/' . $this->link)
+            if ($page && $page->getLink() !== $link)
             {
                 $this->setError('link', 'URL Link already exists');
             }
@@ -91,12 +91,12 @@ class PageCheck extends Check
 
         $page = $this->page->findByName($name);
 
-        if (! $this->link && $page)
+        if (! $this->id && $page)
         {
             $this->setError('name', 'Page Title already exists');
         }
 
-        if ($this->link)
+        if ($this->id)
         {
             if ($page && strtolower($page->getName()) !== strtolower($name))
             {

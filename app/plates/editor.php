@@ -79,7 +79,7 @@
   <script>
     let editor = <?= $data ?>
 
-    const link = '<?= $url->set('/pages' . $page['link']) ?>'
+    const link = '<?= $url->set('/pages/' . $page['id']) ?>'
 
     editor.error = {}
 

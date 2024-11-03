@@ -28,7 +28,7 @@
             <?php foreach ($items as $item): ?>
               <tr>
                 <td>
-                  <a href="<?= $url->set('/pages' . $item['link']) ?>"><?= $item['name'] ?></a>
+                  <a href="<?= $url->set('/pages/' . $item['id']) ?>"><?= $item['name'] ?></a>
                 </td>
                 <td>
                   <a href="<?= $url->set($item['link']) ?>" target="_blank"><?= $item['link'] ?></a>
