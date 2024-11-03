@@ -7,6 +7,7 @@ use Rougin\Slytherin\Http\HttpIntegration;
 use Rougin\Slytherin\Routing\RoutingIntegration;
 use Rougin\Slytherin\System;
 use Rougin\Slytherin\Template\RendererIntegration;
+use Staticka\Expresso\Depots\PageDepot;
 use Staticka\Expresso\Helpers\LinkHelper as ExpressoLink;
 use Staticka\Expresso\Package as Expresso;
 use Staticka\Helper\LinkHelper as StatickaLink;
@@ -20,6 +21,26 @@ use Staticka\Package as Staticka;
 class Express extends System
 {
     /**
+     * @var string|null
+     */
+    protected $buildPath = null;
+
+    /**
+     * @var string|null
+     */
+    protected $configPath = null;
+
+    /**
+     * @var string|null
+     */
+    protected $pagesPath = null;
+
+    /**
+     * @var string|null
+     */
+    protected $platesPath = null;
+
+    /**
      * @var string[]
      */
     protected $fields = array();
@@ -30,9 +51,22 @@ class Express extends System
     protected $package = null;
 
     /**
+     * @var string|null
+     */
+    protected $rootPath = null;
+
+    /**
      * @var string
      */
-    protected $root;
+    protected $timezone = null;
+
+    /**
+     * @return string
+     */
+    public static function getAppPath()
+    {
+        return dirname(dirname(__FILE__)) . '/app';
+    }
 
     /**
      * @return void
@@ -44,6 +78,8 @@ class Express extends System
         $this->setHttp();
 
         $this->setRender();
+
+        $this->setPackage();
 
         $this->setApp();
 
@@ -59,6 +95,30 @@ class Express extends System
     }
 
     /**
+     * @param string $buildPath
+     *
+     * @return self
+     */
+    public function setBuildPath($buildPath)
+    {
+        $this->buildPath = $buildPath;
+
+        return $this;
+    }
+
+    /**
+     * @param string $configPath
+     *
+     * @return self
+     */
+    public function setConfigPath($configPath)
+    {
+        $this->configPath = $configPath;
+
+        return $this;
+    }
+
+    /**
      * @param string[] $fields
      *
      * @return self
@@ -71,34 +131,51 @@ class Express extends System
     }
 
     /**
-     * @param \Staticka\Package $package
-     * @return self
-     */
-    public function setPackage(Staticka $package)
-    {
-        $this->package = $package;
-
-        return $this;
-    }
-
-    /**
-     * @param string $root
+     * @param string $pagesPath
      *
      * @return self
      */
-    public function setRootPath($root)
+    public function setPagesPath($pagesPath)
     {
-        $this->root = $root;
+        $this->pagesPath = $pagesPath;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @param string $platesPath
+     *
+     * @return self
      */
-    public static function getAppPath()
+    public function setPlatesPath($platesPath)
     {
-        return dirname(dirname(__FILE__)) . '/app';
+        $this->platesPath = $platesPath;
+
+        return $this;
+    }
+
+    /**
+     * @param string $rootPath
+     *
+     * @return self
+     */
+    public function setRootPath($rootPath)
+    {
+        $this->rootPath = $rootPath;
+
+        return $this;
+    }
+
+    /**
+     * @param string $timezone
+     *
+     * @return self
+     */
+    public function setTimezone($timezone)
+    {
+        $this->timezone = $timezone;
+
+        return $this;
     }
 
     /**
@@ -106,19 +183,6 @@ class Express extends System
      */
     protected function setApp()
     {
-        // Prepare from Staticka instance -------
-        if (! $this->package)
-        {
-            $package = new Staticka($this->root);
-
-            $package->setPathsFromRoot();
-
-            $this->package = $package;
-        }
-
-        $this->integrate($this->package);
-        // --------------------------------------
-
         // Define the fields for each page for Expresso ----
         /** @var \Staticka\System */
         $app = $this->container->get('Staticka\System');
@@ -130,6 +194,15 @@ class Express extends System
             $this->config->set('app.fields', $this->fields);
         }
         // -------------------------------------------------
+
+        // Initialize the PageDepot ---------------------
+        /** @var string[] */
+        $fields = $this->config->get('app.fields');
+
+        $depot = new PageDepot($app, $fields);
+
+        $this->container->set(get_class($depot), $depot);
+        // ----------------------------------------------
     }
 
     /**
@@ -163,11 +236,53 @@ class Express extends System
         $this->container->set(get_class($helper), $helper);
 
         /** @var string */
-        $baseUrl = $this->config->get('app.base_url');
+        $siteUrl = $this->config->get('app.site_url');
 
-        $helper = new StatickaLink($baseUrl);
+        $helper = new StatickaLink($siteUrl);
 
         $this->container->set(get_class($helper), $helper);
+    }
+
+    /**
+     * @return void
+     */
+    protected function setPackage()
+    {
+        if (! $this->rootPath)
+        {
+            $this->rootPath = self::getAppPath();
+        }
+
+        $package = new Staticka($this->rootPath);
+
+        $package->setPathsFromRoot();
+
+        if ($this->buildPath)
+        {
+            $package->setBuildPath($this->buildPath);
+        }
+
+        if ($this->configPath)
+        {
+            $package->setConfigPath($this->configPath);
+        }
+
+        if ($this->pagesPath)
+        {
+            $package->setPagesPath($this->pagesPath);
+        }
+
+        if ($this->platesPath)
+        {
+            $package->setPlatesPath($this->platesPath);
+        }
+
+        if ($this->timezone)
+        {
+            $package->setTimezone($this->timezone);
+        }
+
+        $this->integrate($package);
     }
 
     /**
@@ -180,8 +295,11 @@ class Express extends System
 
         $plate = new Plate($renderer);
 
+        // Add the specified filters to Plate -----------------
+        $default = array('Staticka\Filter\LayoutFilter');
+
         /** @var string[] */
-        $filters = $this->config->get('app.filters', array());
+        $filters = $this->config->get('app.filters', $default);
 
         $container = new ReflectionContainer($this->container);
 
@@ -192,9 +310,19 @@ class Express extends System
 
             $plate->addFilter($filter);
         }
+        // ----------------------------------------------------
+
+        // Add the specified helpers to Plate -------------------
+        $default = array('Staticka\Expresso\Helpers\LinkHelper');
+
+        $default[] = 'Staticka\Helper\BlockHelper';
+        $default[] = 'Staticka\Helper\LayoutHelper';
+        $default[] = 'Staticka\Helper\LinkHelper';
+        $default[] = 'Staticka\Helper\PlateHelper';
+        $default[] = 'Staticka\Helper\StringHelper';
 
         /** @var string[] */
-        $helpers = $this->config->get('app.helpers', array());
+        $helpers = $this->config->get('app.helpers', $default);
 
         foreach ($helpers as $helper)
         {
@@ -203,6 +331,7 @@ class Express extends System
 
             $plate->addHelper($helper);
         }
+        // ------------------------------------------------------
 
         $this->container->set(get_class($plate), $plate);
     }

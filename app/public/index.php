@@ -6,11 +6,8 @@ $root = dirname(dirname(__DIR__));
 
 require $root . '/vendor/autoload.php';
 
-/** @var string */
-$appPath = realpath($root . '/app');
-
 $app = new Express;
 
-$app->setRootPath($appPath);
+$app->setRootPath($root . '/app');
 
 $app->run();
