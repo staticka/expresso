@@ -23,6 +23,11 @@ class Express extends System
     /**
      * @var string|null
      */
+    protected $appUrl = null;
+
+    /**
+     * @var string|null
+     */
     protected $buildPath = null;
 
     /**
@@ -54,6 +59,11 @@ class Express extends System
      * @var string|null
      */
     protected $rootPath = null;
+
+    /**
+     * @var string|null
+     */
+    protected $siteUrl = null;
 
     /**
      * @var string
@@ -92,6 +102,18 @@ class Express extends System
         $this->setPlate();
 
         parent::run();
+    }
+
+    /**
+     * @param string $appUrl
+     *
+     * @return self
+     */
+    public function setAppUrl($appUrl)
+    {
+        $this->appUrl = $appUrl;
+
+        return $this;
     }
 
     /**
@@ -167,6 +189,18 @@ class Express extends System
     }
 
     /**
+     * @param string $siteUrl
+     *
+     * @return self
+     */
+    public function setSiteUrl($siteUrl)
+    {
+        $this->siteUrl = $siteUrl;
+
+        return $this;
+    }
+
+    /**
      * @param string $timezone
      *
      * @return self
@@ -183,17 +217,25 @@ class Express extends System
      */
     protected function setApp()
     {
-        // Define the fields for each page for Expresso ----
+        // Define the fields for each page for Expresso ---
         /** @var \Staticka\System */
         $app = $this->container->get('Staticka\System');
 
         $this->config->load($app->getConfigPath());
 
-        if ($this->fields)
+        if (! $this->fields)
         {
-            $this->config->set('app.fields', $this->fields);
+            $this->fields[] = 'name';
+            $this->fields[] = 'title';
+            $this->fields[] = 'description';
+            $this->fields[] = 'link';
+            $this->fields[] = 'plate';
+            $this->fields[] = 'category';
+            $this->fields[] = 'tags';
         }
-        // -------------------------------------------------
+
+        $this->config->set('app.fields', $this->fields);
+        // ------------------------------------------------
 
         // Initialize the PageDepot ---------------------
         /** @var string[] */
@@ -229,14 +271,14 @@ class Express extends System
     protected function setLink()
     {
         /** @var string */
-        $appUrl = $this->config->get('app.app_url');
+        $appUrl = $this->config->get('app.app_url', $this->appUrl);
 
         $helper = new ExpressoLink($appUrl, $_SERVER);
 
         $this->container->set(get_class($helper), $helper);
 
         /** @var string */
-        $siteUrl = $this->config->get('app.site_url');
+        $siteUrl = $this->config->get('app.site_url', $this->siteUrl);
 
         $helper = new StatickaLink($siteUrl);
 
