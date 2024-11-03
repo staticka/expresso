@@ -10,15 +10,45 @@
 
 ## Installation
 
-Create an `Expresso` project via [Composer](https://getcomposer.org/):
+Install the `Expresso` package via [Composer](https://getcomposer.org/):
 
 ``` bash
-$ composer create-project staticka/expresso
+$ composer require staticka/expresso
 ```
 
 ## Basic Usage
 
-[TODO]
+Initialize the `Express` class to create a new application:
+
+``` php
+// index.php
+
+use Staticka\Expresso\Express;
+
+// ...
+
+$app = new Express;
+
+// Set the URL of the Expresso app ------
+$app->setAppUrl('http://localhost:3977');
+// --------------------------------------
+
+// Set the URL of the website ------
+$app->setSiteUrl('https://roug.in');
+// ---------------------------------
+
+// Set the path to store the pages ----
+$app->setPagesPath(__DIR__ . '/pages');
+// ------------------------------------
+
+$app->run();
+```
+
+To run the application, the [PHP's built-in web server](https://www.php.net/manual/en/features.commandline.webserver.php) can be used:
+
+``` bash
+$ php -S localhost:3977
+```
 
 ## Changelog
 
