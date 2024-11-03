@@ -178,42 +178,4 @@ class Package implements IntegrationInterface
 
         return $site->setData($data);
     }
-
-    /**
-     * @param \Rougin\Slytherin\Integration\Configuration     $config
-     * @param \Rougin\Slytherin\Container\ReflectionContainer $container
-     *
-     * @return \Staticka\Expresso\Plate
-     */
-    protected function getPlate(Configuration $config, ReflectionContainer $container)
-    {
-        /** @var \Rougin\Slytherin\Template\RendererInterface */
-        $renderer = $container->get(System::TEMPLATE);
-
-        $plate = new Plate($renderer);
-
-        /** @var string[] */
-        $filters = $config->get('app.filters', array());
-
-        foreach ($filters as $filter)
-        {
-            /** @var \Staticka\Filter\FilterInterface */
-            $filter = $container->get($filter);
-
-            $plate->addFilter($filter);
-        }
-
-        /** @var string[] */
-        $helpers = $config->get('app.helpers', array());
-
-        foreach ($helpers as $helper)
-        {
-            /** @var \Staticka\Helper\HelperInterface */
-            $helper = $container->get($helper);
-
-            $plate->addHelper($helper);
-        }
-
-        return $plate;
-    }
 }
