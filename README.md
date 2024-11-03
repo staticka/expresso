@@ -50,6 +50,32 @@ To run the application, the [PHP's built-in web server](https://www.php.net/manu
 $ php -S localhost:3977
 ```
 
+### Adding fields
+
+Fields in `Expresso` are the additional data of a page (e.g., `name`, `link`, etc.). Use the `setFields` method to customize the specified fields:
+
+``` php
+// index.php
+
+use Staticka\Expresso\Express;
+
+// ...
+
+$app = new Express;
+
+$fields = array('name');
+$fields[] = 'title';
+$fields[] = 'link';
+$fields[] = 'description';
+$fields[] = 'plate';
+$fields[] = 'category';
+$fields[] = 'tags';
+
+$app->setFields($fields);
+
+// ...
+```
+
 ## Changelog
 
 Please see [CHANGELOG][link-changelog] for more information what has changed recently.

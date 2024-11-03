@@ -8,7 +8,7 @@
   <?= $plate->add('navbar', compact('link')) ?>
 
   <div x-data="editor">
-    <div class="container mb-3">
+    <div class="container my-3">
       <a href="<?= $link->set('/pages') ?>" class="btn btn-outline-dark shadow-lg" :disabled="loading">Back to Pages</a>
       <button type="button" class="btn btn-dark shadow-lg" @click="save()" :disabled="loading">Save Details</button>
     </div>

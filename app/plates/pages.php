@@ -3,7 +3,7 @@
 <?= $block->body() ?>
   <?= $plate->add('navbar', compact('link')) ?>
 
-  <div class="container mb-3">
+  <div class="container my-3">
     <button type="button" class="btn btn-dark shadow-lg" data-bs-toggle="modal" data-bs-target="#create-page-modal">
       Create New Page
     </button>
