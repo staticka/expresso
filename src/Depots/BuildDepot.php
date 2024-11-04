@@ -16,7 +16,7 @@ class BuildDepot
     {
         chdir($this->getRootPath());
 
-        $script = 'vendor/bin/staticka';
+        $script = 'php vendor/bin/staticka';
 
         system($script . ' build');
     }

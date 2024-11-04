@@ -116,6 +116,11 @@ packages:
   - Staticka\Expresso\Package
 ```
 
+Once configured, select the `Build site` button from the application to compile all pages to HTML.
+
+> [!NOTE]
+> Kindly see the [Using `staticka.yml`](https://github.com/staticka/console/?tab=readme-ov-file#using-statickayml) section from `Console` for more information on how to configure the requested `staticka.yml` file.
+
 ## Changelog
 
 Please see [CHANGELOG][link-changelog] for more information what has changed recently.
