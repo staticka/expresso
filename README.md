@@ -105,7 +105,7 @@ $ vendor/bin/staticka initialize
 [PASS] "staticka.yml" added successfully!
 ```
 
-``` yml
+``` yaml
 # staticka.yml
 
 root_path: %%CURRENT_DIRECTORY%%/app
