@@ -14,32 +14,34 @@
   <div class="container mb-5">
     <div class="card shadow-lg">
       <div class="card-body">
-        <table class="table mb-0">
-          <thead>
-            <tr>
-              <th width="15%">Name</th>
-              <th width="15%">URL Link</th>
-              <th width="30%">Description</th>
-              <th width="15%">Tags</th>
-              <th width="15%">Created At</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($items as $item): ?>
+        <div class="table-responsive">          
+          <table class="table mb-0">
+            <thead>
               <tr>
-                <td>
-                  <a href="<?= $link->set('/pages/' . $item['id']) ?>"><?= $item['name'] ?></a>
-                </td>
-                <td>
-                  <a href="<?= $url->set($item['link']) ?>" target="_blank"><?= $item['link'] ?></a>
-                </td>
-                <td><?= $str->truncate($item['description']) ?></td>
-                <td><?= isset($item['tags']) ? $item['tags'] : '' ?></td>
-                <td><?= date('d M Y h:i:s A', $item['created_at']) ?></td>
+                <th width="15%">Name</th>
+                <th width="15%">URL Link</th>
+                <th width="30%">Description</th>
+                <th width="15%">Tags</th>
+                <th width="15%">Created At</th>
               </tr>
-            <?php endforeach ?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <?php foreach ($items as $item): ?>
+                <tr>
+                  <td>
+                    <a href="<?= $link->set('/pages/' . $item['id']) ?>"><?= $item['name'] ?></a>
+                  </td>
+                  <td>
+                    <a href="<?= $url->set($item['link']) ?>" target="_blank"><?= $item['link'] ?></a>
+                  </td>
+                  <td><?= $str->truncate($item['description']) ?></td>
+                  <td><?= isset($item['tags']) ? $item['tags'] : '' ?></td>
+                  <td><?= date('d M Y h:i:s A', $item['created_at']) ?></td>
+                </tr>
+              <?php endforeach ?>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

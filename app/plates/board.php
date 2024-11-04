@@ -19,24 +19,20 @@
                 <span class="fw-bold">Creating a new Page</span>
             </div>
             <div class="card-body">
-              <p>To create a new page, kindly select the <a href="<?= $link->set('/pages') ?>">Pages</a> link from the navigation bar on top then select the button <code class="p-1 bg-dark text-white rounded">Create New Page</code>.</p>
+              <p>Kindly select the <a href="<?= $link->set('/pages') ?>">Pages</a> link from the navigation bar on top then select the <code class="p-1 bg-dark text-white rounded">Create New Page</code> button to create a new page.</p>
             </div>
           </div>
         </div>
-        <!-- <div class="col-sm-4">
+        <div class="col-sm-4">
           <div class="card h-100">
             <div class="card-header border-bottom-0 p-3">
                 <span class="fw-bold">Compiling the pages to HTML</span>
             </div>
             <div class="card-body">
-              <p>Expresso does not yet have a user interface for building pages.</p>
-              <p>With this, kindly install <a href="https://roug.in/staticka/console" target="_blank">Staticka Console</a> in the mean time then use its <code>build</code> command:</p>
-              <div>
-                <pre class="mb-0 p-2 bg-dark text-white"><code>$ vendor/bin/staticka build</code></pre>
-              </div>
+              <p>Select the <code class="p-1 bg-success text-white rounded">Build site</code> button from the navigation bar to build all available pages. This functionality requires <a href="https://roug.in/staticka/console" target="_blank">Staticka Console</a> to be installed and configured.</p>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
