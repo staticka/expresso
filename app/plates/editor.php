@@ -1,4 +1,4 @@
-<?= $layout->load('main'); ?>
+<?= $layout->load('main', compact('link', 'plate')) ?>
 
 <?= $block->set('styles') ?>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
@@ -72,8 +72,6 @@
 <?= $block->end() ?>
 
 <?= $block->set('scripts') ?>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <script>

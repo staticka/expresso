@@ -50,6 +50,8 @@ To run the application, the [PHP's built-in web server](https://www.php.net/manu
 $ php -S localhost:3977
 ```
 
+Once the application has been served, it is now possible to create pages using `Expresso`.
+
 ### Adding fields
 
 Fields in `Expresso` are the additional data of a page (e.g., `name`, `link`, etc.). Use the `setFields` method to customize the specified fields:
@@ -74,6 +76,44 @@ $fields[] = 'tags';
 $app->setFields($fields);
 
 // ...
+```
+
+## Building pages using `Console`
+
+`Expresso` does not contain a functionality yet to build pages as they introduce performance issues when loading the application. However, an alternative way for building the requested pages is to install the [Console](https://github.com/staticka/console/) package then add the `Package` class by `Expresso`:
+
+``` php
+namespace Staticka\Expresso;
+
+// ...
+
+use Rougin\Slytherin\Integration\IntegrationInterface;
+
+// ...
+
+class Package implements IntegrationInterface
+{
+    // ...
+}
+```
+
+To use the `Package` class of `Expresso` by `Console`, kindly create the required `staticka.yml` then include the specified class to `packages` property:
+
+``` bash
+$ composer require staticka/console
+$ vendor/bin/staticka initialize
+[PASS] "staticka.yml" added successfully!
+```
+
+``` yml
+# staticka.yml
+
+root_path: %%CURRENT_DIRECTORY%%/app
+
+# ...
+
+packages:
+  - Staticka\Expresso\Package
 ```
 
 ## Changelog

@@ -27,6 +27,11 @@
           </div>
         </div>
         <div class="modal-footer border-top-0 bg-light">
+          <div class="me-auto">
+            <div class="spinner-border align-middle text-black" role="status" x-show="loading">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
           <button type="button" class="btn btn-link text-black text-decoration-none" data-bs-dismiss="modal" :disabled="loading">Cancel</button>
           <button type="button" class="btn btn-dark" @click="store" :disabled="loading">Create Page</button>
         </div>

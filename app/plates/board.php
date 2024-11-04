@@ -1,4 +1,4 @@
-<?= $layout->load('main'); ?>
+<?= $layout->load('main', compact('link', 'plate')) ?>
 
 <?= $block->body() ?>
   <?= $plate->add('navbar', compact('link')) ?>
@@ -19,11 +19,11 @@
                 <span class="fw-bold">Creating a new Page</span>
             </div>
             <div class="card-body">
-              <p>To create a new page, kindly select the <a href="<?= $link->set('/pages'); ?>">Pages</a> link from the navigation bar on top then select the <code class="p-1 bg-dark text-white rounded">Create New Page</code> button.</p>
+              <p>To create a new page, kindly select the <a href="<?= $link->set('/pages') ?>">Pages</a> link from the navigation bar on top then select the button <code class="p-1 bg-dark text-white rounded">Create New Page</code>.</p>
             </div>
           </div>
         </div>
-        <div class="col-sm-4">
+        <!-- <div class="col-sm-4">
           <div class="card h-100">
             <div class="card-header border-bottom-0 p-3">
                 <span class="fw-bold">Compiling the pages to HTML</span>
@@ -36,7 +36,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

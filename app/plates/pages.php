@@ -1,7 +1,7 @@
-<?= $layout->load('main'); ?>
+<?= $layout->load('main', compact('link', 'plate')) ?>
 
 <?= $block->body() ?>
-  <?= $plate->add('navbar', compact('link')) ?>
+  <?= $plate->add('navbar', compact('block', 'link')) ?>
 
   <div class="container my-3">
     <button type="button" class="btn btn-dark shadow-lg" data-bs-toggle="modal" data-bs-target="#create-page-modal">
@@ -46,8 +46,5 @@
 <?= $block->end() ?>
 
 <?= $block->set('scripts') ?>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
   <?= $plate->add('modal/script', compact('link')) ?>
 <?= $block->end() ?>
