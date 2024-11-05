@@ -15,6 +15,17 @@ use Symfony\Component\Yaml\Yaml;
  */
 class PageDepot
 {
+    const TEMPLATE = '---
+name: [TITLE]
+link: /[LINK]
+title: [TITLE]
+description: [DESCRIPTION]
+tags:
+category:
+---
+
+# [TITLE]';
+
     const SORT_ASC = 0;
 
     const SORT_DESC = 1;
@@ -311,12 +322,7 @@ class PageDepot
      */
     protected function setTemplate($data)
     {
-        // TODO: Contents should be returned as constant in Page ---
-        $path = __DIR__ . '/../Plates/default.md';
-
-        /** @var string */
-        $md = file_get_contents($path);
-        // ---------------------------------------------------------
+        $md = self::TEMPLATE;
 
         $exists = array_key_exists('description', $data);
 
