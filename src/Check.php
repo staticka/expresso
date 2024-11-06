@@ -127,6 +127,7 @@ class Check
         {
             // Break down multiple rules ---
             $items = explode('|', $rule);
+            // -----------------------------
 
             // TODO: Allow custom rules from existing, new ones ---
             foreach ($items as $item)
@@ -134,7 +135,6 @@ class Check
                 $valid->rule($item, $key);
             }
             // ----------------------------------------------------
-            // -----------------------------
         }
 
         $valid = $valid->withData($data);
