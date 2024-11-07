@@ -57,6 +57,18 @@ class AppTest extends Testcase
     /**
      * @return void
      */
+    public function test_pages_page()
+    {
+        $this->setRequest('GET', '/pages');
+
+        $this->app->run();
+
+        $this->expectOutputRegex('/Create New Page/');
+    }
+
+    /**
+     * @return void
+     */
     public function test_welcome_page()
     {
         $this->setRequest('GET', '/');
