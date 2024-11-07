@@ -7,7 +7,7 @@ use Rougin\Slytherin\Http\HttpIntegration;
 use Rougin\Slytherin\Routing\RoutingIntegration;
 use Rougin\Slytherin\System;
 use Rougin\Slytherin\Template\RendererIntegration;
-use Staticka\Expresso\Depots\PageDepot;
+use Staticka\Depots\PageDepot;
 use Staticka\Expresso\Helpers\LinkHelper as ExpressoLink;
 use Staticka\Helper\LinkHelper as StatickaLink;
 use Staticka\Package;

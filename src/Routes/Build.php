@@ -3,13 +3,8 @@
 namespace Staticka\Expresso\Routes;
 
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Staticka\Expresso\Checks\BuildCheck;
-use Staticka\Expresso\Checks\PageCheck;
 use Staticka\Expresso\Depots\BuildDepot;
-use Staticka\Expresso\Depots\PageDepot;
-use Staticka\Expresso\Helpers\FieldHelper;
-use Staticka\Expresso\Plate;
 
 /**
  * @package Staticka
@@ -24,7 +19,7 @@ class Build
     protected $response;
 
     /**
-     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      */
     public function __construct(ResponseInterface $response)
     {
@@ -34,7 +29,7 @@ class Build
     /**
      * @param \Staticka\Expresso\Depots\BuildDepot $depot
      *
-     * @return string
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function index(BuildDepot $depot)
     {

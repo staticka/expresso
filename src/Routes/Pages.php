@@ -4,8 +4,8 @@ namespace Staticka\Expresso\Routes;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Staticka\Depots\PageDepot;
 use Staticka\Expresso\Checks\PageCheck;
-use Staticka\Expresso\Depots\PageDepot;
 use Staticka\Expresso\Helpers\FieldHelper;
 use Staticka\Expresso\Plate;
 
@@ -38,8 +38,8 @@ class Pages
     }
 
     /**
-     * @param \Staticka\Expresso\Depots\PageDepot $page
-     * @param \Staticka\Expresso\Plate            $plate
+     * @param \Staticka\Depots\PageDepot $page
+     * @param \Staticka\Expresso\Plate   $plate
      *
      * @return string
      */
@@ -51,9 +51,9 @@ class Pages
     }
 
     /**
-     * @param integer                             $id
-     * @param \Staticka\Expresso\Depots\PageDepot $page
-     * @param \Staticka\Expresso\Plate            $plate
+     * @param integer                    $id
+     * @param \Staticka\Depots\PageDepot $page
+     * @param \Staticka\Expresso\Plate   $plate
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -81,7 +81,7 @@ class Pages
     }
 
     /**
-     * @param \Staticka\Expresso\Depots\PageDepot $page
+     * @param \Staticka\Depots\PageDepot $page
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -103,8 +103,8 @@ class Pages
     }
 
     /**
-     * @param integer                             $id
-     * @param \Staticka\Expresso\Depots\PageDepot $page
+     * @param integer                    $id
+     * @param \Staticka\Depots\PageDepot $page
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

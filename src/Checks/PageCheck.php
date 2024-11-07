@@ -2,8 +2,8 @@
 
 namespace Staticka\Expresso\Checks;
 
+use Staticka\Depots\PageDepot;
 use Staticka\Expresso\Check;
-use Staticka\Expresso\Depots\PageDepot;
 
 /**
  * @package Staticka
@@ -34,13 +34,13 @@ class PageCheck extends Check
     protected $id = null;
 
     /**
-     * @var \Staticka\Expresso\Depots\PageDepot
+     * @var \Staticka\Depots\PageDepot
      */
     protected $page;
 
     /**
-     * @param \Staticka\Expresso\Depots\PageDepot $page
-     * @param integer|null                        $id
+     * @param \Staticka\Depots\PageDepot $page
+     * @param integer|null               $id
      */
     public function __construct(PageDepot $page, $id = null)
     {

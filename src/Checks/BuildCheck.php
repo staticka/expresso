@@ -3,7 +3,6 @@
 namespace Staticka\Expresso\Checks;
 
 use Staticka\Expresso\Check;
-use Staticka\Expresso\Depots\PageDepot;
 
 /**
  * @package Staticka
