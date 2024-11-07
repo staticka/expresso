@@ -30,14 +30,13 @@ class AppTest extends Testcase
         $app->setBuildPath($path . '/build');
         $app->setConfigPath($path . '/config');
         $app->setPagesPath($path . '/pages');
-        $plates = __DIR__ . '/../app/plates';
-        $app->setPlatesPath($plates);
         $app->setBuildPath($path . '/build');
         $app->setTimezone('Asia/Manila');
 
-        $app->setFields(array());
+        $plates = __DIR__ . '/../app/plates';
+        $app->setPlatesPath($plates);
 
-        $this->app = $app;
+        $this->app = $app->setFields(array());
     }
 
     /**
