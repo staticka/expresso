@@ -7,14 +7,14 @@
           <?php if ($link->isCurrent('/')): ?>
             <div class="nav-link active">Dashboard</div>
           <?php else: ?>
-            <a class="nav-link" href="<?= $link->set('/') ?>">Dashboard</a>
+            <a class="nav-link" href="<?php echo $link->set('/') ?>">Dashboard</a>
           <?php endif ?>
         </li>
         <li class="nav-item">
           <?php if ($link->isCurrent('pages')): ?>
             <div class="nav-link active">Pages</div>
           <?php else: ?>
-            <a class="nav-link" href="<?= $link->set('/pages') ?>">Pages</a>
+            <a class="nav-link" href="<?php echo $link->set('/pages') ?>">Pages</a>
           <?php endif ?>
         </li>
       </ul>

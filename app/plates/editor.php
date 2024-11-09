@@ -1,15 +1,15 @@
-<?= $layout->load('main', compact('link', 'plate')) ?>
+<?php echo $layout->load('main', compact('link', 'plate')) ?>
 
-<?= $block->set('styles') ?>
+<?php echo $block->set('styles') ?>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-<?= $block->end() ?>
+<?php echo $block->end() ?>
 
-<?= $block->body() ?>
-  <?= $plate->add('navbar', compact('link')) ?>
+<?php echo $block->body() ?>
+  <?php echo $plate->add('navbar', compact('link')) ?>
 
   <div x-data="editor">
     <div class="container my-3">
-      <a href="<?= $link->set('/pages') ?>" class="btn btn-outline-dark shadow-lg" :disabled="loading">Back to Pages</a>
+      <a href="<?php echo $link->set('/pages') ?>" class="btn btn-outline-dark shadow-lg" :disabled="loading">Back to Pages</a>
       <button type="button" class="btn btn-dark shadow-lg" @click="save()" :disabled="loading">Save Details</button>
     </div>
 
@@ -19,10 +19,10 @@
           <div class="row">
             <?php foreach ($fields as $field): ?>
               <div class="col-sm-3 mb-3">
-                <label for="<?= $field ?>" class="form-label mb-0"><?= ucfirst($field) ?></label>
-                <input type="text" name="<?= $field ?>" class="form-control" x-model="input.<?= $field ?>" :disabled="loading">
-                <template x-if="error.<?= $field ?>">
-                  <p class="text-danger small mb-0" x-text="error.<?= $field ?>[0]"></p>
+                <label for="<?php echo $field ?>" class="form-label mb-0"><?= ucfirst($field) ?></label>
+                <input type="text" name="<?php echo $field ?>" class="form-control" x-model="input.<?php echo $field ?>" :disabled="loading">
+                <template x-if="error.<?php echo $field ?>">
+                  <p class="text-danger small mb-0" x-text="error.<?php echo $field ?>[0]"></p>
                 </template>
               </div>
             <?php endforeach ?>
@@ -69,15 +69,15 @@
       </div>
     </div>
   </div>
-<?= $block->end() ?>
+<?php echo $block->end() ?>
 
-<?= $block->set('scripts') ?>
+<?php echo $block->set('scripts') ?>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <script>
-    let editor = <?= $data ?>
+    let editor = <?php echo $data ?>
 
-    const link = '<?= $link->set('/pages/' . $page['id']) ?>'
+    const link = '<?php echo $link->set('/pages/' . $page['id']) ?>'
 
     editor.error = {}
 
@@ -123,4 +123,4 @@
         })
     }
   </script>
-<?= $block->end() ?>
+<?php echo $block->end() ?>

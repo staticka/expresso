@@ -1,7 +1,7 @@
-<?= $layout->load('main', compact('link', 'plate')) ?>
+<?php echo $layout->load('main', compact('link', 'plate')) ?>
 
-<?= $block->body() ?>
-  <?= $plate->add('navbar', compact('link')) ?>
+<?php echo $block->body() ?>
+  <?php echo $plate->add('navbar', compact('link')) ?>
 
   <div class="p-5 bg-body-tertiary">
     <div class="container">
@@ -19,7 +19,7 @@
                 <span class="fw-bold">Creating a new Page</span>
             </div>
             <div class="card-body">
-              <p>Kindly select the <a href="<?= $link->set('/pages') ?>">Pages</a> link from the navigation bar on top then select the <code class="p-1 bg-dark text-white rounded">Create New Page</code> button to create a new page.</p>
+              <p>Kindly select the <a href="<?php echo $link->set('/pages') ?>">Pages</a> link from the navigation bar on top then select the <code class="p-1 bg-dark text-white rounded">Create New Page</code> button to create a new page.</p>
             </div>
           </div>
         </div>
@@ -36,4 +36,4 @@
       </div>
     </div>
   </div>
-<?= $block->end() ?>
+<?php echo $block->end() ?>

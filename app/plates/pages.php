@@ -1,14 +1,14 @@
-<?= $layout->load('main', compact('link', 'plate')) ?>
+<?php echo $layout->load('main', compact('link', 'plate')) ?>
 
-<?= $block->body() ?>
-  <?= $plate->add('navbar', compact('block', 'link')) ?>
+<?php echo $block->body() ?>
+  <?php echo $plate->add('navbar', compact('block', 'link')) ?>
 
   <div class="container my-3">
     <button type="button" class="btn btn-dark shadow-lg" data-bs-toggle="modal" data-bs-target="#create-page-modal">
       Create New Page
     </button>
 
-    <?= $plate->add('modal/plate') ?>
+    <?php echo $plate->add('modal/plate') ?>
   </div>
 
   <div class="container mb-5">
@@ -29,12 +29,12 @@
               <?php foreach ($items as $item): ?>
                 <tr>
                   <td>
-                    <a href="<?= $link->set('/pages/' . $item['id']) ?>"><?= $item['name'] ?></a>
+                    <a href="<?php echo $link->set('/pages/' . $item['id']) ?>"><?php echo $item['name'] ?></a>
                   </td>
                   <td>
-                    <a href="<?= $url->set($item['link']) ?>" target="_blank"><?= $item['link'] ?></a>
+                    <a href="<?php echo $url->set($item['link']) ?>" target="_blank"><?php echo $item['link'] ?></a>
                   </td>
-                  <td><?= $str->truncate($item['description']) ?></td>
+                  <td><?php echo $str->truncate($item['description']) ?></td>
                   <td><?= isset($item['tags']) ? $item['tags'] : '' ?></td>
                   <td><?= date('d M Y h:i:s A', $item['created_at']) ?></td>
                 </tr>
@@ -45,8 +45,8 @@
       </div>
     </div>
   </div>
-<?= $block->end() ?>
+<?php echo $block->end() ?>
 
-<?= $block->set('scripts') ?>
-  <?= $plate->add('modal/script', compact('link')) ?>
-<?= $block->end() ?>
+<?php echo $block->set('scripts') ?>
+  <?php echo $plate->add('modal/script', compact('link')) ?>
+<?php echo $block->end() ?>

@@ -13,7 +13,7 @@
 
       self.loading = true
 
-      const link = '<?= $link->set('/build') ?>'
+      const link = '<?php echo $link->set('/build') ?>'
 
       self.error = null
 

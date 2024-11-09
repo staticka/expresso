@@ -9,21 +9,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <?= $block->add('styles') ?>
+  <?php echo $block->add('styles') ?>
   <style type="text/css">
     html, body { font-family: 'Roboto'; }
     .ex-pointer { cursor: pointer; }
   </style>
 </head>
 <body>
-  <?= $block->content() ?>
+  <?php echo $block->content() ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-  <?= $plate->add('modal/build', compact('link')) ?>
+  <?php echo $plate->add('modal/build', compact('link')) ?>
 
-  <?= $block->add('scripts') ?>
+  <?php echo $block->add('scripts') ?>
 </body>
 </html>

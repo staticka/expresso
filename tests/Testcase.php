@@ -66,6 +66,7 @@ class Testcase extends Legacy
         $_SERVER['REQUEST_URI'] = $uri;
         $_SERVER['SERVER_NAME'] = 'localhost';
         $_SERVER['SERVER_PORT'] = '8000';
+        $_SERVER['HTTP_HOST'] = 'https';
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace Staticka\Expresso\Routes;
 
 use Staticka\Expresso\Testcase;
+use Staticka\Page;
+use Staticka\Parser;
 
 /**
  * @package Staticka
@@ -27,6 +29,32 @@ class CreateTest extends Testcase
     }
 
     /**
+     * @depends test_update_page
+     *
+     * @return integer
+     */
+    public function test_create_another_page()
+    {
+        sleep(1);
+
+        $this->setRequest('POST', '/pages');
+
+        $name = 'Another page!';
+        $link = '/another-page';
+        $this->setPayload(compact('name', 'link'));
+
+        $this->app->run();
+
+        $expected = $this->toJson('Page created!');
+
+        $this->expectOutputString($expected);
+
+        $this->resetPayload();
+
+        return $this->getPageId('another-page');
+    }
+
+    /**
      * @return integer
      */
     public function test_create_new_page()
@@ -34,9 +62,7 @@ class CreateTest extends Testcase
         $this->setRequest('POST', '/pages');
 
         $name = 'Hello world!';
-
         $link = '/hello-world';
-
         $this->setPayload(compact('name', 'link'));
 
         $this->app->run();
@@ -60,12 +86,45 @@ class CreateTest extends Testcase
         $this->app->run();
 
         $text = 'Page Title is required';
-
         $errors = array('name' => array($text));
 
         $expected = $this->toJson($errors);
 
         $this->expectOutputString($expected);
+    }
+
+    /**
+     * @depends test_create_another_page
+     *
+     * @param integer $id
+     *
+     * @return void
+     */
+    public function test_duplicate_error_page($id)
+    {
+        $this->setRequest('POST', '/pages/' . $id);
+
+        $name = 'This is something!';
+        $link = '/hello-world';
+        $this->setPayload(compact('name', 'link'));
+
+        $this->app->run();
+
+        $text = 'URL Link already exists';
+        $errors = array('link' => array($text));
+
+        $text = 'Page Title already exists';
+        $errors['name'] = array($text);
+
+        $expected = $this->toJson($errors);
+
+        $this->expectOutputString($expected);
+
+        $this->resetPayload();
+
+        $this->deleteFile('hello-world');
+
+        $this->deleteFile('another-page');
     }
 
     /**
@@ -78,9 +137,7 @@ class CreateTest extends Testcase
         $this->setRequest('POST', '/pages');
 
         $name = 'Hello world!';
-
         $link = '/hello-world';
-
         $this->setPayload(compact('name', 'link'));
 
         $this->app->run();
@@ -129,7 +186,7 @@ class CreateTest extends Testcase
      *
      * @param integer $id
      *
-     * @return void
+     * @return integer
      */
     public function test_show_page_details($id)
     {
@@ -141,7 +198,38 @@ class CreateTest extends Testcase
 
         $this->expectOutputRegex('/' . $html . '/');
 
-        $this->deleteFile('hello-world');
+        return $id;
+    }
+
+    /**
+     * @depends test_show_page_details
+     *
+     * @param integer $id
+     *
+     * @return void
+     */
+    public function test_update_page($id)
+    {
+        $this->setRequest('POST', '/pages/' . $id);
+
+        $name = 'This is something!';
+        $link = '/hello-world';
+        $this->setPayload(compact('name', 'link'));
+
+        $this->app->run();
+
+        $page = $this->getActualPage('hello-world');
+
+        $expected = $this->toJson('Page updated!');
+        $this->expectOutputString($expected);
+
+        $expected = 'This is something!';
+
+        $actual = $page->getName();
+
+        $this->assertEquals($expected, $actual);
+
+        // $this->deleteFile('hello-world');
     }
 
     /**
@@ -190,6 +278,26 @@ class CreateTest extends Testcase
         }
 
         return $selected;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return \Staticka\Page
+     * @throws \Exception
+     */
+    protected function getActualPage($name)
+    {
+        $file = $this->getActualFile($name);
+
+        if (! $file)
+        {
+            throw new \Exception('File "' . $name . '" not found');
+        }
+
+        $parser = new Parser;
+
+        return $parser->parsePage(new Page($file));
     }
 
     /**

@@ -44,7 +44,7 @@ class PageCheck extends Check
      */
     public function __construct(PageDepot $page, $id = null)
     {
-        $this->id = $id;
+        $this->id = $id ? (int) $id : null;
 
         $this->page = $page;
     }
@@ -83,9 +83,9 @@ class PageCheck extends Check
             $this->setError('link', 'URL Link already exists');
         }
 
-        if ($this->id)
+        if ($this->id && $page)
         {
-            if ($page && $page->getLink() !== $link)
+            if ($page->getId() !== $this->id)
             {
                 $this->setError('link', 'URL Link already exists');
             }
@@ -100,9 +100,7 @@ class PageCheck extends Check
 
         if ($this->id && $page)
         {
-            $pageName = strtolower((string) $page->getName());
-
-            if ($pageName !== strtolower($name))
+            if ($page->getId() !== $this->id)
             {
                 $this->setError('name', 'Page Title already exists');
             }
