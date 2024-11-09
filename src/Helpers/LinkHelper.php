@@ -14,7 +14,7 @@ class LinkHelper extends Staticka
     /**
      * @var array<string, string>
      */
-    protected $server;
+    protected $server = array();
 
     /**
      * @param string                $base
@@ -22,9 +22,9 @@ class LinkHelper extends Staticka
      */
     public function __construct($base, $server = array())
     {
-        parent::__construct($base);
-
         $this->server = $server;
+
+        parent::__construct($base);
     }
 
     /**

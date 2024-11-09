@@ -58,10 +58,12 @@ class PageCheck extends Check
     {
         $valid = parent::valid($data);
 
+        // @codeCoverageStartIgnore
         if (! $data || ! $valid)
         {
             return false;
         }
+        // @codeCoverageEndIgnore
 
         /** @var string */
         $name = $data['name'];

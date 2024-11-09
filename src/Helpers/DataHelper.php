@@ -7,7 +7,7 @@ namespace Staticka\Expresso\Helpers;
  *
  * @author Rougin Gutib <rougingutib@gmail.com>
  */
-class FieldHelper
+class DataHelper
 {
     /**
      * @param string[]             $fields

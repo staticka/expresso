@@ -50,15 +50,17 @@ class Check
      */
     public function firstError()
     {
-        if (! $this->errors)
+        $result = null;
+
+        if ($this->errors)
         {
-            return null;
+            /** @var string[][] */
+            $values = array_values($this->errors);
+
+            $result = $values[0][0];
         }
 
-        /** @var string[][] */
-        $values = array_values($this->errors);
-
-        return (string) $values[0][0];
+        return $result;
     }
 
     /**
@@ -93,12 +95,14 @@ class Check
      */
     public function setError($key, $text)
     {
-        if (! isset($this->errors[$key]))
+        $exists = array_key_exists($key, $this->errors);
+
+        if (! $exists)
         {
             $this->errors[$key] = array();
         }
 
-        array_push($this->errors[$key], $text);
+        $this->errors[$key][] = $text;
 
         return $this;
     }

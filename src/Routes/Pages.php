@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticka\Depots\PageDepot;
 use Staticka\Expresso\Checks\PageCheck;
-use Staticka\Expresso\Helpers\FieldHelper;
+use Staticka\Expresso\Helpers\DataHelper;
 use Staticka\Expresso\Plate;
 
 /**
@@ -74,7 +74,7 @@ class Pages
 
         $item['page'] = $data;
 
-        $item['data'] = FieldHelper::toJson($fields, $data);
+        $item['data'] = DataHelper::toJson($fields, $data);
 
         /** @var \Psr\Http\Message\ResponseInterface */
         return $plate->view('editor', $item);
