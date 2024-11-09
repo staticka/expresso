@@ -6,7 +6,7 @@
   <div class="p-5 bg-body-tertiary">
     <div class="container">
       <p class="fs-1 fw-bold">Welcome to Expresso!</p>
-      <span><a href="https://roug.in/staticka/expresso" target="_blank">Expresso</a> is a simple static blog platform based on <a href="https://roug.in/staticka" target="_blank">Staticka</a> which allows creating and building of pages through a web-based user interface.</span>
+      <span><a href="https://roug.in/staticka/expresso/" target="_blank">Expresso</a> is a simple static blog platform based on <a href="https://roug.in/staticka/" target="_blank">Staticka</a> which allows creating and building of pages through a web-based user interface.</span>
     </div>
   </div>
 
@@ -29,7 +29,7 @@
                 <span class="fw-bold">Compiling the pages to HTML</span>
             </div>
             <div class="card-body">
-              <p>Select the <code class="p-1 bg-success text-white rounded">Build site</code> button from the navigation bar to build all available pages. This functionality requires <a href="https://roug.in/staticka/console" target="_blank">Staticka Console</a> to be installed and configured.</p>
+              <p>Select the <code class="p-1 bg-success text-white rounded">Build site</code> button from the navigation bar to build all available pages. This functionality requires <a href="https://roug.in/staticka/console/" target="_blank">Staticka Console</a> to be installed and configured.</p>
             </div>
           </div>
         </div>

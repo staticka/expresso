@@ -1,8 +1,8 @@
 {
   "name": "staticka/expresso",
   "description": "Static blog platform based on Staticka.",
-  "keywords": [ "php-blog", "static-blog", "static-site" ],
-  "homepage": "https://roug.in/staticka/",
+  "keywords": [ "static-blog", "php-blog", "static-site" ],
+  "homepage": "https://roug.in/staticka/expresso",
   "license": "MIT",
   "authors":
   [

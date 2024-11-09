@@ -6,7 +6,7 @@
 [![Coverage Status][ico-coverage]][link-coverage]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-`Expresso` is a simple static blog platform based on [Staticka](https://roug.in/staticka) which allows creating and building of pages through a web-based user interface.
+`Expresso` is a simple static blog platform based on [Staticka](https://github.com/staticka/staticka) which allows creating and building of pages through a web-based user interface.
 
 ## Installation
 
@@ -47,7 +47,7 @@ $app->run();
 To run the application, the [PHP's built-in web server](https://www.php.net/manual/en/features.commandline.webserver.php) can be used:
 
 ``` bash
-$ php -S localhost:3977
+$ php -S localhost:3977 -t app/public
 ```
 
 Once the application has been served, it is now possible to create pages using `Expresso`.
