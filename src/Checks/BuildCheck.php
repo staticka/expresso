@@ -33,7 +33,16 @@ class BuildCheck extends Check
     {
         if (! file_exists($this->root . '/staticka.yml'))
         {
-            $this->setError('file', '"staticka.yml" not yet created');
+            $error = '"staticka.yml" not yet created';
+
+            $this->setError('file', $error);
+        }
+
+        if (! class_exists('Staticka\Console\Console'))
+        {
+            $error = '"staticka/console" is not yet installed.';
+
+            $this->setError('file', $error);
         }
 
         return count($this->errors) === 0;
