@@ -10,18 +10,17 @@ namespace Staticka\Expresso\Depots;
 class BuildDepot
 {
     /**
-     * @var string
-     */
-    protected $script = 'php vendor/bin/staticka build';
-
-    /**
+     * @codeCoverageIgnore
+     *
      * @return void
      */
     public function build()
     {
+        // Requires "staticka/console" package to test this manually ---
         chdir($this->getRootPath());
 
-        system($this->script);
+        system('php vendor/bin/staticka build');
+        // -------------------------------------------------------------
     }
 
     /**
@@ -36,17 +35,5 @@ class BuildDepot
         $exists = file_exists($vendor . '.gitignore');
 
         return $exists ? $vendor : $root;
-    }
-
-    /**
-     * @param string $script
-     *
-     * @return self
-     */
-    public function setScript($script)
-    {
-        $this->script = $script;
-
-        return $this;
     }
 }

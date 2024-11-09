@@ -2,6 +2,10 @@
 
 namespace Staticka\Expresso;
 
+use Rougin\Slytherin\Configuration;
+use Rougin\Slytherin\Container\Container;
+use Staticka\System;
+
 /**
  * @package Staticka
  *
@@ -32,6 +36,44 @@ class AppTest extends Testcase
 
         /** @var string */
         $actual = realpath(Express::getAppPath());
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_package_class()
+    {
+        $expected = __DIR__ . '/Fixture';
+
+        $config = new Configuration;
+
+        $config->set('layout.name', 'post');
+
+        $filters = array('Staticka\Filter\HtmlMinifier');
+        $config->set('layout.filters', $filters);
+
+        $filters = array('Staticka\Filter\HtmlMinifier');
+        $config->set('parser.filters', $filters);
+
+        $helpers = array('Staticka\Helper\StringHelper');
+        $config->set('layout.helpers', $helpers);
+
+        $package = new Package;
+
+        $container = new Container;
+
+        $old = new System($expected);
+        $old->setPagesPath($expected . '/pages');
+        $container->set(get_class($old), $old);
+
+        $result = $package->define($container, $config);
+
+        /** @var \Staticka\System */
+        $app = $result->get('Staticka\System');
+
+        $actual = $app->getRootPath();
 
         $this->assertEquals($expected, $actual);
     }

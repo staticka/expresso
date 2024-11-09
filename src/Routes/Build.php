@@ -42,9 +42,13 @@ class Build
             return $this->toJson($check->firstError(), 422);
         }
 
+        // Requires "staticka/console" package to test this manually ---
+        // @codeCoverageIgnoreStart
         $depot->build();
 
         return $this->toJson('Pages compiled!');
+        // @codeCoverageIgnoreEnd
+        // -------------------------------------------------------------
     }
 
     /**
