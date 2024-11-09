@@ -28,12 +28,10 @@ class BuildDepot
      */
     public function getRootPath()
     {
-        $vendor = __DIR__ . '/../../../../../';
+        $main = __DIR__ . '/../../../../../';
 
-        $root = __DIR__ . '/../../';
+        $exists = file_exists($main . '/vendor/autoload.php');
 
-        $exists = file_exists($vendor . '.gitignore');
-
-        return $exists ? $vendor : $root;
+        return $exists ? $main : __DIR__ . '/../../';
     }
 }
