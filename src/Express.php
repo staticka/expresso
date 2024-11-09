@@ -297,12 +297,14 @@ class Express extends System
      */
     protected function setPackage()
     {
-        if (! $this->rootPath)
+        $rootPath = self::getAppPath();
+
+        if ($this->rootPath)
         {
-            $this->rootPath = self::getAppPath();
+            $rootPath = $this->rootPath;
         }
 
-        $package = new Package($this->rootPath);
+        $package = new Package($rootPath);
 
         $package->setPathsFromRoot();
 
