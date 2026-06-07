@@ -8,7 +8,7 @@ All notable changes to `Expresso` will be documented in this file.
 - Conformed to `Level 10` of `PHPStan`
 
 ### Changed
-- Built-in `Check` to `rougin/valla`
+- Built-in `Check` to [Valla](https://github.com/rougin/valla)
 
 ## 0.1.0 - 2024-11-10
 
