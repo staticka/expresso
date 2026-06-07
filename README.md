@@ -121,10 +121,6 @@ Once configured, select the `Build site` button from the application to compile 
 > [!NOTE]
 > Kindly see the [Using `staticka.yml`](https://github.com/staticka/console/?tab=readme-ov-file#using-statickayml) section from `Console` for more information on how to configure the requested `staticka.yml` file.
 
-## Changelog
-
-Please see [CHANGELOG][link-changelog] for more information what has changed recently.
-
 ## Testing
 
 The [PHP's built-in web server](https://www.php.net/manual/en/features.commandline.webserver.php) can be used for running the project:
@@ -138,9 +134,13 @@ After running, open a web browser then proceed to http://localhost:3977.
 > [!WARNING]
 > This command should only be used for development purposes.
 
-## Credits
+## Changelog
 
-- [All contributors][link-contributors]
+Please see [CHANGELOG][link-changelog] for more recent changes and latest updates.
+
+## Contributing
+
+See [CONTRIBUTING][link-contributing] on how to contribute to the project.
 
 ## License
 
@@ -154,7 +154,7 @@ The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 
 [link-build]: https://github.com/staticka/expresso/actions
 [link-changelog]: https://github.com/staticka/expresso/blob/master/CHANGELOG.md
-[link-contributors]: https://github.com/staticka/expresso/contributors
+[link-contributing]: https://github.com/staticka/expresso/blob/master/CONTRIBUTING.md
 [link-coverage]: https://app.codecov.io/gh/staticka/expresso
 [link-downloads]: https://packagist.org/packages/staticka/expresso
 [link-license]: https://github.com/staticka/expresso/blob/master/LICENSE.md
