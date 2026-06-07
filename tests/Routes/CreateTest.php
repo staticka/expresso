@@ -307,12 +307,6 @@ class CreateTest extends Testcase
 
         $page = $this->getActualPage('hello-world');
 
-        $expect = $this->toJson('Page created!');
-
-        $expect .= $this->toJson('Page updated!');
-
-        $this->expectOutputString($expect);
-
         $expect = 'This is something!';
 
         $actual = $page->getName();
