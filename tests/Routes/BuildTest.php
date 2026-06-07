@@ -19,15 +19,7 @@ class BuildTest extends Testcase
     /**
      * @return void
      */
-    public function doSetUp()
-    {
-        $this->app = $this->setApp();
-    }
-
-    /**
-     * @return void
-     */
-    public function test_build_without_staticka_yml()
+    public function test_failed_if_build_without_config()
     {
         $expect = '"staticka.yml" not yet created';
 
@@ -40,5 +32,13 @@ class BuildTest extends Testcase
         $this->app->run();
 
         $this->expectOutputString($expect);
+    }
+
+    /**
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $this->app = $this->setApp();
     }
 }

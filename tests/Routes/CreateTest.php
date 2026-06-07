@@ -21,53 +21,9 @@ class CreateTest extends Testcase
     /**
      * @return void
      */
-    public function doSetUp()
+    public function test_failed_if_creating_duplicate_page()
     {
-        $path = __DIR__ . '/../Fixture/pages';
-
-        $files = glob($path . '/*.md');
-
-        $files = $files === false ? array() : $files;
-
-        foreach ($files as $file)
-        {
-            unlink($file);
-        }
-
-        $this->app = $this->setApp();
-
-        $this->resetPayload();
-    }
-
-    /**
-     * @return void
-     */
-    public function test_create_another_page()
-    {
-        sleep(1);
-
-        $this->setRequest('POST', '/pages');
-
-        $name = 'Another page!';
-        $link = '/another-page';
-        $this->setPayload(compact('name', 'link'));
-
-        $this->app->run();
-
-        $expected = $this->toJson('Page created!');
-
-        $this->expectOutputString($expected);
-
-        $this->resetPayload();
-
-        $this->deleteFile('another-page');
-    }
-
-    /**
-     * @return void
-     */
-    public function test_create_new_page()
-    {
+        // Create the initial page ----------------
         $this->setRequest('POST', '/pages');
 
         $name = 'Hello world!';
@@ -75,12 +31,37 @@ class CreateTest extends Testcase
         $link = '/hello-world';
 
         $this->setPayload(compact('name', 'link'));
+        // ----------------------------------------
 
         $this->app->run();
 
-        $expected = $this->toJson('Page created!');
+        $this->resetPayload();
 
-        $this->expectOutputString($expected);
+        // Attempt to create a duplicate page -----
+        $this->setRequest('POST', '/pages');
+
+        $name = 'Hello world!';
+
+        $link = '/hello-world';
+
+        $this->setPayload(compact('name', 'link'));
+        // ----------------------------------------
+
+        $this->app->run();
+
+        $text = 'URL Link already exists';
+
+        $errors = array('link' => array($text));
+
+        $text = 'Page Title already exists';
+
+        $errors['name'] = array($text);
+
+        $expect = $this->toJson('Page created!');
+
+        $expect .= $this->toJson($errors);
+
+        $this->expectOutputString($expect);
 
         $this->resetPayload();
 
@@ -90,7 +71,7 @@ class CreateTest extends Testcase
     /**
      * @return void
      */
-    public function test_create_new_page_without_data()
+    public function test_failed_if_create_without_data()
     {
         $this->setRequest('POST', '/pages');
 
@@ -99,15 +80,29 @@ class CreateTest extends Testcase
         $text = 'Page Title is required';
         $errors = array('name' => array($text));
 
-        $expected = $this->toJson($errors);
+        $expect = $this->toJson($errors);
 
-        $this->expectOutputString($expected);
+        $this->expectOutputString($expect);
     }
 
     /**
      * @return void
      */
-    public function test_duplicate_error_page()
+    public function test_failed_if_page_not_found()
+    {
+        $this->setRequest('GET', '/pages/0');
+
+        $this->app->run();
+
+        $expect = 'Page (0) not found';
+
+        $this->expectOutputString($expect);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_failed_if_updating_to_duplicate()
     {
         // Create first page (Hello world!) -------
         $this->setRequest('POST', '/pages');
@@ -163,13 +158,13 @@ class CreateTest extends Testcase
 
         $errors['name'] = array($text);
 
-        $expected = $this->toJson('Page created!');
+        $expect = $this->toJson('Page created!');
 
-        $expected .= $this->toJson('Page created!');
+        $expect .= $this->toJson('Page created!');
 
-        $expected .= $this->toJson($errors);
+        $expect .= $this->toJson($errors);
 
-        $this->expectOutputString($expected);
+        $this->expectOutputString($expect);
 
         $this->resetPayload();
 
@@ -181,45 +176,43 @@ class CreateTest extends Testcase
     /**
      * @return void
      */
-    public function test_error_existing_page()
+    public function test_passed_if_another_page_created()
     {
-        // Create the initial page ----------------
+        sleep(1);
+
         $this->setRequest('POST', '/pages');
 
-        $name = 'Hello world!';
-
-        $link = '/hello-world';
-
+        $name = 'Another page!';
+        $link = '/another-page';
         $this->setPayload(compact('name', 'link'));
-        // ----------------------------------------
 
         $this->app->run();
-
-        $this->resetPayload();
-
-        // Attempt to create a duplicate page -----
-        $this->setRequest('POST', '/pages');
-
-        $name = 'Hello world!';
-
-        $link = '/hello-world';
-
-        $this->setPayload(compact('name', 'link'));
-        // ----------------------------------------
-
-        $this->app->run();
-
-        $text = 'URL Link already exists';
-
-        $errors = array('link' => array($text));
-
-        $text = 'Page Title already exists';
-
-        $errors['name'] = array($text);
 
         $expect = $this->toJson('Page created!');
 
-        $expect .= $this->toJson($errors);
+        $this->expectOutputString($expect);
+
+        $this->resetPayload();
+
+        $this->deleteFile('another-page');
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_new_page_created()
+    {
+        $this->setRequest('POST', '/pages');
+
+        $name = 'Hello world!';
+
+        $link = '/hello-world';
+
+        $this->setPayload(compact('name', 'link'));
+
+        $this->app->run();
+
+        $expect = $this->toJson('Page created!');
 
         $this->expectOutputString($expect);
 
@@ -231,33 +224,7 @@ class CreateTest extends Testcase
     /**
      * @return void
      */
-    public function test_page_not_found()
-    {
-        $this->setRequest('GET', '/pages/0');
-
-        $this->app->run();
-
-        $expected = 'Page (0) not found';
-
-        $this->expectOutputString($expected);
-    }
-
-    /**
-     * @return void
-     */
-    public function test_pages_page()
-    {
-        $this->setRequest('GET', '/pages');
-
-        $this->app->run();
-
-        $this->expectOutputRegex('/Create New Page/');
-    }
-
-    /**
-     * @return void
-     */
-    public function test_show_page_details()
+    public function test_passed_if_page_details_shown()
     {
         // Create a page first (Hello world!) -----
         $this->setRequest('POST', '/pages');
@@ -280,7 +247,8 @@ class CreateTest extends Testcase
 
         $this->app->run();
 
-        $html = '"input":{"name":"Hello world!","title":"Hello world!"';
+        $html = '"input":{"name":"Hello world!",';
+        $html .= '"title":"Hello world!"';
         // -----------------------------------------
 
         $this->expectOutputRegex('/' . $html . '/');
@@ -291,7 +259,7 @@ class CreateTest extends Testcase
     /**
      * @return void
      */
-    public function test_update_page()
+    public function test_passed_if_page_updated()
     {
         // Create a page first (Hello world!) -----
         $this->setRequest('POST', '/pages');
@@ -329,13 +297,25 @@ class CreateTest extends Testcase
 
         $this->expectOutputString($expect);
 
-        $expected = 'This is something!';
+        $expect = 'This is something!';
 
         $actual = $page->getName();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals($expect, $actual);
 
         $this->deleteFile('hello-world');
+    }
+
+    /**
+     * @return void
+     */
+    public function test_passed_if_pages_list_loaded()
+    {
+        $this->setRequest('GET', '/pages');
+
+        $this->app->run();
+
+        $this->expectOutputRegex('/Create New Page/');
     }
 
     /**
@@ -349,6 +329,27 @@ class CreateTest extends Testcase
         {
             unlink($file);
         }
+    }
+
+    /**
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $path = __DIR__ . '/../Fixture/pages';
+
+        $files = glob($path . '/*.md');
+
+        $files = $files === false ? array() : $files;
+
+        foreach ($files as $file)
+        {
+            unlink($file);
+        }
+
+        $this->app = $this->setApp();
+
+        $this->resetPayload();
     }
 
     /**

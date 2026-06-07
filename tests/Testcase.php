@@ -14,6 +14,17 @@ use LegacyPHPUnit\TestCase as Legacy;
 class Testcase extends Legacy
 {
     /**
+     * @return void
+     */
+    protected function resetPayload()
+    {
+        foreach ($_POST as $key => $value)
+        {
+            unset($_POST[$key]);
+        }
+    }
+
+    /**
      * @param string[] $fields
      *
      * @return \Staticka\Expresso\Express
@@ -41,21 +52,6 @@ class Testcase extends Legacy
     }
 
     /**
-     * @param string $method
-     * @param string $uri
-     *
-     * @return void
-     */
-    protected function setRequest($method, $uri)
-    {
-        $_SERVER['REQUEST_METHOD'] = $method;
-        $_SERVER['REQUEST_URI'] = $uri;
-        $_SERVER['SERVER_NAME'] = 'localhost';
-        $_SERVER['SERVER_PORT'] = '8000';
-        $_SERVER['HTTP_HOST'] = 'https';
-    }
-
-    /**
      * @param array<string, mixed> $data
      *
      * @return void
@@ -69,13 +65,17 @@ class Testcase extends Legacy
     }
 
     /**
+     * @param string $method
+     * @param string $uri
+     *
      * @return void
      */
-    protected function resetPayload()
+    protected function setRequest($method, $uri)
     {
-        foreach ($_POST as $key => $value)
-        {
-            unset($_POST[$key]);
-        }
+        $_SERVER['REQUEST_METHOD'] = $method;
+        $_SERVER['REQUEST_URI'] = $uri;
+        $_SERVER['SERVER_NAME'] = 'localhost';
+        $_SERVER['SERVER_PORT'] = '8000';
+        $_SERVER['HTTP_HOST'] = 'https';
     }
 }

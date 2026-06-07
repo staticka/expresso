@@ -21,15 +21,7 @@ class AppTest extends Testcase
     /**
      * @return void
      */
-    public function doSetUp()
-    {
-        $this->app = $this->setApp();
-    }
-
-    /**
-     * @return void
-     */
-    public function test_fixed_app_path()
+    public function test_passed_if_app_path_fixed()
     {
         $expect = realpath(__DIR__ . '/../app');
 
@@ -43,7 +35,7 @@ class AppTest extends Testcase
     /**
      * @return void
      */
-    public function test_package_class()
+    public function test_passed_if_package_loads_system()
     {
         $expect = __DIR__ . '/Fixture';
 
@@ -68,10 +60,10 @@ class AppTest extends Testcase
         $old->setPagesPath($expect . '/pages');
         $container->set(get_class($old), $old);
 
-        $result = $package->define($container, $config);
+        $defined = $package->define($container, $config);
 
         /** @var \Staticka\System */
-        $app = $result->get('Staticka\System');
+        $app = $defined->get('Staticka\System');
 
         $actual = $app->getRootPath();
 
@@ -81,12 +73,20 @@ class AppTest extends Testcase
     /**
      * @return void
      */
-    public function test_welcome_page()
+    public function test_passed_if_welcome_page_shown()
     {
         $this->setRequest('GET', '/');
 
         $this->app->run();
 
         $this->expectOutputRegex('/Welcome to Expresso!/');
+    }
+
+    /**
+     * @return void
+     */
+    protected function doSetUp()
+    {
+        $this->app = $this->setApp();
     }
 }
