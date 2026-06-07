@@ -54,7 +54,7 @@ class PageCheck extends Check
      *
      * @return boolean
      */
-    public function valid(array $data = null)
+    public function valid($data = null)
     {
         $valid = parent::valid($data);
 

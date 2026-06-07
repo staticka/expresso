@@ -29,15 +29,16 @@ class BuildTest extends Testcase
      */
     public function test_build_without_staticka_yml()
     {
-        $expected = '"staticka.yml" not yet created';
+        $expect = '"staticka.yml" not yet created';
 
-        /** @var string */
-        $expected = json_encode($expected);
+        $expect = json_encode($expect);
+
+        $expect = $expect === false ? '' : $expect;
 
         $this->setRequest('POST', '/build');
 
         $this->app->run();
 
-        $this->expectOutputString($expected);
+        $this->expectOutputString($expect);
     }
 }

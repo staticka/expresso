@@ -42,13 +42,14 @@ class Build
             return $this->toJson($check->firstError(), 422);
         }
 
-        // Requires "staticka/console" package to test this manually ---
+        // This requires the "staticka/console" ---
+        // package to test this logic manually. ---
         // @codeCoverageIgnoreStart
         $depot->build();
 
         return $this->toJson('Pages compiled!');
         // @codeCoverageIgnoreEnd
-        // -------------------------------------------------------------
+        // ----------------------------------------
     }
 
     /**
@@ -60,13 +61,14 @@ class Build
      */
     protected function toJson($data, $code = 200, $options = 0)
     {
-        $response = $this->response->withStatus($code);
+        $http = $this->response->withStatus($code);
 
-        /** @var string */
-        $stream = @json_encode($data, $options);
+        $html = @json_encode($data, $options);
 
-        $response->getBody()->write($stream);
+        $http->getBody()->write($html === false ? '' : $html);
 
-        return $response->withHeader('Content-Type', 'application/json');
+        $value = 'application/json';
+
+        return $http->withHeader('Content-Type', $value);
     }
 }

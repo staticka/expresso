@@ -17,25 +17,26 @@ class DataHelper
      */
     public static function toJson($fields, $data = array())
     {
-        $result = array('input' => array());
+        $item = array('input' => array());
 
         foreach ($fields as $field)
         {
-            $result['input'][$field] = null;
+            $item['input'][$field] = null;
         }
 
         foreach ($data as $key => $value)
         {
-            $result['input'][$key] = $data[$key];
+            $item['input'][$key] = $data[$key];
         }
 
-        $result['body'] = $data['body'];
+        $item['body'] = $data['body'];
 
-        $result['html'] = null;
+        $item['html'] = null;
 
-        $result['loading'] = false;
+        $item['loading'] = false;
 
-        /** @var string */
-        return json_encode($result);
+        $item = json_encode($item);
+
+        return $item === false ? '' : $item;
     }
 }

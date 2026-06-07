@@ -29,7 +29,7 @@ class BuildCheck extends Check
      *
      * @return boolean
      */
-    public function valid(array $data = null)
+    public function valid($data = null)
     {
         if (! file_exists($this->root . '/staticka.yml'))
         {

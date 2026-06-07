@@ -146,8 +146,9 @@ class Pages
     {
         $response = $this->response->withStatus($code);
 
-        /** @var string */
         $stream = @json_encode($data, $options);
+
+        $stream = $stream === false ? '' : $stream;
 
         $response->getBody()->write($stream);
 

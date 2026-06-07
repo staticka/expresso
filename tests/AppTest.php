@@ -31,13 +31,13 @@ class AppTest extends Testcase
      */
     public function test_fixed_app_path()
     {
-        /** @var string */
-        $expected = realpath(__DIR__ . '/../app');
+        $expect = realpath(__DIR__ . '/../app');
 
-        /** @var string */
-        $actual = realpath(Express::getAppPath());
+        $expect = $expect === false ? '' : $expect;
 
-        $this->assertEquals($expected, $actual);
+        $actual = Express::getAppPath();
+
+        $this->assertEquals($expect, $actual);
     }
 
     /**
@@ -45,7 +45,7 @@ class AppTest extends Testcase
      */
     public function test_package_class()
     {
-        $expected = __DIR__ . '/Fixture';
+        $expect = __DIR__ . '/Fixture';
 
         $config = new Configuration;
 
@@ -64,8 +64,8 @@ class AppTest extends Testcase
 
         $container = new Container;
 
-        $old = new System($expected);
-        $old->setPagesPath($expected . '/pages');
+        $old = new System($expect);
+        $old->setPagesPath($expect . '/pages');
         $container->set(get_class($old), $old);
 
         $result = $package->define($container, $config);
@@ -75,7 +75,7 @@ class AppTest extends Testcase
 
         $actual = $app->getRootPath();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals($expect, $actual);
     }
 
     /**

@@ -75,7 +75,11 @@ class Express extends System
      */
     public static function getAppPath()
     {
-        return dirname(dirname(__FILE__)) . '/app';
+        $root = dirname(dirname(__FILE__));
+
+        $slash = DIRECTORY_SEPARATOR;
+
+        return $root . $slash . 'app';
     }
 
     /**
@@ -277,19 +281,30 @@ class Express extends System
      */
     protected function setLink()
     {
-        /** @var string */
-        $appUrl = $this->config->get('app.app_url', $this->appUrl);
-
-        $helper = new ExpressoLink($appUrl, $_SERVER);
-
-        $this->container->set(get_class($helper), $helper);
+        $appUrl = $this->appUrl;
 
         /** @var string */
-        $siteUrl = $this->config->get('app.site_url', $this->siteUrl);
+        $appUrl = $this->config->get('app.app_url', $appUrl);
+
+        /** @var array<string, string> */
+        $server = $_SERVER;
+
+        $helper = new ExpressoLink($appUrl, $server);
+
+        $class = get_class($helper);
+
+        $this->container->set($class, $helper);
+
+        $siteUrl = $this->siteUrl;
+
+        /** @var string */
+        $siteUrl = $this->config->get('app.site_url', $siteUrl);
 
         $helper = new StatickaLink($siteUrl);
 
-        $this->container->set(get_class($helper), $helper);
+        $class = get_class($helper);
+
+        $this->container->set($class, $helper);
     }
 
     /**
