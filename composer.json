@@ -38,11 +38,10 @@
       "Staticka\\Expresso\\": "tests"
     }
   },
-  "extra":
+  "scripts":
   {
-    "branch-alias":
-    {
-      "dev-master": "1.0-dev"
-    }
+    "analyze": "phpstan analyse",
+    "restyle": "php-cs-fixer fix --config=phpstyle.php",
+    "test": "phpunit"
   }
 }
