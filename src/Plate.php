@@ -96,6 +96,6 @@ class Plate implements RenderInterface
             $html = $filter->filter($html);
         }
 
-        return (string) $html;
+        return $html;
     }
 }
