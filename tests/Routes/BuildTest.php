@@ -17,6 +17,8 @@ class BuildTest extends Testcase
     protected $app;
 
     /**
+     * @runInSeparateProcess
+     *
      * @return void
      */
     public function test_failed_if_build_without_config()

@@ -19,6 +19,8 @@ class CreateTest extends Testcase
     protected $app;
 
     /**
+     * @runInSeparateProcess
+     *
      * @return void
      */
     public function test_failed_if_creating_duplicate_page()
@@ -69,6 +71,8 @@ class CreateTest extends Testcase
     }
 
     /**
+     * @runInSeparateProcess
+     *
      * @return void
      */
     public function test_failed_if_create_without_data()
@@ -86,6 +90,8 @@ class CreateTest extends Testcase
     }
 
     /**
+     * @runInSeparateProcess
+     *
      * @return void
      */
     public function test_failed_if_page_not_found()
@@ -100,6 +106,8 @@ class CreateTest extends Testcase
     }
 
     /**
+     * @runInSeparateProcess
+     *
      * @return void
      */
     public function test_failed_if_updating_to_duplicate()
@@ -174,6 +182,8 @@ class CreateTest extends Testcase
     }
 
     /**
+     * @runInSeparateProcess
+     *
      * @return void
      */
     public function test_passed_if_another_page_created()
@@ -198,6 +208,8 @@ class CreateTest extends Testcase
     }
 
     /**
+     * @runInSeparateProcess
+     *
      * @return void
      */
     public function test_passed_if_new_page_created()
@@ -222,6 +234,8 @@ class CreateTest extends Testcase
     }
 
     /**
+     * @runInSeparateProcess
+     *
      * @return void
      */
     public function test_passed_if_page_details_shown()
@@ -257,6 +271,8 @@ class CreateTest extends Testcase
     }
 
     /**
+     * @runInSeparateProcess
+     *
      * @return void
      */
     public function test_passed_if_page_updated()
@@ -307,6 +323,8 @@ class CreateTest extends Testcase
     }
 
     /**
+     * @runInSeparateProcess
+     *
      * @return void
      */
     public function test_passed_if_pages_list_loaded()

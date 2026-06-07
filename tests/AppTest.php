@@ -71,6 +71,8 @@ class AppTest extends Testcase
     }
 
     /**
+     * @runInSeparateProcess
+     *
      * @return void
      */
     public function test_passed_if_welcome_page_shown()
