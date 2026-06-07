@@ -1,8 +1,11 @@
 .env
+.gemini
 .php-cs-fixer.cache
 .phpunit.result.cache
+AGENTS.md
 app/build
 app/pages
 build
 composer.lock
+GEMINI.md
 vendor
