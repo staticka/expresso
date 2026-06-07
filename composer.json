@@ -16,7 +16,8 @@
   "require":
   {
     "php": ">=5.3.0",
-    "staticka/staticka": "~0.4"
+    "staticka/staticka": "~0.4",
+    "rougin/valla": "~0.1"
   },
   "require-dev":
   {

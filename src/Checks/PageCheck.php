@@ -2,8 +2,8 @@
 
 namespace Staticka\Expresso\Checks;
 
+use Rougin\Valla\Check;
 use Staticka\Depots\PageDepot;
-use Staticka\Expresso\Check;
 
 /**
  * @package Staticka
@@ -50,11 +50,11 @@ class PageCheck extends Check
     }
 
     /**
-     * @param array<string, mixed>|null $data
+     * @param array<string, mixed> $data
      *
      * @return boolean
      */
-    public function valid($data = null)
+    public function valid(array $data)
     {
         $valid = parent::valid($data);
 

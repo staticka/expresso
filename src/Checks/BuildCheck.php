@@ -2,7 +2,7 @@
 
 namespace Staticka\Expresso\Checks;
 
-use Staticka\Expresso\Check;
+use Rougin\Valla\Check;
 
 /**
  * @package Staticka
@@ -25,11 +25,11 @@ class BuildCheck extends Check
     }
 
     /**
-     * @param array<string, mixed>|null $data
+     * @param array<string, mixed> $data
      *
      * @return boolean
      */
-    public function valid($data = null)
+    public function valid(array $data)
     {
         if (! file_exists($this->root . '/staticka.yml'))
         {

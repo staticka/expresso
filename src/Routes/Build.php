@@ -37,7 +37,7 @@ class Build
 
         $check = new BuildCheck($root);
 
-        if (! $check->valid())
+        if (! $check->valid(array()))
         {
             return $this->toJson($check->firstError(), 422);
         }
