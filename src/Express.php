@@ -407,11 +407,13 @@ class Express extends System
      */
     protected function setRender()
     {
-        $path = (string) __DIR__ . '/../app/plates';
+        $path = __DIR__ . '/../app/plates';
 
         $this->config->set('app.views', $path);
 
-        $this->integrate(new RendererIntegration);
+        $package = new RendererIntegration;
+
+        $this->integrate($package);
     }
 
     /**
