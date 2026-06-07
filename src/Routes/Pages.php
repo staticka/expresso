@@ -59,6 +59,11 @@ class Pages
      */
     public function show($id, PageDepot $page, Plate $plate)
     {
+        // Forcing as "integer" since request ---
+        // parameters always return as "string".
+        $id = (int) $id;
+        // --------------------------------------
+
         $result = $page->find($id);
 
         if (! $result)
@@ -94,7 +99,9 @@ class Pages
 
         if (! $check->valid($data))
         {
-            return $this->toJson($check->errors(), 422);
+            $errors = $check->errors();
+
+            return $this->toJson($errors, 422);
         }
 
         $page->create($data);
@@ -110,19 +117,28 @@ class Pages
      */
     public function update($id, PageDepot $page)
     {
-        $check = new PageCheck($page, $id);
+        // Forcing as "integer" since request ---
+        // parameters always return as "string".
+        $id = (int) $id;
+        // --------------------------------------
+
+        $check = new PageCheck($page);
+
+        $check->setId($id);
 
         /** @var array<string, string> */
         $data = $this->request->getParsedBody();
 
         if (! $check->valid($data))
         {
-            return $this->toJson($check->errors(), 422);
+            $errors = $check->errors();
+
+            return $this->toJson($errors, 422);
         }
 
         $page->update($id, $data);
 
-        return $this->toJson('Page updated!', 204);
+        return $this->toJson(null, 204);
     }
 
     /**
@@ -132,7 +148,9 @@ class Pages
      */
     protected function asNotFound($id)
     {
-        return $this->withError('Page (' . $id . ') not found', 422);
+        $text = 'Page (' . $id . ') not found';
+
+        return $this->withError($text, 422);
     }
 
     /**
@@ -144,15 +162,19 @@ class Pages
      */
     protected function toJson($data, $code = 200, $options = 0)
     {
-        $response = $this->response->withStatus($code);
+        $http = $this->response->withStatus($code);
 
         $stream = @json_encode($data, $options);
 
         $stream = $stream === false ? '' : $stream;
 
-        $response->getBody()->write($stream);
+        $http->getBody()->write($stream);
 
-        return $response->withHeader('Content-Type', 'application/json');
+        $key = 'Content-Type';
+
+        $value = 'application/json';
+
+        return $http->withHeader($key, $value);
     }
 
     /**
@@ -163,10 +185,10 @@ class Pages
      */
     protected function withError($text, $code)
     {
-        $response = $this->response->withStatus($code);
+        $http = $this->response->withStatus($code);
 
-        $response->getBody()->write($text);
+        $http->getBody()->write($text);
 
-        return $response;
+        return $http;
     }
 }

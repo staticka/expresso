@@ -13,25 +13,20 @@ use Staticka\Depots\PageDepot;
 class PageCheck extends Check
 {
     /**
-     * @var array<string, string>
-     */
-    protected $labels = array(
-        'name' => 'Page Title',
-        'link' => 'URL Link',
-        'description' => 'Description',
-    );
-
-    /**
-     * @var array<string, string>
-     */
-    protected $rules = array(
-        'name' => 'required',
-    );
-
-    /**
      * @var integer|null
      */
     protected $id = null;
+
+    /**
+     * @var array<string, string>
+     */
+    protected $labels = array(
+
+        'name' => 'Page Title',
+        'link' => 'URL Link',
+        'description' => 'Description',
+
+    );
 
     /**
      * @var \Staticka\Depots\PageDepot
@@ -39,14 +34,32 @@ class PageCheck extends Check
     protected $page;
 
     /**
-     * @param \Staticka\Depots\PageDepot $page
-     * @param integer|null               $id
+     * @var array<string, string>
      */
-    public function __construct(PageDepot $page, $id = null)
-    {
-        $this->id = $id ? (int) $id : null;
+    protected $rules = array(
 
+        'name' => 'required',
+
+    );
+
+    /**
+     * @param \Staticka\Depots\PageDepot $page
+     */
+    public function __construct(PageDepot $page)
+    {
         $this->page = $page;
+    }
+
+    /**
+     * @param integer $id
+     *
+     * @return self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
