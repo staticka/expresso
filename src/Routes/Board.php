@@ -38,7 +38,9 @@ class Board
 
                 if ($updated === false)
                 {
+                    // @codeCoverageIgnoreStart
                     $updated = null;
+                    // @codeCoverageIgnoreEnd
                 }
             }
 

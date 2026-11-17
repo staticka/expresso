@@ -407,6 +407,180 @@ class CreateTest extends Testcase
     }
 
     /**
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function test_passed_if_dashboard_shown_with_page()
+    {
+        // Create a page first (Hello world!) -----
+        $this->setRequest('POST', '/pages');
+
+        $name = 'Hello world!';
+
+        $link = '/hello-world';
+
+        $this->setPayload(compact('name', 'link'));
+        // ----------------------------------------
+
+        $this->app->run();
+
+        $this->resetPayload();
+
+        // Show the dashboard with the page -------
+        $this->setRequest('GET', '/');
+
+        $this->app->run();
+
+        $this->expectOutputRegex('/Hello world!/');
+        // ----------------------------------------
+
+        $this->deleteFile('hello-world');
+    }
+
+    /**
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function test_passed_if_pages_list_shown_with_page()
+    {
+        // Create a page first (Hello world!) -----
+        $this->setRequest('POST', '/pages');
+
+        $name = 'Hello world!';
+
+        $link = '/hello-world';
+
+        $this->setPayload(compact('name', 'link'));
+        // ----------------------------------------
+
+        $this->app->run();
+
+        $this->resetPayload();
+
+        // Show the pages list with the page ------
+        $this->setRequest('GET', '/pages');
+
+        $this->app->run();
+
+        $this->expectOutputRegex('/Hello world!/');
+        // ----------------------------------------
+
+        $this->deleteFile('hello-world');
+    }
+
+    /**
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function test_failed_if_update_without_csrf()
+    {
+        // Create a page first (Hello world!) -----
+        $this->setRequest('POST', '/pages');
+
+        $name = 'Hello world!';
+
+        $link = '/hello-world';
+
+        $this->setPayload(compact('name', 'link'));
+        // ----------------------------------------
+
+        $this->app->run();
+
+        $this->resetPayload();
+
+        $id = $this->getPageId('hello-world');
+
+        // Attempt to update without a token ------
+        unset($_SERVER['HTTP_X_CSRF_TOKEN']);
+
+        $this->setRequest('POST', '/pages/' . $id);
+
+        $name = 'This is something!';
+
+        $link = '/hello-world';
+
+        $this->setPayload(compact('name', 'link'));
+        // ----------------------------------------
+
+        $this->app->run();
+
+        $expect = $this->toJson('Page created!');
+
+        $expect .= $this->toJson('Invalid CSRF token');
+
+        $this->expectOutputString($expect);
+
+        $this->deleteFile('hello-world');
+    }
+
+    /**
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function test_failed_if_delete_without_csrf()
+    {
+        // Create a page first (Hello world!) -----
+        $this->setRequest('POST', '/pages');
+
+        $name = 'Hello world!';
+
+        $link = '/hello-world';
+
+        $this->setPayload(compact('name', 'link'));
+        // ----------------------------------------
+
+        $this->app->run();
+
+        $this->resetPayload();
+
+        $id = $this->getPageId('hello-world');
+
+        // Attempt to delete without a token ------
+        unset($_SERVER['HTTP_X_CSRF_TOKEN']);
+
+        $this->setRequest('DELETE', '/pages/' . $id);
+
+        $this->app->run();
+
+        $expect = $this->toJson('Page created!');
+
+        $expect .= $this->toJson('Invalid CSRF token');
+
+        $this->expectOutputString($expect);
+        // ----------------------------------------
+
+        $this->deleteFile('hello-world');
+    }
+
+    /**
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function test_passed_if_store_with_body_token()
+    {
+        unset($_SERVER['HTTP_X_CSRF_TOKEN']);
+
+        $this->setRequest('POST', '/pages');
+
+        $this->setPayload(array('_csrf' => 'test-token'));
+
+        $this->app->run();
+
+        $text = 'Page Title is required';
+
+        $errors = array('name' => array($text));
+
+        $expect = $this->toJson($errors);
+
+        $this->expectOutputString($expect);
+    }
+
+    /**
      * @param string $name
      *
      * @return void

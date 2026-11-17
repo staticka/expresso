@@ -64,7 +64,9 @@ class Pages
 
                 if ($updated === false)
                 {
+                    // @codeCoverageIgnoreStart
                     $updated = null;
+                    // @codeCoverageIgnoreEnd
                 }
             }
 

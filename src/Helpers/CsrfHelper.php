@@ -119,9 +119,11 @@ class CsrfHelper implements HelperInterface
             return bin2hex(random_bytes(32));
         }
 
+        // @codeCoverageIgnoreStart
         $random = (string) mt_rand();
 
         return md5(uniqid($random, true));
+        // @codeCoverageIgnoreEnd
     }
 
     /**
