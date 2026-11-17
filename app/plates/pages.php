@@ -1,52 +1,192 @@
-<?php echo $layout->load('main', compact('link', 'plate')) ?>
+<?php $title = 'Pages' ?>
+<?php echo $layout->load('main', compact('link', 'plate', 'csrf', 'title')) ?>
 
 <?php echo $block->body() ?>
   <?php echo $plate->add('navbar', compact('block', 'link')) ?>
 
-  <div class="container my-3">
-    <button type="button" class="btn btn-dark shadow-lg" data-bs-toggle="modal" data-bs-target="#create-page-modal">
-      Create New Page
-    </button>
+  <div x-data="pages">
+    <div class="text-bg-light py-3 border-bottom">
+      <div class="container">
+        <div class="fw-bold mb-0 fs-4">Pages</div>
+      </div>
+    </div>
+    <div class="container pb-5">
+      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 my-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-page-modal">
+          Create New...
+        </button>
+        <div>
+          <label for="search" class="small text-uppercase fw-bold d-block mb-0">Search by Keyword</label>
+          <input type="search" id="search" class="form-control" style="min-width: 200px;" placeholder="Search pages..." x-model="query">
+        </div>
+      </div>
 
-    <?php echo $plate->add('modal/plate') ?>
-  </div>
-
-  <div class="container mb-5">
-    <div class="card shadow-lg">
-      <div class="card-body">
-        <div class="table-responsive">          
-          <table class="table mb-0">
-            <thead>
-              <tr>
-                <th width="15%">Name</th>
-                <th width="15%">URL Link</th>
-                <th width="30%">Description</th>
-                <th width="15%">Tags</th>
-                <th width="15%">Created At</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach ($items as $item): ?>
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead>
                 <tr>
-                  <td>
-                    <a href="<?php echo $link->set('/pages/' . $item['id']) ?>"><?php echo $item['name'] ?></a>
-                  </td>
-                  <td>
-                    <a href="<?php echo $url->set($item['link']) ?>" target="_blank"><?php echo $item['link'] ?></a>
-                  </td>
-                  <td><?php echo $str->truncate($item['description']) ?></td>
-                  <td><?= isset($item['tags']) ? $item['tags'] : '' ?></td>
-                  <td><?= date('d M Y h:i:s A', $item['created_at']) ?></td>
+                  <th width="35%">Name of Page</th>
+                  <th width="20%">Tags</th>
+                  <th width="15%">Page Created</th>
+                  <th width="15%">Last Updated</th>
+                  <th width="10%"></th>
                 </tr>
-              <?php endforeach ?>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <?php if (! $items): ?>
+                  <tr>
+                    <td colspan="5" class="text-center text-secondary px-0">
+                      <i class="bi bi-folder2-open fs-1 d-block mb-2 opacity-50"></i>
+                      No pages create yet. Select the "Create New..." button to create your first page.
+                    </td>
+                  </tr>
+                <?php endif ?>
+                <?php foreach ($items as $item): ?>
+                  <?php
+                  $raw = isset($item['tags']) ? $item['tags'] : '';
+                  $tags = array();
+
+                  if (is_array($raw))
+                  {
+                      $tags = $raw;
+                  }
+                  else
+                  {
+                      foreach (explode(',', $raw) as $part)
+                      {
+                          $part = trim($part);
+
+                          if ($part !== '')
+                          {
+                              $tags[] = $part;
+                          }
+                      }
+                  }
+
+                  $search = $item['name'] . ' ' . $item['link'] . ' ' . $item['description'] . ' ' . implode(' ', $tags);
+                  ?>
+                  <tr x-show="matches($el.dataset.search)" data-search="<?= htmlspecialchars($search, ENT_QUOTES) ?>">
+                    <td>
+                      <a href="<?php echo $link->set('/pages/' . $item['id']) ?>"><?php echo $item['name'] ?></a>
+                      <br>
+                      <span class="small text-secondary"><?php echo $str->truncate($item['description']) ?></span>
+                    </td>
+                    <td>
+                      <?php if ($tags): ?>
+                        <?php foreach ($tags as $tag): ?>
+                          <span class="badge text-bg-light border ex-tag"><?php echo htmlspecialchars($tag) ?></span>
+                        <?php endforeach ?>
+                      <?php else: ?>
+                        <span class="text-muted small">—</span>
+                      <?php endif ?>
+                    </td>
+                    <td><?= date('d M Y h:i A', $item['created_at']) ?></td>
+                    <td><?= $item['updated_at'] ? date('d M Y h:i A', $item['updated_at']) : '—' ?></td>
+                    <td>
+                      <div class="dropdown">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Actions
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                          <li>
+                            <a class="dropdown-item" href="<?php echo $url->set($item['link']) ?>" target="_blank">
+                              Open Link <i class="bi bi-box-arrow-up-right"></i>
+                            </a>
+                          </li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li>
+                            <button type="button" class="dropdown-item text-danger small" data-id="<?= $item['id'] ?>" data-name="<?= htmlspecialchars($item['name'], ENT_QUOTES) ?>" @click="askDelete($el.dataset.id, $el.dataset.name, $el)">
+                              <i class="bi bi-trash"></i> Delete page
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </td>
+                  </tr>
+                <?php endforeach ?>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
+
+    <?php echo $plate->add('modal/plate') ?>
+
+    <?php echo $plate->add('modal/delete', array('id' => 'delete-modal', 'action' => 'doDelete()')) ?>
   </div>
 <?php echo $block->end() ?>
 
 <?php echo $block->set('scripts') ?>
   <?php echo $plate->add('modal/script', compact('link')) ?>
+
+  <script>
+    const pages =
+    {
+      query: '',
+
+      deleteId: null,
+
+      deleteName: null,
+
+      loading: false,
+
+      matches(text)
+      {
+        const query = (this.query || '').trim().toLowerCase()
+
+        return ! query || (text || '').toLowerCase().includes(query)
+      },
+
+      askDelete(id, name, el)
+      {
+        this.deleteId = id
+
+        this.deleteName = name
+
+        const dropdown = el ? el.closest('.dropdown') : null
+
+        if (dropdown)
+        {
+          const toggle = dropdown.querySelector('[data-bs-toggle="dropdown"]')
+
+          if (toggle)
+          {
+            bootstrap.Dropdown.getOrCreateInstance(toggle).hide()
+          }
+        }
+
+        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('delete-modal'))
+
+        modal.show()
+      },
+
+      doDelete()
+      {
+        const self = this
+
+        const link = '<?php echo $link->set('/pages') ?>/' + self.deleteId
+
+        self.loading = true
+
+        axios.delete(link)
+          .then(function ()
+          {
+            exToast('Page deleted!', 'success')
+
+            setTimeout(function () { window.location.reload() }, 800)
+          })
+          .catch(function (error)
+          {
+            exToast(error.response.data || 'Unable to delete the page.', 'danger')
+          })
+          .finally(function ()
+          {
+            self.loading = false
+          })
+      },
+    }
+  </script>
 <?php echo $block->end() ?>

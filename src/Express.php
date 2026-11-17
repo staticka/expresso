@@ -381,6 +381,7 @@ class Express extends System
         // Add the specified helpers to Plate -------------------
         $default = array('Staticka\Expresso\Helpers\LinkHelper');
 
+        $default[] = 'Staticka\Expresso\Helpers\CsrfHelper';
         $default[] = 'Staticka\Helper\BlockHelper';
         $default[] = 'Staticka\Helper\LayoutHelper';
         $default[] = 'Staticka\Helper\LinkHelper';

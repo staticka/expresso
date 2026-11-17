@@ -3,8 +3,10 @@
 namespace Staticka\Expresso\Routes;
 
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Staticka\Expresso\Checks\BuildCheck;
 use Staticka\Expresso\Depots\BuildDepot;
+use Staticka\Expresso\Helpers\CsrfHelper;
 
 /**
  * @package Staticka
@@ -14,25 +16,39 @@ use Staticka\Expresso\Depots\BuildDepot;
 class Build
 {
     /**
+     * @var \Psr\Http\Message\ServerRequestInterface
+     */
+    protected $request;
+
+    /**
      * @var \Psr\Http\Message\ResponseInterface
      */
     protected $response;
 
     /**
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
      */
-    public function __construct(ResponseInterface $response)
+    public function __construct(ServerRequestInterface $request, ResponseInterface $response)
     {
+        $this->request = $request;
+
         $this->response = $response;
     }
 
     /**
-     * @param \Staticka\Expresso\Depots\BuildDepot $depot
+     * @param \Staticka\Expresso\Helpers\CsrfHelper $csrf
+     * @param \Staticka\Expresso\Depots\BuildDepot  $depot
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function index(BuildDepot $depot)
+    public function index(CsrfHelper $csrf, BuildDepot $depot)
     {
+        if (! $csrf->verify($this->request))
+        {
+            return $this->toJson('Invalid CSRF token', 403);
+        }
+
         $root = $depot->getRootPath();
 
         $check = new BuildCheck($root);

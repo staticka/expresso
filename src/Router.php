@@ -31,6 +31,8 @@ class Router extends Slytherin
 
         $this->post('/pages/:id', 'Pages@update');
 
+        $this->delete('/pages/:id', 'Pages@destroy');
+
         $this->get('/', 'Board@index');
 
         return $this->routes;

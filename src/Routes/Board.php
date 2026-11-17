@@ -2,6 +2,7 @@
 
 namespace Staticka\Expresso\Routes;
 
+use Staticka\Depots\PageDepot;
 use Staticka\Expresso\Plate;
 
 /**
@@ -12,10 +13,44 @@ use Staticka\Expresso\Plate;
 class Board
 {
     /**
+     * @param \Staticka\Depots\PageDepot $page
+     * @param \Staticka\Expresso\Plate   $plate
+     *
      * @return string
      */
-    public function index(Plate $plate)
+    public function index(PageDepot $page, Plate $plate)
     {
-        return $plate->view('board');
+        $pages = array_reverse($page->get());
+
+        $items = array();
+
+        foreach ($pages as $item)
+        {
+            $data = $item->getData();
+
+            $file = $item->getFile();
+
+            $updated = null;
+
+            if ($file)
+            {
+                $updated = filemtime($file);
+
+                if ($updated === false)
+                {
+                    $updated = null;
+                }
+            }
+
+            $data['updated_at'] = $updated;
+
+            $items[] = $data;
+        }
+
+        $count = count($items);
+
+        $latest = $items ? $items[0] : null;
+
+        return $plate->view('board', compact('count', 'latest'));
     }
 }

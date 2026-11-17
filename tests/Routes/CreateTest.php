@@ -331,6 +331,82 @@ class CreateTest extends Testcase
     }
 
     /**
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function test_passed_if_page_deleted()
+    {
+        // Create a page first (Hello world!) -----
+        $this->setRequest('POST', '/pages');
+
+        $name = 'Hello world!';
+
+        $link = '/hello-world';
+
+        $this->setPayload(compact('name', 'link'));
+        // ----------------------------------------
+
+        $this->app->run();
+
+        $this->resetPayload();
+
+        $id = $this->getPageId('hello-world');
+
+        // Delete the created page ----------------
+        $this->setRequest('DELETE', '/pages/' . $id);
+
+        $this->app->run();
+
+        $expect = $this->toJson('Page created!');
+
+        $expect .= $this->toJson('Page deleted!');
+
+        $this->expectOutputString($expect);
+        // ----------------------------------------
+    }
+
+    /**
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function test_failed_if_delete_page_not_found()
+    {
+        $this->setRequest('DELETE', '/pages/0');
+
+        $this->app->run();
+
+        $expect = $this->toJson('Page (0) not found');
+
+        $this->expectOutputString($expect);
+    }
+
+    /**
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function test_failed_if_post_without_csrf()
+    {
+        unset($_SERVER['HTTP_X_CSRF_TOKEN']);
+
+        $this->setRequest('POST', '/pages');
+
+        $name = 'Hello world!';
+
+        $link = '/hello-world';
+
+        $this->setPayload(compact('name', 'link'));
+
+        $this->app->run();
+
+        $expect = $this->toJson('Invalid CSRF token');
+
+        $this->expectOutputString($expect);
+    }
+
+    /**
      * @param string $name
      *
      * @return void
@@ -362,6 +438,8 @@ class CreateTest extends Testcase
         $this->app = $this->setApp();
 
         $this->resetPayload();
+
+        $this->setCsrfToken();
     }
 
     /**

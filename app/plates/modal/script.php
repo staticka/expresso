@@ -36,9 +36,9 @@
       axios.post(link, input)
         .then(function (response)
         {
-          console.log(response.data)
+          exToast('Page created!', 'success')
 
-          window.location.reload()
+          setTimeout(function () { window.location.href = link }, 800)
         })
         .catch(function (error)
         {

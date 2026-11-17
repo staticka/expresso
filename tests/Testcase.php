@@ -25,6 +25,21 @@ class Testcase extends Legacy
     }
 
     /**
+     * @return void
+     */
+    protected function setCsrfToken()
+    {
+        if (session_id() === '')
+        {
+            session_start();
+        }
+
+        $_SESSION['_csrf'] = 'test-token';
+
+        $_SERVER['HTTP_X_CSRF_TOKEN'] = 'test-token';
+    }
+
+    /**
      * @param string[] $fields
      *
      * @return \Staticka\Expresso\Express

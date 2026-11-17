@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticka\Depots\PageDepot;
 use Staticka\Expresso\Checks\PageCheck;
+use Staticka\Expresso\Helpers\CsrfHelper;
 use Staticka\Expresso\Helpers\DataHelper;
 use Staticka\Expresso\Plate;
 
@@ -45,7 +46,32 @@ class Pages
      */
     public function index(PageDepot $page, Plate $plate)
     {
-        $items = $page->getAsData(PageDepot::SORT_DESC);
+        $pages = array_reverse($page->get());
+
+        $items = array();
+
+        foreach ($pages as $item)
+        {
+            $data = $item->getData();
+
+            $file = $item->getFile();
+
+            $updated = null;
+
+            if ($file)
+            {
+                $updated = filemtime($file);
+
+                if ($updated === false)
+                {
+                    $updated = null;
+                }
+            }
+
+            $data['updated_at'] = $updated;
+
+            $items[] = $data;
+        }
 
         return $plate->view('pages', compact('items'));
     }
@@ -86,12 +112,18 @@ class Pages
     }
 
     /**
-     * @param \Staticka\Depots\PageDepot $page
+     * @param \Staticka\Expresso\Helpers\CsrfHelper $csrf
+     * @param \Staticka\Depots\PageDepot            $page
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function store(PageDepot $page)
+    public function store(CsrfHelper $csrf, PageDepot $page)
     {
+        if (! $csrf->verify($this->request))
+        {
+            return $this->toJson('Invalid CSRF token', 403);
+        }
+
         $check = new PageCheck($page);
 
         /** @var array<string, string> */
@@ -110,17 +142,23 @@ class Pages
     }
 
     /**
-     * @param integer                    $id
-     * @param \Staticka\Depots\PageDepot $page
+     * @param integer                               $id
+     * @param \Staticka\Expresso\Helpers\CsrfHelper $csrf
+     * @param \Staticka\Depots\PageDepot            $page
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function update($id, PageDepot $page)
+    public function update($id, CsrfHelper $csrf, PageDepot $page)
     {
         // Forcing as "integer" since request ---
         // parameters always return as "string".
         $id = (int) $id;
         // --------------------------------------
+
+        if (! $csrf->verify($this->request))
+        {
+            return $this->toJson('Invalid CSRF token', 403);
+        }
 
         $check = new PageCheck($page);
 
@@ -139,6 +177,37 @@ class Pages
         $page->update($id, $data);
 
         return $this->toJson(null, 204);
+    }
+
+    /**
+     * @param integer                               $id
+     * @param \Staticka\Expresso\Helpers\CsrfHelper $csrf
+     * @param \Staticka\Depots\PageDepot            $page
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function destroy($id, CsrfHelper $csrf, PageDepot $page)
+    {
+        if (! $csrf->verify($this->request))
+        {
+            return $this->toJson('Invalid CSRF token', 403);
+        }
+
+        // Forcing as "integer" since request ---
+        // parameters always return as "string".
+        $id = (int) $id;
+        // --------------------------------------
+
+        if (! $page->find($id))
+        {
+            $text = 'Page (' . $id . ') not found';
+
+            return $this->toJson($text, 404);
+        }
+
+        $page->delete($id);
+
+        return $this->toJson('Page deleted!', 200);
     }
 
     /**

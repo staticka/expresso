@@ -37,10 +37,32 @@ class BuildTest extends Testcase
     }
 
     /**
+     * @runInSeparateProcess
+     *
+     * @return void
+     */
+    public function test_failed_if_build_without_csrf()
+    {
+        unset($_SERVER['HTTP_X_CSRF_TOKEN']);
+
+        $this->setRequest('POST', '/build');
+
+        $this->app->run();
+
+        $expect = json_encode('Invalid CSRF token');
+
+        $expect = $expect === false ? '' : $expect;
+
+        $this->expectOutputString($expect);
+    }
+
+    /**
      * @return void
      */
     protected function doSetUp()
     {
         $this->app = $this->setApp();
+
+        $this->setCsrfToken();
     }
 }
