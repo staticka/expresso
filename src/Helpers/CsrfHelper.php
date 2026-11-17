@@ -31,11 +31,11 @@ class CsrfHelper implements HelperInterface
     {
         $self = new CsrfHelper;
 
-        $this->start();
+        $self->start();
 
         if (! array_key_exists('_csrf', $_SESSION))
         {
-            $_SESSION['_csrf'] = $this->random();
+            $_SESSION['_csrf'] = $self->random();
         }
 
         /** @var string */
