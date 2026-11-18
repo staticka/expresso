@@ -38,48 +38,7 @@
 <body>
   <?php echo $block->content() ?>
 
-  <div class="toast-container position-fixed top-0 end-0 p-3"></div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    function exToast (message, type)
-    {
-      type = type || 'success';
-
-      var container = document.querySelector('.toast-container');
-
-      var el = document.createElement('div');
-
-      el.className = 'toast align-items-center text-bg-' + type + ' border-0 shadow';
-      el.setAttribute('role', 'alert');
-      el.setAttribute('aria-live', 'assertive');
-      el.setAttribute('aria-atomic', 'true');
-
-      var body = document.createElement('div');
-      body.className = 'd-flex';
-
-      var text = document.createElement('div');
-      text.className = 'toast-body fw-medium';
-      text.textContent = message;
-
-      var close = document.createElement('button');
-      close.type = 'button';
-      close.className = 'btn-close btn-close-white me-2 m-auto';
-      close.setAttribute('data-bs-dismiss', 'toast');
-      close.setAttribute('aria-label', 'Close');
-
-      body.appendChild(text);
-      body.appendChild(close);
-
-      el.appendChild(body);
-      container.appendChild(el);
-
-      var toast = new bootstrap.Toast(el, { delay: 3500 });
-      toast.show();
-
-      el.addEventListener('hidden.bs.toast', function () { el.remove(); });
-    }
-  </script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>

@@ -5,10 +5,16 @@
         <span class="modal-title fs-5 fw-bold" id="<?php echo $id ?>-label">Delete page?</span>
       </div>
       <div class="modal-body">
-        <p class="mb-0">Are you sure that you want to delete the page <span class="fw-bold" x-text="deleteName"></span>? This action cannot be undone.</p>
+        <p >Are you sure that you want to delete the this page? This action cannot be undone.</p>
         <template x-if="deleteError">
-          <p class="text-danger small mb-0" x-text="deleteError"></p>
+          <p class="text-danger small" x-text="deleteError"></p>
         </template>
+        <div class="card small">
+          <div class="card-body">
+            <label class="form-label mb-0">Name of Page</label>
+            <div class="fw-bold" x-text="deleteName"></div>
+          </div>
+        </div>
       </div>
       <div class="modal-footer border-top-0 bg-light">
         <div class="me-auto">

@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Staticka\Expresso\Checks\BuildCheck;
 use Staticka\Expresso\Depots\BuildDepot;
 use Staticka\Expresso\Helpers\CsrfHelper;
+use Staticka\Expresso\Session;
 
 /**
  * @package Staticka
@@ -39,10 +40,11 @@ class Build
     /**
      * @param \Staticka\Expresso\Helpers\CsrfHelper $csrf
      * @param \Staticka\Expresso\Depots\BuildDepot  $depot
+     * @param \Staticka\Expresso\Session            $session
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function index(CsrfHelper $csrf, BuildDepot $depot)
+    public function index(CsrfHelper $csrf, BuildDepot $depot, Session $session)
     {
         if (! $csrf->verify($this->request))
         {
@@ -62,6 +64,8 @@ class Build
         // package to test this logic manually. ---
         // @codeCoverageIgnoreStart
         $depot->build();
+
+        $session->flash('success', 'Pages compiled!');
 
         return $this->toJson('Pages compiled!');
         // @codeCoverageIgnoreEnd

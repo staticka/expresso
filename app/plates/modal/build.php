@@ -20,17 +20,16 @@
       axios.post(link)
         .then(function (response)
         {
-          exToast('Pages compiled!', 'success')
-
-          setTimeout(function () { window.location.reload() }, 800)
+          setTimeout(function ()
+          {
+            window.location.reload()
+          }, 800)
         })
         .catch(function (error)
         {
-          self.error = error.response.data
-        })
-        .finally(function ()
-        {
           self.loading = false
+
+          self.error = error.response.data
         })
     },
   }

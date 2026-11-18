@@ -16,10 +16,10 @@
         <i class="bi bi-check-circle-fill me-1"></i>Page details updated successfully!
       </div>
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-        <a href="<?php echo $link->set('/pages') ?>" class="btn btn-outline-dark shadow-sm" :disabled="loading"><i class="bi bi-arrow-left me-1"></i>Back to Pages</a>
+        <a href="<?php echo $link->set('/pages') ?>" class="btn btn-outline-dark shadow-lg" :disabled="loading"><i class="bi bi-arrow-left me-1"></i>Back to Pages</a>
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#delete-page-modal" :disabled="loading"><i class="bi bi-trash me-1"></i>Delete page</button>
-          <button type="button" class="btn btn-dark shadow-sm" @click="save()" :disabled="loading">
+          <button type="button" class="btn btn-outline-danger shadow-lg" data-bs-toggle="modal" data-bs-target="#delete-page-modal" :disabled="loading"><i class="bi bi-trash me-1"></i>Delete page</button>
+          <button type="button" class="btn btn-dark shadow-lg" @click="save()" :disabled="loading">
             <span x-show="! loading"><i class="bi bi-check-lg me-1"></i>Save Details</span>
             <span x-show="loading"><span class="spinner-border spinner-border-sm me-1" role="status"></span>Saving...</span>
           </button>
@@ -28,7 +28,7 @@
     </div>
 
     <div class="container mb-3">
-      <div class="card">
+      <div class="card shadow-lg">
         <div class="card-body pb-0">
           <div class="row">
             <?php foreach ($fields as $field): ?>
@@ -42,13 +42,16 @@
             <?php endforeach ?>
           </div>
         </div>
+        <div class="px-3 py-2 bg-light rounded-bottom">
+          <small><i class="bi bi-question-circle"></i> These fields are configurable using the <a target="_blank" href="https://roug.in/staticka/console/#using-staticka-yml">staticka.yml</a> file.</small>
+        </div>
       </div>
     </div>
 
     <div class="container mb-5">
       <div class="row g-3">
         <div class="col-md-6">
-          <div class="card h-100" style="max-height: 600px;">
+          <div class="card shadow-lg h-100" style="max-height: 600px;">
             <div class="card-header bg-white border-bottom">
               <span class="fw-bold"><i class="bi bi-pencil me-1"></i>Write</span>
             </div>
@@ -63,7 +66,7 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="card h-100" style="max-height: 600px;">
+          <div class="card shadow-lg h-100" style="max-height: 600px;">
             <div class="card-header bg-white border-bottom">
               <span class="fw-bold"><i class="bi bi-eye me-1"></i>Preview</span>
             </div>
@@ -112,6 +115,7 @@
       const self = this
 
       let input = self.input
+
       input.body = self.body
 
       const form = new FormData
@@ -122,6 +126,7 @@
       }
 
       self.error = {}
+
       self.loading = true
 
       axios.post(link, form)
@@ -129,7 +134,10 @@
         {
           self.saved = true
 
-          setTimeout(function () { self.saved = false }, 2500)
+          setTimeout(function ()
+          {
+            self.saved = false
+          }, 2500)
         })
         .catch(function (error)
         {
@@ -154,10 +162,8 @@
         })
         .catch(function (error)
         {
-          self.deleteError = error.response.data || 'Unable to delete the page.'
-        })
-        .finally(function ()
-        {
+          self.deleteError = error.response.data
+
           self.loading = false
         })
     }

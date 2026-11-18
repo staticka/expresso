@@ -45,19 +45,21 @@
         <div class="modal-body">
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="0" id="accept" x-model="accept" :disabled="loading">
-            <label class="form-check-label" for="accept">
-              I understand that selecting the button below will <span class="fw-bold">BUILD</span> all the pages.
-              <span class="text-danger">*</span>
-            </label>
+            <div>
+              <label class="form-check-label" for="accept">
+                I understand that selecting the button below will <span class="fw-bold">BUILD</span> all the available pages from its source folder.
+                <span class="text-danger">*</span>
+              </label>
+              <template x-if="error">
+                <div class="mb-3">
+                  <p class="text-danger small mb-0">An error occurred, <span x-text="error"></span>.</p>
+                </div>
+              </template>
+            </div>
           </div>
           <div class="alert alert-warning mb-0 mt-3" role="alert">
             Do not close this entire window nor press the back button from the web browser (<span class="bi bi-arrow-left"></span>) during the rebuilding process.
           </div>
-          <template x-if="error">
-            <div class="mt-3">
-              <p class="text-danger small mb-0">An error occurred, <span x-text="error"></span>.</p>
-            </div>
-          </template>
         </div>
         <div class="modal-footer border-top-0 bg-light">
           <div class="me-auto">

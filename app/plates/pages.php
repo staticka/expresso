@@ -18,12 +18,12 @@
         </div>
       <?php endif ?>
       <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 my-3">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-page-modal">
+        <button type="button" class="btn btn-primary shadow-lg" data-bs-toggle="modal" data-bs-target="#create-page-modal">
           Create New...
         </button>
         <div>
           <label for="search" class="small text-uppercase fw-bold d-block mb-0">Search by Keyword</label>
-          <input type="search" id="search" class="form-control" style="min-width: 200px;" placeholder="Search pages..." x-model="query">
+          <input type="search" id="search" class="form-control shadow-lg" style="min-width: 200px;" placeholder="Search pages..." x-model="query">
         </div>
       </div>
 
@@ -105,7 +105,7 @@
                           </li>
                           <li><hr class="dropdown-divider"></li>
                           <li>
-                            <button type="button" class="dropdown-item text-danger small" data-id="<?= $item['id'] ?>" data-name="<?= htmlspecialchars($item['name'], ENT_QUOTES) ?>" @click="askDelete($el.dataset.id, $el.dataset.name, $el)">
+                            <button type="button" class="dropdown-item text-danger small" data-id="<?= $item['id'] ?>" data-name="<?= htmlspecialchars($item['name'], ENT_QUOTES) ?>" @click="trash($el.dataset.id, $el.dataset.name, $el)">
                               <i class="bi bi-trash"></i> Delete page
                             </button>
                           </li>
@@ -123,7 +123,7 @@
 
     <?php echo $plate->add('modal/plate') ?>
 
-    <?php echo $plate->add('modal/delete', array('id' => 'delete-modal', 'action' => 'doDelete()')) ?>
+    <?php echo $plate->add('modal/delete', array('id' => 'delete-modal', 'action' => 'remove()')) ?>
   </div>
 <?php echo $block->end() ?>
 
@@ -141,6 +141,8 @@
 
       loading: false,
 
+      deleteError: null,
+
       matches(text)
       {
         const query = (this.query || '').trim().toLowerCase()
@@ -148,7 +150,28 @@
         return ! query || (text || '').toLowerCase().includes(query)
       },
 
-      askDelete(id, name, el)
+      remove()
+      {
+        const self = this
+
+        const link = '<?php echo $link->set('/pages') ?>/' + self.deleteId
+
+        self.loading = true
+
+        axios.delete(link)
+          .then(function ()
+          {
+            window.location.href = '<?php echo $link->set('/pages') ?>'
+          })
+          .catch(function (error)
+          {
+            self.deleteError = error.response.data
+
+            self.loading = false
+          })
+      },
+
+      trash(id, name, el)
       {
         this.deleteId = id
 
@@ -169,31 +192,6 @@
         const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('delete-modal'))
 
         modal.show()
-      },
-
-      doDelete()
-      {
-        const self = this
-
-        const link = '<?php echo $link->set('/pages') ?>/' + self.deleteId
-
-        self.loading = true
-
-        axios.delete(link)
-          .then(function ()
-          {
-            exToast('Page deleted!', 'success')
-
-            setTimeout(function () { window.location.reload() }, 800)
-          })
-          .catch(function (error)
-          {
-            exToast(error.response.data || 'Unable to delete the page.', 'danger')
-          })
-          .finally(function ()
-          {
-            self.loading = false
-          })
       },
     }
   </script>
