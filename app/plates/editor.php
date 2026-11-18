@@ -13,12 +13,12 @@
 
     <div class="container my-3">
       <div x-show="saved" x-cloak class="alert alert-success mb-3" role="alert">
-        <i class="bi bi-check-circle-fill me-1"></i>Page details updated successfully!
+        <i class="bi bi-check-circle-fill me-1"></i>Page details have been updated successfully!
       </div>
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
         <a href="<?php echo $link->set('/pages') ?>" class="btn btn-outline-dark shadow-lg" :disabled="loading"><i class="bi bi-arrow-left me-1"></i>Back to Pages</a>
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-danger shadow-lg" data-bs-toggle="modal" data-bs-target="#delete-page-modal" :disabled="loading"><i class="bi bi-trash me-1"></i>Delete page</button>
+          <button type="button" class="btn btn-outline-danger shadow-lg" @click="openDelete" :disabled="loading"><i class="bi bi-trash me-1"></i>Delete page</button>
           <button type="button" class="btn btn-dark shadow-lg" @click="save()" :disabled="loading">
             <span x-show="! loading"><i class="bi bi-check-lg me-1"></i>Save Details</span>
             <span x-show="loading"><span class="spinner-border spinner-border-sm me-1" role="status"></span>Saving...</span>
@@ -78,7 +78,7 @@
       </div>
     </div>
 
-    <?php echo $plate->add('modal/delete', array('id' => 'delete-page-modal', 'action' => 'remove()')) ?>
+    <?php echo $plate->add('modal/delete', array('id' => 'delete-page-modal', 'link' => $link)) ?>
   </div>
 <?php echo $block->end() ?>
 
@@ -90,15 +90,14 @@
 
     const link = '<?php echo $link->set('/pages/' . $page['id']) ?>'
 
-    const deleteLink = '<?php echo $link->set('/pages') ?>/<?php echo $page['id'] ?>'
-
     editor.error = {}
-
-    editor.deleteName = <?php echo json_encode($page['name']) ?>
 
     editor.saved = false
 
-    editor.deleteError = null
+    editor.openDelete = function ()
+    {
+      window.dispatchEvent(new CustomEvent('delete-page', { detail: { id: <?php echo $page['id'] ?>, name: <?php echo json_encode($page['name']) ?> } }))
+    }
 
     editor.init = function ()
     {
@@ -145,25 +144,6 @@
         })
         .finally(function ()
         {
-          self.loading = false
-        })
-    }
-
-    editor.remove = function ()
-    {
-      const self = this
-
-      self.loading = true
-
-      axios.delete(deleteLink)
-        .then(function ()
-        {
-          window.location.href = '<?php echo $link->set('/pages') ?>'
-        })
-        .catch(function (error)
-        {
-          self.deleteError = error.response.data
-
           self.loading = false
         })
     }

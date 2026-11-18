@@ -81,7 +81,11 @@ class Pages
 
         $session->delete('success');
 
-        return $plate->view('pages', compact('items', 'flash'));
+        $flashUrl = $session->get('success_url');
+
+        $session->delete('success_url');
+
+        return $plate->view('pages', compact('items', 'flash', 'flashUrl'));
     }
 
     /**
@@ -147,7 +151,7 @@ class Pages
 
         $page->create($data);
 
-        $text = 'Page "' . $data['name'] . '" created!';
+        $text = 'Page "' . $data['name'] . '" has been created successfully!';
 
         $session->flash('success', $text);
 
@@ -212,16 +216,22 @@ class Pages
         $id = (int) $id;
         // --------------------------------------
 
-        if (! $page->find($id))
+        $result = $page->find($id);
+
+        if (! $result)
         {
             $text = 'Page (' . $id . ') not found';
 
             return $this->toJson($text, 404);
         }
 
+        $name = $result->getName();
+
         $page->delete($id);
 
-        $session->flash('success', 'Page deleted!');
+        $text = 'Page "' . $name . '" has been deleted successfully!';
+
+        $session->flash('success', $text);
 
         return $this->toJson('Page deleted!', 200);
     }
