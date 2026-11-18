@@ -2,9 +2,18 @@
 
 namespace Staticka\Expresso;
 
+use Rougin\Onion\BodyParams;
+use Rougin\Onion\CorsHeader;
+use Rougin\Onion\FormParser;
+use Rougin\Onion\JsonHeader;
+use Rougin\Onion\NullString;
+use Rougin\Onion\SpoofMethod;
+use Rougin\Onion\TrimString;
 use Rougin\Slytherin\Container\ReflectionContainer;
 use Rougin\Slytherin\Http\HttpIntegration;
 use Rougin\Slytherin\Http\Response;
+use Rougin\Slytherin\Middleware\Dispatcher;
+use Rougin\Slytherin\Middleware\MiddlewareIntegration;
 use Rougin\Slytherin\Routing\RoutingIntegration;
 use Rougin\Slytherin\System;
 use Rougin\Slytherin\Template\RendererIntegration;
@@ -100,6 +109,8 @@ class Express extends System
     public function run()
     {
         $this->setRouter();
+
+        $this->setMiddleware();
 
         $this->setHttp();
 
@@ -290,6 +301,24 @@ class Express extends System
         $this->integrate(new HttpIntegration);
 
         $this->container->set(System::RESPONSE, new Response);
+    }
+
+    /**
+     * @return void
+     */
+    protected function setMiddleware()
+    {
+        $items = array(new BodyParams);
+
+        $items[] = new CorsHeader;
+        $items[] = new FormParser;
+        $items[] = new NullString;
+        $items[] = new SpoofMethod;
+        $items[] = new TrimString;
+
+        $this->config->set('app.middlewares', $items);
+
+        $this->integrate(new MiddlewareIntegration);
     }
 
     /**
