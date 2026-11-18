@@ -1,19 +1,19 @@
 <div x-data="trash" @delete-page.window="open($event.detail)">
-  <div class="modal fade" id="<?php echo $id ?>" tabindex="-1" aria-labelledby="<?php echo $id ?>-label" aria-hidden="true">
+  <div class="modal fade" id="delete-page" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header text-white bg-danger border-bottom-0">
-          <span class="modal-title fs-5 fw-bold" id="<?php echo $id ?>-label">Delete page?</span>
+          <span class="modal-title fs-5 fw-bold">Delete page?</span>
         </div>
         <div class="modal-body">
           <p class="mb-0">Are you sure that you want to delete the this page? This action cannot be undone.</p>
-          <template x-if="deleteError">
-            <p class="text-danger small" x-text="deleteError"></p>
+          <template x-if="error">
+            <p class="text-danger small" x-text="error"></p>
           </template>
           <div class="card small mt-3">
             <div class="card-body">
               <label class="form-label mb-0">Name of Page</label>
-              <div class="fw-bold" x-text="pageName"></div>
+              <div class="fw-bold" x-text="item.name"></div>
             </div>
           </div>
         </div>
@@ -36,39 +36,39 @@
 <script type="text/javascript">
   const trash =
   {
-    pageId: null,
+    error: null,
 
-    pageName: null,
-
-    deleteError: null,
+    item: {},
 
     loading: false,
 
-    open(payload)
+    open(item)
     {
-      this.pageId = payload.id
+      const el = document.getElementById('delete-page')
 
-      this.pageName = payload.name
+      this.item = item
 
-      this.deleteError = null
+      this.error = null
 
-      bootstrap.Modal.getOrCreateInstance(document.getElementById('<?php echo $id ?>')).show()
+      bootstrap.Modal.getOrCreateInstance(el).show()
     },
 
     remove()
     {
+      const link = '<?php echo $link->set('/pages') ?>'
+
       const self = this
 
       self.loading = true
 
-      axios.delete('<?php echo $link->set('/pages') ?>/' + self.pageId)
+      axios.delete(link + '/' + self.item.id)
         .then(function ()
         {
-          window.location.href = '<?php echo $link->set('/pages') ?>'
+          window.location.href = link
         })
         .catch(function (error)
         {
-          self.deleteError = error.response.data
+          self.error = error.response.data
 
           self.loading = false
         })

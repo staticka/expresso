@@ -18,7 +18,7 @@
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
         <a href="<?php echo $link->set('/pages') ?>" class="btn btn-outline-dark shadow-lg" :disabled="loading"><i class="bi bi-arrow-left me-1"></i>Back to Pages</a>
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-danger shadow-lg" @click="openDelete" :disabled="loading"><i class="bi bi-trash me-1"></i>Delete page</button>
+          <button type="button" class="btn btn-outline-danger shadow-lg" @click="remove" :disabled="loading"><i class="bi bi-trash me-1"></i>Delete page</button>
           <button type="button" class="btn btn-dark shadow-lg" @click="save()" :disabled="loading">
             <span x-show="! loading"><i class="bi bi-check-lg me-1"></i>Save Details</span>
             <span x-show="loading"><span class="spinner-border spinner-border-sm me-1" role="status"></span>Saving...</span>
@@ -78,7 +78,7 @@
       </div>
     </div>
 
-    <?php echo $plate->add('modal/delete', array('id' => 'delete-page-modal', 'link' => $link)) ?>
+    <?php echo $plate->add('modal/delete', array('link' => $link)) ?>
   </div>
 <?php echo $block->end() ?>
 
@@ -94,11 +94,6 @@
 
     editor.saved = false
 
-    editor.openDelete = function ()
-    {
-      window.dispatchEvent(new CustomEvent('delete-page', { detail: { id: <?php echo $page['id'] ?>, name: <?php echo json_encode($page['name']) ?> } }))
-    }
-
     editor.init = function ()
     {
       this.parse()
@@ -107,6 +102,19 @@
     editor.parse = function ()
     {
       this.html = marked.parse(this.body)
+    }
+
+    editor.remove = function ()
+    {
+      let data = { detail: {} }
+
+      data.detail.name = <?php echo json_encode($page['name']) ?>
+
+      data.detail.id = <?php echo $page['id'] ?>
+
+      const event = new CustomEvent('delete-page', data)
+
+      window.dispatchEvent(event)
     }
 
     editor.save = function ()

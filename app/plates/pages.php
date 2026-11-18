@@ -17,7 +17,7 @@
           <?php if (isset($flashUrl)): ?>
             <span>See its changes <a href="<?= htmlspecialchars($flashUrl) ?>" target="_blank">here</a>.</span>
           <?php endif ?>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
       <?php endif ?>
       <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 my-3">
@@ -32,7 +32,11 @@
 
       <div class="card shadow-lg">
         <div class="card-body">
-          <table class="table table-hover mb-0">
+          <?php if ($items): ?>
+            <table class="table table-hover mb-0">
+          <?php else: ?>
+            <table class="table mb-0">
+          <?php endif; ?>
             <thead>
               <tr>
                 <th width="30%">Name of Page</th>
@@ -47,7 +51,7 @@
                 <tr>
                   <td colspan="5" class="text-center text-secondary px-0">
                     <i class="bi bi-folder2-open fs-1 d-block mb-2 opacity-50"></i>
-                    No pages create yet. Select the "Create New..." button to create your first page.
+                    No pages created yet. Select the "Create New..." button to create your first page.
                   </td>
                 </tr>
               <?php endif ?>
@@ -96,7 +100,7 @@
                   <td><?= $item['updated_at'] ? date('d M Y h:i A', $item['updated_at']) : '—' ?></td>
                   <td>
                     <div class="dropdown">
-                      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         Actions
                       </button>
                       <ul class="dropdown-menu dropdown-menu-end">
@@ -107,7 +111,7 @@
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
-                          <button type="button" class="dropdown-item text-danger small" data-id="<?= $item['id'] ?>" data-name="<?= htmlspecialchars($item['name'], ENT_QUOTES) ?>" @click="trash($el.dataset.id, $el.dataset.name, $el)">
+                          <button type="button" class="dropdown-item text-danger small" data-id="<?= $item['id'] ?>" data-name="<?= htmlspecialchars($item['name'], ENT_QUOTES) ?>" @click="remove($el.dataset.id, $el.dataset.name, $el)">
                             <i class="bi bi-trash"></i> Delete page
                           </button>
                         </li>
@@ -122,15 +126,13 @@
       </div>
     </div>
 
-    <?php echo $plate->add('modal/plate') ?>
+    <?php echo $plate->add('modal/plate', compact('link')) ?>
 
-    <?php echo $plate->add('modal/delete', array('id' => 'delete-modal', 'link' => $link)) ?>
+    <?php echo $plate->add('modal/delete', array('link' => $link)) ?>
   </div>
 <?php echo $block->end() ?>
 
 <?php echo $block->set('scripts') ?>
-  <?php echo $plate->add('modal/script', compact('link')) ?>
-
   <script>
     const pages =
     {
@@ -143,21 +145,13 @@
         return ! query || (text || '').toLowerCase().includes(query)
       },
 
-      trash(id, name, el)
+      remove(id, name, el)
       {
-        const dropdown = el ? el.closest('.dropdown') : null
+        const data = { detail: { id: id, name: name } }
 
-        if (dropdown)
-        {
-          const toggle = dropdown.querySelector('[data-bs-toggle="dropdown"]')
+        const event = new CustomEvent('delete-page', data)
 
-          if (toggle)
-          {
-            bootstrap.Dropdown.getOrCreateInstance(toggle).hide()
-          }
-        }
-
-        window.dispatchEvent(new CustomEvent('delete-page', { detail: { id: id, name: name } }))
+        window.dispatchEvent(event)
       },
     }
   </script>

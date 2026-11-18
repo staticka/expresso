@@ -1,5 +1,5 @@
 <div x-data="modal">
-  <div class="modal fade" id="create-page-modal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="create-page-modal-label" aria-hidden="true">
+  <div class="modal fade" id="create-page-modal" data-bs-backdrop="static" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header text-white bg-primary border-bottom-0">
@@ -39,3 +39,49 @@
     </div>
   </div>
 </div>
+
+<script>
+  const modal =
+  {
+    error: {},
+
+    name: null,
+
+    description: null,
+
+    link: null,
+
+    loading: false,
+
+    store()
+    {
+      const link = '<?php echo $link->set('/pages') ?>'
+
+      const input = new FormData
+
+      const self = this
+
+      input.append('name', self.name)
+
+      input.append('description', self.description)
+
+      input.append('link', self.link)
+
+      self.loading = true
+
+      self.error = {}
+
+      axios.post(link, input)
+        .then(function (response)
+        {
+          window.location.href = link
+        })
+        .catch(function (error)
+        {
+          self.error = error.response.data
+
+          self.loading = false
+        })
+    },
+  }
+</script>

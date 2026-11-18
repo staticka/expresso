@@ -1,9 +1,9 @@
 <div x-data="build">
-  <div class="modal fade" id="build-modal" tabindex="-1" aria-labelledby="build-modal-label" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal fade" id="build-pages" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header text-white bg-success border-bottom-0">
-          <span class="modal-title fs-5 fw-bold" id="build-modal-label">Build all available pages?</span>
+          <span class="modal-title fs-5 fw-bold">Build all available pages?</span>
         </div>
         <div class="modal-body">
           <div class="form-check">

@@ -59,16 +59,12 @@
           <div class="card-body p-4">
             <h5 class="fw-bold">Compiling pages to HTML</h5>
             <p class="text-secondary mb-3">Build all available pages to HTML. This requires Staticka Console to be installed.</p>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#build-modal">Build site</button>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#build-pages">Build site</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <?php echo $plate->add('modal/plate') ?>
-<?php echo $block->end() ?>
-
-<?php echo $block->set('scripts') ?>
-  <?php echo $plate->add('modal/script', compact('link')) ?>
+  <?php echo $plate->add('modal/plate', compact('link')) ?>
 <?php echo $block->end() ?>
