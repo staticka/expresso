@@ -30,7 +30,7 @@
           <div class="row">
             <?php foreach ($fields as $field): ?>
               <div class="col-sm-3 mb-3">
-                <label for="<?php echo $field ?>" class="form-label mb-1 fw-semibold"><?= ucfirst($field) ?></label>
+                <label for="<?php echo $field ?>" class="form-label mb-0"><?= ucfirst($field) ?></label>
                 <input type="text" id="<?php echo $field ?>" name="<?php echo $field ?>" class="form-control" x-model="input.<?php echo $field ?>" :disabled="loading">
                 <template x-if="error.<?php echo $field ?>">
                   <p class="text-danger small mb-0" x-text="error.<?php echo $field ?>[0]"></p>
