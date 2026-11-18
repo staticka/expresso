@@ -71,7 +71,9 @@
                     <td>
                       <a href="<?php echo $link->set('/pages/' . $item['id']) ?>"><?php echo $item['name'] ?></a>
                       <br>
-                      <span class="small text-secondary"><?php echo $str->truncate($item['description']) ?></span>
+                      <?php if (isset($item['description'])): ?>
+                        <span class="small text-secondary"><?php echo $str->truncate($item['description']) ?></span>
+                      <?php endif; ?>
                     </td>
                     <td>
                       <?php if ($tags): ?>
