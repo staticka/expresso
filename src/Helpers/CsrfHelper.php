@@ -66,17 +66,6 @@ class CsrfHelper implements HelperInterface
     {
         $token = $request->getHeaderLine('X-CSRF-Token');
 
-        if ($token === '')
-        {
-            $server = $request->getServerParams();
-
-            if (array_key_exists('HTTP_X_CSRF_TOKEN', $server))
-            {
-                /** @var string */
-                $token = $server['HTTP_X_CSRF_TOKEN'];
-            }
-        }
-
         if ($token !== '')
         {
             return $this->equals($token, $this->token());
