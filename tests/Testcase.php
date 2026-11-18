@@ -14,6 +14,11 @@ use LegacyPHPUnit\TestCase as Legacy;
 class Testcase extends Legacy
 {
     /**
+     * @var \Staticka\Expresso\Express
+     */
+    protected $app;
+
+    /**
      * @return void
      */
     protected function resetPayload()
@@ -102,5 +107,11 @@ class Testcase extends Legacy
         $_SERVER['SERVER_NAME'] = 'localhost';
         $_SERVER['SERVER_PORT'] = '8000';
         $_SERVER['HTTP_HOST'] = 'https';
+
+        // Rebuild the app so each request gets ------
+        // a fresh container (HttpIntegration --------
+        // caches the request across run() calls). ---
+        $this->app = $this->setApp();
+        // -------------------------------------------
     }
 }

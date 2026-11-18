@@ -5,7 +5,6 @@ namespace Staticka\Expresso;
 use Rougin\Slytherin\Container\ReflectionContainer;
 use Rougin\Slytherin\Http\HttpIntegration;
 use Rougin\Slytherin\Http\Response;
-use Rougin\Slytherin\Http\ServerRequest;
 use Rougin\Slytherin\Routing\RoutingIntegration;
 use Rougin\Slytherin\System;
 use Rougin\Slytherin\Template\RendererIntegration;
@@ -34,9 +33,19 @@ class Express extends System
     protected $buildPath = null;
 
     /**
+     * @var \Rougin\Slytherin\Integration\Configuration
+     */
+    protected $config;
+
+    /**
      * @var string|null
      */
     protected $configPath = null;
+
+    /**
+     * @var \Rougin\Slytherin\Container\ContainerInterface
+     */
+    protected $container;
 
     /**
      * @var string|null
