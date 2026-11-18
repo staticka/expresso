@@ -23,7 +23,8 @@
   {
     "phpunit/phpunit": "*",
     "sanmai/phpunit-legacy-adapter": "*",
-    "vlucas/valitron": "~1.4"
+    "vlucas/valitron": "~1.4",
+    "symfony/polyfill-php54": "~1.0"
   },
   "autoload":
   {
