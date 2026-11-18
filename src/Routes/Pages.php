@@ -196,10 +196,11 @@ class Pages
      * @param integer                               $id
      * @param \Staticka\Expresso\Helpers\CsrfHelper $csrf
      * @param \Staticka\Depots\PageDepot            $page
+     * @param \Staticka\Expresso\Session            $session
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function destroy($id, CsrfHelper $csrf, PageDepot $page)
+    public function destroy($id, CsrfHelper $csrf, PageDepot $page, Session $session)
     {
         if (! $csrf->verify($this->request))
         {
@@ -219,6 +220,8 @@ class Pages
         }
 
         $page->delete($id);
+
+        $session->flash('success', 'Page deleted!');
 
         return $this->toJson('Page deleted!', 200);
     }

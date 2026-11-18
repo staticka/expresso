@@ -12,6 +12,9 @@
     </div>
 
     <div class="container my-3">
+      <div x-show="saved" x-cloak class="alert alert-success mb-3" role="alert">
+        <i class="bi bi-check-circle-fill me-1"></i>Page details updated successfully!
+      </div>
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
         <a href="<?php echo $link->set('/pages') ?>" class="btn btn-outline-dark shadow-sm" :disabled="loading"><i class="bi bi-arrow-left me-1"></i>Back to Pages</a>
         <div class="d-flex gap-2">
@@ -90,6 +93,10 @@
 
     editor.deleteName = <?php echo json_encode($page['name']) ?>
 
+    editor.saved = false
+
+    editor.deleteError = null
+
     editor.init = function ()
     {
       this.parse()
@@ -120,7 +127,9 @@
       axios.post(link, form)
         .then(function ()
         {
-          exToast('Page updated!', 'success')
+          self.saved = true
+
+          setTimeout(function () { self.saved = false }, 2500)
         })
         .catch(function (error)
         {
@@ -141,13 +150,11 @@
       axios.delete(deleteLink)
         .then(function ()
         {
-          exToast('Page deleted!', 'success')
-
-          setTimeout(function () { window.location.href = '<?php echo $link->set('/pages') ?>' }, 800)
+          window.location.href = '<?php echo $link->set('/pages') ?>'
         })
         .catch(function (error)
         {
-          exToast(error.response.data || 'Unable to delete the page.', 'danger')
+          self.deleteError = error.response.data || 'Unable to delete the page.'
         })
         .finally(function ()
         {

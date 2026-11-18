@@ -6,6 +6,9 @@
       </div>
       <div class="modal-body">
         <p class="mb-0">Are you sure that you want to delete the page <span class="fw-bold" x-text="deleteName"></span>? This action cannot be undone.</p>
+        <template x-if="deleteError">
+          <p class="text-danger small mb-0" x-text="deleteError"></p>
+        </template>
       </div>
       <div class="modal-footer border-top-0 bg-light">
         <div class="me-auto">

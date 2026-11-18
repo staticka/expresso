@@ -13,6 +13,11 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <?php echo $block->add('styles') ?>
   <style type="text/css">
+    [x-cloak]
+    {
+      display: none !important;
+    }
+
     html, body
     {
       font-family: 'Roboto', system-ui, sans-serif;
