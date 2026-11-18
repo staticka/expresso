@@ -4,9 +4,11 @@
 .phpunit.result.cache
 AGENTS.md
 app/build
+app/cache/session
 app/pages
 build
 composer.lock
 GEMINI.md
+tests/Fixture/cache
 tests/Fixture/pages
 vendor
