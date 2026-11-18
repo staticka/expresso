@@ -77,8 +77,8 @@
     }
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script defer>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
     (function ()
     {
       var meta = document.querySelector('meta[name="csrf-token"]');
