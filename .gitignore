@@ -9,6 +9,7 @@ app/pages
 build
 composer.lock
 GEMINI.md
+staticka.yml
 tests/Fixture/cache
 tests/Fixture/pages
 vendor
