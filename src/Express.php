@@ -4,9 +4,12 @@ namespace Staticka\Expresso;
 
 use Rougin\Slytherin\Container\ReflectionContainer;
 use Rougin\Slytherin\Http\HttpIntegration;
+use Rougin\Slytherin\Http\Response;
+use Rougin\Slytherin\Http\ServerRequest;
 use Rougin\Slytherin\Routing\RoutingIntegration;
 use Rougin\Slytherin\System;
 use Rougin\Slytherin\Template\RendererIntegration;
+use Rougin\Weasley\Packages\Session as SessionPackage;
 use Staticka\Depots\PageDepot;
 use Staticka\Expresso\Helpers\LinkHelper as ExpressoLink;
 use Staticka\Helper\LinkHelper as StatickaLink;
@@ -90,6 +93,8 @@ class Express extends System
         $this->setRouter();
 
         $this->setHttp();
+
+        $this->setSession();
 
         $this->setRender();
 
@@ -274,6 +279,8 @@ class Express extends System
         $this->config->set('app.http.server', $_SERVER);
 
         $this->integrate(new HttpIntegration);
+
+        $this->container->set(System::RESPONSE, new Response);
     }
 
     /**
@@ -415,6 +422,25 @@ class Express extends System
         $package = new RendererIntegration;
 
         $this->integrate($package);
+    }
+
+    /**
+     * @return void
+     */
+    protected function setSession()
+    {
+        $root = self::getAppPath();
+
+        if ($this->rootPath)
+        {
+            $root = $this->rootPath;
+        }
+
+        $path = $root . '/cache/session';
+
+        $this->config->set('session.path', $path);
+
+        $this->integrate(new SessionPackage);
     }
 
     /**

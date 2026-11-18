@@ -3,6 +3,7 @@
 namespace Staticka\Expresso\Helpers;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Rougin\Weasley\Contract\Session;
 use Staticka\Helper\HelperInterface;
 
 /**
@@ -12,6 +13,19 @@ use Staticka\Helper\HelperInterface;
  */
 class CsrfHelper implements HelperInterface
 {
+    /**
+     * @var \Rougin\Weasley\Contract\Session
+     */
+    protected $session;
+
+    /**
+     * @param \Rougin\Weasley\Contract\Session $session
+     */
+    public function __construct(Session $session)
+    {
+        $this->session = $session;
+    }
+
     /**
      * Returns the name of the helper.
      *
@@ -29,17 +43,16 @@ class CsrfHelper implements HelperInterface
      */
     public function token()
     {
-        $self = new CsrfHelper;
+        $token = $this->session->get('_csrf');
 
-        $self->start();
-
-        if (! array_key_exists('_csrf', $_SESSION))
+        if (! is_string($token))
         {
-            $_SESSION['_csrf'] = $self->random();
+            $token = $this->random();
+
+            $this->session->set('_csrf', $token);
         }
 
-        /** @var string */
-        return $_SESSION['_csrf'];
+        return $token;
     }
 
     /**
@@ -124,18 +137,5 @@ class CsrfHelper implements HelperInterface
 
         return md5(uniqid($random, true));
         // @codeCoverageIgnoreEnd
-    }
-
-    /**
-     * Starts the session if not yet started.
-     *
-     * @return void
-     */
-    protected function start()
-    {
-        if (session_id() === '')
-        {
-            session_start();
-        }
     }
 }

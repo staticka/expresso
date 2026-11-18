@@ -9,6 +9,7 @@ use Staticka\Expresso\Checks\PageCheck;
 use Staticka\Expresso\Helpers\CsrfHelper;
 use Staticka\Expresso\Helpers\DataHelper;
 use Staticka\Expresso\Plate;
+use Staticka\Expresso\Session;
 
 /**
  * @package Staticka
@@ -41,10 +42,11 @@ class Pages
     /**
      * @param \Staticka\Depots\PageDepot $page
      * @param \Staticka\Expresso\Plate   $plate
+     * @param \Staticka\Expresso\Session $session
      *
      * @return string
      */
-    public function index(PageDepot $page, Plate $plate)
+    public function index(PageDepot $page, Plate $plate, Session $session)
     {
         $pages = array_reverse($page->get());
 
@@ -75,7 +77,11 @@ class Pages
             $items[] = $data;
         }
 
-        return $plate->view('pages', compact('items'));
+        $flash = $session->get('success');
+
+        $session->delete('success');
+
+        return $plate->view('pages', compact('items', 'flash'));
     }
 
     /**
@@ -116,10 +122,11 @@ class Pages
     /**
      * @param \Staticka\Expresso\Helpers\CsrfHelper $csrf
      * @param \Staticka\Depots\PageDepot            $page
+     * @param \Staticka\Expresso\Session            $session
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function store(CsrfHelper $csrf, PageDepot $page)
+    public function store(CsrfHelper $csrf, PageDepot $page, Session $session)
     {
         if (! $csrf->verify($this->request))
         {
@@ -139,6 +146,10 @@ class Pages
         }
 
         $page->create($data);
+
+        $text = 'Page "' . $data['name'] . '" created!';
+
+        $session->flash('success', $text);
 
         return $this->toJson('Page created!', 201);
     }

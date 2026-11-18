@@ -29,12 +29,22 @@ class Testcase extends Legacy
      */
     protected function setCsrfToken()
     {
-        if (session_id() === '')
+        $path = __DIR__ . '/Fixture/cache/session';
+
+        if (! is_dir($path))
         {
-            session_start();
+            mkdir($path, 0777, true);
         }
 
-        $_SESSION['_csrf'] = 'test-token';
+        $_COOKIE['weasley_session'] = 'test-session';
+
+        $file = $path . '/test-session';
+
+        $data = array('_csrf' => 'test-token');
+
+        $serial = serialize($data);
+
+        file_put_contents($file, $serial);
 
         $_SERVER['HTTP_X_CSRF_TOKEN'] = 'test-token';
     }

@@ -11,6 +11,12 @@
       </div>
     </div>
     <div class="container pb-5">
+      <?php if (isset($flash)): ?>
+        <div class="alert alert-success alert-dismissible fade show mt-3 mb-0" role="alert">
+          <i class="bi bi-check-circle-fill me-1"></i><span><?= htmlspecialchars($flash) ?></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <?php endif ?>
       <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 my-3">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-page-modal">
           Create New...

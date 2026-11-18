@@ -36,16 +36,12 @@
       axios.post(link, input)
         .then(function (response)
         {
-          exToast('Page created!', 'success')
-
-          setTimeout(function () { window.location.href = link }, 800)
+          window.location.href = link
         })
         .catch(function (error)
         {
           self.error = error.response.data
-        })
-        .finally(function ()
-        {
+
           self.loading = false
         })
     },

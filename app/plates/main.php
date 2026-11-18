@@ -13,19 +13,18 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <?php echo $block->add('styles') ?>
   <style type="text/css">
-    html, body {
+    html, body
+    {
       font-family: 'Roboto', system-ui, sans-serif;
-      background-color: #f6f7f9;
-      color: #1c2733;
     }
 
-    .table > :not(caption) > * > * {
-      vertical-align: top;
+    .ex-tag
+    {
+      margin: .125rem .125rem .125rem 0;
     }
 
-    .ex-tag { margin: .125rem .125rem .125rem 0; }
-
-    .fw-small-caps {
+    .fw-small-caps
+    {
       font-variant: small-caps;
       letter-spacing: 0.02em;
     }
